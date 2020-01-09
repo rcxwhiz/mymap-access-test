@@ -1,9 +1,11 @@
+import logging
 import re
 
 
 class Section:
 
 	def __init__(self, attributes):
+		logging.debug('Creating a new section')
 		self.section_num = attributes['section num']
 		self.type = attributes['type']
 		self.instructor = attributes['instructor']
