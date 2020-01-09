@@ -29,7 +29,7 @@ for college in college_buttons:
 	except AttributeError:
 		long_college_name = college.get_attribute('college')
 
-	print(college.text, '|', long_college_name)
+	print(f'{college.text} | {long_college_name}')
 	print(f'num of courses - {len(college_courses)}')
 
 print('done')
