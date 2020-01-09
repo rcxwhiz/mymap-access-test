@@ -1,5 +1,5 @@
-import logging
 import re
+from my_logger import logging
 
 
 class Course:
@@ -17,6 +17,7 @@ class Course:
 		self.note = attributes['note']
 		self.when_taught = attributes['when taught']
 		self.sections = attributes['sections']
+		self.prerequisites = attributes['prerequisites']
 
 		num_regex = re.compile(r'[0-9]+')
 		self.num = int(num_regex.search(self.short_title).group())

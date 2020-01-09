@@ -1,5 +1,5 @@
-import logging
 import re
+from my_logger import logging
 
 
 class Semester:
@@ -8,7 +8,7 @@ class Semester:
 		logging.debug('Creating a new semester')
 		self.timestamp = attributes['timestamp']
 		self.courses = attributes['courses']
-		self.semester_year = attributes['semester_year']
+		self.semester_year = attributes['semester year']
 
 		semester_regex = re.compile(r'[a-zA-Z]*')
 		year_regex = re.compile(r'[0-9]*')

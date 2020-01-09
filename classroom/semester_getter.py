@@ -1,14 +1,18 @@
 from selenium import webdriver
 from selenium.common import exceptions
 from selenium.webdriver.support.ui import Select
+import datetime
 import time
 import re
-import sys
-import logging
 from classroom import *
+from my_logger import logging
 
 
 def get(semester_year, page_load_buffer=3):
+
+	semester_attributes = {'timestamp': datetime.datetime, 'semester year': semester_year}
+	course_list = []
+
 	logging.info(f'Getting classes for {semester_year}')
 
 	browser = webdriver.Chrome()
@@ -18,7 +22,7 @@ def get(semester_year, page_load_buffer=3):
 	try:
 		semester_button.select_by_visible_text(semester_year)
 	except exceptions.NoSuchElementException:
-		sys.exit('ERROR - Semester not found')
+		logging.error(f'ERROR - Semester {semester_year} not found')
 
 	time.sleep(page_load_buffer)
 	college_buttons = browser.find_elements_by_class_name('collegeName')
@@ -39,7 +43,7 @@ def get(semester_year, page_load_buffer=3):
 		# print the college names and number of courses
 		logging.info(f'{college.text} | {long_college_name}')
 
-		college.click()  # this appears to be the issue?
+		college.click()
 
 		# get list of courses from that college
 		college_courses = []
@@ -48,6 +52,12 @@ def get(semester_year, page_load_buffer=3):
 			college_courses = browser.find_elements_by_class_name('courseItem')
 			time.sleep(1)
 		logging.info(f'num of courses - {len(college_courses)}')
+		for course in college_courses:
+			course.click()
+		time.sleep(page_load_buffer * 2)
+		browser.refresh()
+		time.sleep(page_load_buffer)
+		# here I need to find a new way to iterate through the colleges
 
 	browser.close()
 	logging.info(f'Finished getting classes for {semester_year}')
