@@ -1,18 +1,31 @@
 from selenium import webdriver
 from selenium.common import exceptions
-from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 import datetime
 import time
 import re
-import sys
 from classroom import *
 from my_logger import logging
 
 
+def page_loaded(browser):
+	page_state = browser.execute_script('return document.readyState;')
+	return page_state == 'complete'
+
+
+def wait_for_page(browser, timeout=10):
+	old_page = browser.find_element_by_tag_name('html')
+	yield
+	WebDriverWait(browser, timeout).until(EC.staleness_of(old_page))
+
+
 def get(semester_year, page_load_buffer=3):
 
-	semester_attributes = {'timestamp': datetime.datetime, 'semester year': semester_year}
-	course_list = []
+	semester_attributes = {'timestamp': datetime.datetime,
+	                       'semester year': semester_year,
+	                       'courses': []}
 
 	logging.info(f'Getting classes for {semester_year}')
 
@@ -25,7 +38,9 @@ def get(semester_year, page_load_buffer=3):
 	except exceptions.NoSuchElementException:
 		logging.error(f'ERROR - Semester {semester_year} not found')
 
-	time.sleep(page_load_buffer)
+	# TODO find a way to wait the right amount of time for the page to load
+	# time.sleep(page_load_buffer)
+	WebDriverWait(browser, page_load_buffer).until(EC.element_to_be_clickable((By.CLASS_NAME, 'collegeName')))
 	college_buttons = browser.find_elements_by_class_name('collegeName')
 
 	colleges = []
@@ -63,15 +78,26 @@ def get(semester_year, page_load_buffer=3):
 		for course in college_courses:
 			course.click()
 			time.sleep(page_load_buffer)
-			course_attributes = {'college short': college[0], 'college long': college[1]}
-			course_attributes['dept'] = browser.find_element_by_id('courseDept').text
-			course_attributes['num'] = int(browser.find_element_by_id('courseNumber').text)
-			course_attributes['short title'] = course_attributes['dept'] + ' ' + str(course_attributes['num'])
-			course_attributes['long title'] = browser.find_element_by_id('courseTitle').text
-			course_attributes['description'] = browser.find_element_by_id('courseDescription').text
-			things_to_try = ['hours', 'offered', 'headers', 'note', 'when taught', 'prerequisites']
+			course_attributes = {'college short': college[0],
+			                     'college long': college[1],
+			                     'dept': browser.find_element_by_id('courseDept').text,
+			                     'num': browser.find_element_by_id('courseNumber').text,
+			                     'long title': browser.find_element_by_id('courseTitle').text,
+			                     'description': browser.find_element_by_id('courseDescription').text}
+
+			things_to_try = ['courseCredits',
+			                 'courseOffered',
+			                 'courseHeaders',
+			                 'courseNote',
+			                 'courseWhenTaught',
+			                 'coursePrereqs',
+			                 'courseRec']
+
 			for thing in things_to_try:
-				# TODO check for each of the things
+				try:
+					course_attributes[thing] = browser.find_element_by_id(thing).text
+				except exceptions.NoSuchElementException:
+					course_attributes[thing] = ''
 
 		time.sleep(page_load_buffer)
 		browser.refresh()
