@@ -22,7 +22,7 @@ for college in college_buttons:
 		time.sleep(1)
 	try:
 		postfix_regex = re.compile(r'.*, ')
-		prefix_regex = re.compile(r', .*')
+		prefix_regex = re.compile(r', (.^,)*')
 		name_postfix = postfix_regex.search(college.get_attribute('college')).group(0)
 		name_prefix = prefix_regex.search(college.get_attribute('college')).group(0)
 		long_college_name = name_prefix[2:] + ' ' + name_postfix[:-2]
