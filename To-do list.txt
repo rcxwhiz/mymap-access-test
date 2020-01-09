@@ -1,0 +1,11 @@
+Class registration is on March 1st
+
+The two main features of this program are advanced filtering of the entire course catalogue and making a schedule
+out of given classes.
+
+# TODO a good GUI so that the filtering can be done well
+# TODO a function to update the class catalogue
+# TODO a cached catalogue (json?) with a timestamp of when it was collected
+# TODO a dropdown to select the semester
+# TODO determine if filter will be able to apply in realtime due to performance issues or if an apply button is needed
+# TODO

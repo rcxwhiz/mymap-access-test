@@ -1,18 +1,27 @@
-import webbrowser
-
-# register the browser
-chrome_path = 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
-webbrowser.register('chrome', None, webbrowser.BackgroundBrowser(chrome_path))
-
-# webbrowser.get('chrome').open('lego.com')
-
 from selenium import webdriver
+from selenium import common
+import time
+
 browser = webdriver.Chrome()
 browser.get('https://mymap.byu.edu')
-username = browser.find_element_by_id('username')
-password = browser.find_element_by_id('password')
-username.send_keys('joshbedw')
-password.send_keys('')
-# password.submit()
+# just have the user login themselves
+
+register_button = None
+while register_button is None:
+	try:
+		register_button = browser.find_element_by_id('NAVregister')
+	except common.exceptions.NoSuchElementException:
+		time.sleep(1)
+
+register_button.click()
+
+add_button = None
+while add_button is None:
+	try:
+		add_button = browser.find_element_by_id('add-class buttonAlt')
+	except common.exceptions.NoSuchElementException:
+		time.sleep(1)
+
+add_button.click()
 
 print('done')
