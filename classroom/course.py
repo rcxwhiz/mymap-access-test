@@ -1,4 +1,3 @@
-import re
 from my_logger import logging
 
 
@@ -7,6 +6,8 @@ class Course:
 	def __init__(self, attributes):
 		logging.debug('Creating a new course')
 		self.short_title = attributes['short title']
+		self.num = attributes['num']
+		self.dept = attributes['dept']
 		self.long_title = attributes['long title']
 		self.description = attributes['description']
 		self.college_short = attributes['college short']
@@ -19,9 +20,4 @@ class Course:
 		self.sections = attributes['sections']
 		self.prerequisites = attributes['prerequisites']
 
-		num_regex = re.compile(r'[0-9]+')
-		self.num = int(num_regex.search(self.short_title).group())
 		self.level = int(self.num / 100) * 100
-
-		dept_regex = re.compile(r'[a-zA-Z]+')
-		self.dept = dept_regex.search(self.short_title).group()
