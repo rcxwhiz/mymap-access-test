@@ -1,8 +1,6 @@
 from selenium import webdriver
 from selenium.common import exceptions
-from selenium.webdriver.support.ui import Select, WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
 import datetime
 import time
 import re
@@ -10,18 +8,42 @@ from classroom import *
 from my_logger import logging
 
 
-def page_loaded(browser):
-	page_state = browser.execute_script('return document.readyState;')
-	return page_state == 'complete'
+def get_college_buttons(browser, delay, max_wait=3.0):
+	college_buttons = browser.find_elements_by_class_name('collegeName')
+	start = time.time()
+	while True:
+		try:
+			for college in college_buttons:
+				college.get_attribute('college')
+			time.sleep(delay)
+		except exceptions.StaleElementReferenceException:
+			college_buttons = browser.find_elements_by_class_name('collegeName')
+			return college_buttons
+		if time.time() - start > max_wait:
+			logging.info('Ran out of time without encountering stale elements, passing what was given')
+			return college_buttons
 
 
-def wait_for_page(browser, timeout=10):
-	old_page = browser.find_element_by_tag_name('html')
-	yield
-	WebDriverWait(browser, timeout).until(EC.staleness_of(old_page))
+def get_courses_page(browser, delay, max_wait=5.0):
+	start = time.time()
+	college_courses = []
+	while not college_courses:
+		college_courses = browser.find_elements_by_class_name('courseItem')
+
+	while True:
+		try:
+			for course in college_courses:
+				course.text
+			time.sleep(delay)
+		except exceptions.StaleElementReferenceException:
+			college_courses = browser.find_elements_by_class_name('courseItem')
+			return college_courses
+		if time.time() - start > max_wait:
+			logging.info('Ran out of time without encountering stale elements, passing what was given')
+			return college_courses
 
 
-def get(semester_year, page_load_buffer=3):
+def get(semester_year, page_load_buffer=3, recheck_delay=0.1):
 
 	semester_attributes = {'timestamp': datetime.datetime,
 	                       'semester year': semester_year,
@@ -38,10 +60,7 @@ def get(semester_year, page_load_buffer=3):
 	except exceptions.NoSuchElementException:
 		logging.error(f'ERROR - Semester {semester_year} not found')
 
-	# TODO find a way to wait the right amount of time for the page to load
-	# time.sleep(page_load_buffer)
-	WebDriverWait(browser, page_load_buffer).until(EC.element_to_be_clickable((By.CLASS_NAME, 'collegeName')))
-	college_buttons = browser.find_elements_by_class_name('collegeName')
+	college_buttons = get_college_buttons(browser, recheck_delay)
 
 	colleges = []
 	for college in college_buttons:
@@ -54,12 +73,14 @@ def get(semester_year, page_load_buffer=3):
 		except AttributeError:
 			long_college_name = college.get_attribute('college')
 		except exceptions.StaleElementReferenceException:
-			logging.critical('Found a stale element :(')
+			logging.critical('Found a stale element :( this should not have happened')
 			return None
 		colleges.append([college.text, long_college_name])
 
 	for college in colleges:
-		college_buttons = browser.find_elements_by_class_name('collegeName')
+		college_buttons = get_college_buttons(browser, recheck_delay)
+
+		# find the right college button to click and click it
 		for button in college_buttons:
 			if button.text == college[0]:
 				button.click()
@@ -67,23 +88,25 @@ def get(semester_year, page_load_buffer=3):
 		# print the college names and number of courses
 		logging.info(f'{college[0]} | {college[1]}')
 
-		# get list of courses from that college
-		college_courses = []
-		time.sleep(page_load_buffer)
-		while not college_courses:
-			college_courses = browser.find_elements_by_class_name('courseItem')
-			time.sleep(1)
-		logging.info(f'num of courses - {len(college_courses)}')
+		college_courses = get_courses_page(browser, recheck_delay)
 
-		for course in college_courses:
-			course.click()
-			time.sleep(page_load_buffer)
-			course_attributes = {'college short': college[0],
-			                     'college long': college[1],
-			                     'dept': browser.find_element_by_id('courseDept').text,
-			                     'num': browser.find_element_by_id('courseNumber').text,
-			                     'long title': browser.find_element_by_id('courseTitle').text,
-			                     'description': browser.find_element_by_id('courseDescription').text}
+		for clicked_course in college_courses:
+			clicked_course.click()
+			# wait_for_course_load(browser, recheck_delay)
+			while True:
+				course_attributes = {'college short': college[0],
+				                     'college long': college[1],
+				                     'dept': browser.find_element_by_id('courseDept').text,
+				                     'num': browser.find_element_by_id('courseNumber').text,
+				                     'long title': browser.find_element_by_id('courseTitle').text,
+				                     'description': browser.find_element_by_id('courseDescription').text}
+				to_break = True
+				for value in course_attributes.values():
+					if not value:
+						to_break = False
+				if to_break:
+					break
+				time.sleep(recheck_delay)
 
 			things_to_try = ['courseCredits',
 			                 'courseOffered',
@@ -101,8 +124,6 @@ def get(semester_year, page_load_buffer=3):
 
 		time.sleep(page_load_buffer)
 		browser.refresh()
-		time.sleep(page_load_buffer)
-		# here I need to find a new way to iterate through the colleges
 
 	browser.close()
 	logging.info(f'Finished getting classes for {semester_year}')
