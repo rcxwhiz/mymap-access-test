@@ -4,6 +4,7 @@ from selenium.webdriver.support.ui import Select
 import datetime
 import time
 import re
+import sys
 from classroom import *
 from my_logger import logging
 
@@ -45,11 +46,12 @@ def get_courses_page(browser, delay, max_wait=2.0):
 
 def get(semester_year, page_load_buffer=3, recheck_delay=0.1):
 
+	get_start = time.time()
 	semester_attributes = {'timestamp': datetime.datetime,
 	                       'semester year': semester_year,
 	                       'courses': []}
 
-	logging.info(f'Getting classes for {semester_year}')
+	print(f'Getting classes for {semester_year}')
 
 	browser = webdriver.Chrome()
 	browser.get('http://saasta.byu.edu/noauth/classSchedule/index.php')
@@ -78,7 +80,9 @@ def get(semester_year, page_load_buffer=3, recheck_delay=0.1):
 			return None
 		colleges.append([college.text, long_college_name])
 
+	college_counter = 0
 	for college in colleges:
+		college_counter += 1
 		college_buttons = get_college_buttons(browser, recheck_delay)
 
 		# find the right college button to click and click it
@@ -87,11 +91,13 @@ def get(semester_year, page_load_buffer=3, recheck_delay=0.1):
 				button.click()
 
 		# print the college names and number of courses
-		logging.info(f'{college[0]} | {college[1]}')
+		logging.debug(f'{college[0]} | {college[1]}')
 
 		college_courses = get_courses_page(browser, recheck_delay)
 
+		course_counter = 0
 		for clicked_course in college_courses:
+			course_counter += 1
 			clicked_course.click()
 
 			while True:
@@ -99,8 +105,7 @@ def get(semester_year, page_load_buffer=3, recheck_delay=0.1):
 				                     'college long': college[1],
 				                     'dept': browser.find_element_by_id('courseDept').text,
 				                     'num': browser.find_element_by_id('courseNumber').text,
-				                     'long title': browser.find_element_by_id('courseTitle').text,
-				                     'description': browser.find_element_by_id('courseDescription').text}
+				                     'long title': browser.find_element_by_id('courseTitle').text}
 				to_break = True
 				for value in course_attributes.values():
 					if not value:
@@ -108,6 +113,7 @@ def get(semester_year, page_load_buffer=3, recheck_delay=0.1):
 				if to_break:
 					break
 				time.sleep(recheck_delay)
+			course_attributes['description'] = browser.find_element_by_id('courseDescription').text
 
 			course_attributes['sections'] = []
 			things_to_try = ['courseCredits',
@@ -126,7 +132,19 @@ def get(semester_year, page_load_buffer=3, recheck_delay=0.1):
 
 			sections = browser.find_elements_by_class_name('match')
 
+			section_counter = 0
 			for section_data in sections:
+				section_counter += 1
+				# printing progress here
+				# print('Scanning classes')
+				update_string = f'\r[{str(datetime.timedelta(seconds=int(time.time() - get_start)))}]'
+				update_string += f' College {college_counter}/{len(colleges)} ({college_counter / len(colleges) * 100:.0f}%)'
+				update_string += f' - Course {course_counter}/{len(college_courses)} ({course_counter / len(college_courses) * 100:.0f}%)'
+				update_string += f' - Section {section_counter}/{len(sections)} ({section_counter / len(sections) * 100:.0f}%)'
+				update_string += ' ' * 10
+				sys.stdout.write(update_string)
+				sys.stdout.flush()
+
 				# use the data we get from a section to create the object and add it to the course
 				data = section_data.find_elements_by_tag_name('td')
 				section_attributes = {'section num': data[0].text,
@@ -149,5 +167,5 @@ def get(semester_year, page_load_buffer=3, recheck_delay=0.1):
 
 	browser.close()
 	semester_out = Semester(semester_attributes)
-	logging.info(f'Finished getting classes for {semester_year}')
+	print(f'Finished getting classes for {semester_year}')
 	return semester_out

@@ -4,7 +4,7 @@ from my_logger import logging
 class Course:
 
 	def __init__(self, attributes):
-		logging.info('Creating a new course')
+		logging.debug('Creating a new course')
 		self.short_title = attributes['dept'] + ' ' + attributes['num']
 		self.num = attributes['num']
 		self.dept = attributes['dept']

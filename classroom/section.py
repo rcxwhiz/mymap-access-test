@@ -4,7 +4,7 @@ import re
 class Section:
 
 	def __init__(self, attributes):
-		logging.info('Creating a new section')
+		logging.debug('Creating a new section')
 		self.section_num = int(attributes['section num'])
 		self.type = attributes['type']
 		self.instructor = attributes['instructor']
@@ -17,7 +17,7 @@ class Section:
 		self.available_frac = attributes['available']
 		self.waitlist = int(attributes['waitlist'])
 
-		building_regex = re.compile(r'[a-zA-Z]+')
+		building_regex = re.compile(r'[a-zA-Z]*')
 		self.building = building_regex.search(attributes['location']).group()
 
 		available_regex1 = re.compile(r'[0-9]+/')
