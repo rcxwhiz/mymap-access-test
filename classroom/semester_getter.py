@@ -52,6 +52,7 @@ def get(semester_year, recheck_delay=0.1):
 	                       'courses': []}
 
 	print(f'Getting classes for {semester_year}')
+	print('this may take about an hour...')
 
 	browser = webdriver.Chrome()
 	browser.get('http://saasta.byu.edu/noauth/classSchedule/index.php')
@@ -104,8 +105,7 @@ def get(semester_year, recheck_delay=0.1):
 				course_attributes = {'college short': college[0],
 				                     'college long': college[1],
 				                     'dept': browser.find_element_by_id('courseDept').text,
-				                     'num': browser.find_element_by_id('courseNumber').text,
-				                     'long title': browser.find_element_by_id('courseTitle').text}
+				                     'num': browser.find_element_by_id('courseNumber').text}
 				to_break = True
 				for value in course_attributes.values():
 					if not value:
@@ -113,6 +113,7 @@ def get(semester_year, recheck_delay=0.1):
 				if to_break:
 					break
 				time.sleep(recheck_delay)
+			course_attributes['long title'] = browser.find_element_by_id('courseTitle').text
 			course_attributes['description'] = browser.find_element_by_id('courseDescription').text
 
 			course_attributes['sections'] = []
@@ -136,7 +137,6 @@ def get(semester_year, recheck_delay=0.1):
 			for section_data in sections:
 				section_counter += 1
 				# printing progress here
-				# print('Scanning classes')
 				update_string = f'\r[{str(datetime.timedelta(seconds=int(time.time() - get_start)))}]'
 				update_string += f' College {college_counter}/{len(colleges)} ({college_counter / len(colleges) * 100:.0f}%)'
 				update_string += f' - Course {course_counter}/{len(college_courses)} ({course_counter / len(college_courses) * 100:.0f}%)'
@@ -163,6 +163,8 @@ def get(semester_year, recheck_delay=0.1):
 			semester_attributes['courses'].append(Course(course_attributes))
 
 		browser.refresh()
+		semester_button = Select(browser.find_element_by_id('yearterm'))
+		semester_button.select_by_visible_text(semester_year)
 
 	browser.close()
 	semester_out = Semester(semester_attributes)

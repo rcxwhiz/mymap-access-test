@@ -10,8 +10,8 @@ class Semester:
 		self.courses = attributes['courses']
 		self.semester_year = attributes['semester year']
 
-		semester_regex = re.compile(r'[a-zA-Z]*')
-		year_regex = re.compile(r'[0-9]*')
+		semester_regex = re.compile(r'[a-zA-Z]+')
+		year_regex = re.compile(r'[0-9]+')
 		self.semester = semester_regex.search(self.semester_year).group()
 		self.year = int(year_regex.search(self.semester_year).group())
 

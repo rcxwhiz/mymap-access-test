@@ -12,7 +12,6 @@ os.chdir(pickles_path)
 test_semester = semester_getter.get('Fall 2019')
 print('it worked')
 
-with open('test semester', 'wb') as test_file:
-	pickle.dump(test_semester)
+pickle.dump(test_semester, open('test semester', 'wb'))
 
 print('I was able to save the semester file!')
