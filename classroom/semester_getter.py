@@ -162,7 +162,6 @@ def get(semester_year, page_load_buffer=3, recheck_delay=0.1):
 
 			semester_attributes['courses'].append(Course(course_attributes))
 
-		time.sleep(page_load_buffer)
 		browser.refresh()
 
 	browser.close()
