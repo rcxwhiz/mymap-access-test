@@ -4,8 +4,9 @@ The two main features of this program are advanced filtering of the entire cours
 out of given classes.
 
 # TODO a good GUI so that the filtering can be done well
-# TODO a function to update the class catalogue
-# TODO a cached catalogue (json?) with a timestamp of when it was collected
 # TODO a dropdown to select the semester
 # TODO determine if filter will be able to apply in realtime due to performance issues or if an apply button is needed
-# TODO
+# TODO warnings when classes aren't found
+# TODO makes a schedule by getting all possible combinations and then removing the impossible ones
+# TODO allow schedules to be optimized several ways
+# TODO add a function to the semester manager to save it to a google sheet
