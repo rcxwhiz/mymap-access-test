@@ -4,7 +4,6 @@ import sys
 from pathlib import Path
 from classroom import semester_getter
 
-# TODO make this so that it goes to the pickles folder within the current directory
 pickles_path = os.path.join(os.path.dirname(sys.argv[0]), 'pickles')
 if not os.path.exists(pickles_path):
 	os.makedirs(pickles_path)
