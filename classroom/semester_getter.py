@@ -47,7 +47,7 @@ def get_courses_page(browser, delay, max_wait=2.0):
 def get(semester_year, recheck_delay=0.1):
 
 	get_start = time.time()
-	semester_attributes = {'timestamp': datetime.datetime,
+	semester_attributes = {'timestamp': time.time(),
 	                       'semester year': semester_year,
 	                       'courses': []}
 

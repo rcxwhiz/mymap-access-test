@@ -1,3 +1,4 @@
+import datetime
 import re
 from my_logger import logging
 
@@ -7,6 +8,7 @@ class Semester:
 	def __init__(self, attributes):
 		logging.debug('Creating a new semester')
 		self.timestamp = attributes['timestamp']
+		self.datestamp = datetime.datetime.fromtimestamp(self.timestamp).strftime('%b-%d-%y %I:%M:%S')
 		self.courses = attributes['courses']
 		self.semester_year = attributes['semester year']
 

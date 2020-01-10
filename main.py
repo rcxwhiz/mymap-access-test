@@ -1,17 +1,9 @@
-import pickle
-import os
-import sys
-from pathlib import Path
-from classroom import semester_getter
+from classroom import semester_manager
 
-pickles_path = os.path.join(os.path.dirname(sys.argv[0]), 'pickles')
-if not os.path.exists(pickles_path):
-	os.makedirs(pickles_path)
-os.chdir(pickles_path)
+test_semester = 'Fall 2019'
 
-test_semester = semester_getter.get('Fall 2019')
-print('it worked')
+semester_bag = semester_manager.SemesterManager()
+if test_semester not in semester_bag.cached_semesters():
+	semester_bag.update(test_semester)
 
-pickle.dump(test_semester, open('test semester', 'wb'))
-
-print('I was able to save the semester file!')
+print(semester_bag.semester(test_semester).datestamp)
