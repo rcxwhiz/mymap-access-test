@@ -4,7 +4,7 @@ from my_logger import logging
 class Course:
 
 	def __init__(self, attributes):
-		logging.debug('Creating a new course')
+		logging.info('Creating a new course')
 		self.short_title = attributes['dept'] + ' ' + attributes['num']
 		self.num = attributes['num']
 		self.dept = attributes['dept']
@@ -12,12 +12,14 @@ class Course:
 		self.description = attributes['description']
 		self.college_short = attributes['college short']
 		self.college_long = attributes['college long']
-		self.hours = attributes['hours']
-		self.offered = attributes['offered']
-		self.headers = attributes['headers']
-		self.note = attributes['note']
-		self.when_taught = attributes['when taught']
+		self.hours = attributes['courseCredits']
+		self.offered = attributes['courseOffered']
+		self.headers = attributes['courseHeaders']
+		self.note = attributes['courseNote']
+		self.when_taught = attributes['courseWhenTaught']
+		self.prerequisites = attributes['coursePrereqs']
+		self.recommended = attributes['courseRec']
 		self.sections = attributes['sections']
-		self.prerequisites = attributes['prerequisites']
 
 		self.level = int(self.num[0]) * 100
+		self.num_sections = len(self.sections)
