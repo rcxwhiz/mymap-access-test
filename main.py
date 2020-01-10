@@ -1,6 +1,6 @@
 from classroom import semester_manager
 
-test_semester = 'Fall 2019'
+test_semester = 'Fall 201944'
 
 semester_bag = semester_manager.SemesterManager()
 if test_semester not in semester_bag.cached_semesters():
