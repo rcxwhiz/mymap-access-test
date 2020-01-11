@@ -10,3 +10,4 @@ out of given classes.
 # TODO makes a schedule by getting all possible combinations and then removing the impossible ones
 # TODO allow schedules to be optimized several ways
 # TODO add a function to the semester manager to save it to a google sheet
+# TODO use qt designer to create the UI
