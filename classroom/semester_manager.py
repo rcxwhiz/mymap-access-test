@@ -12,10 +12,9 @@ class SemesterManager:
 		pickles_path = os.path.join(os.path.dirname(sys.argv[0]), 'pickles')
 		if not os.path.exists(pickles_path):
 			os.makedirs(pickles_path)
-		os.chdir(pickles_path)
 
-		for file in os.listdir():
-			self.semesters[file] = pickle.load(open(file, 'rb'))
+		for file in os.listdir(pickles_path):
+			self.semesters[file] = pickle.load(open(os.path.join(pickles_path, file), 'rb'))
 
 	def semester(self, semester_year):
 		if semester_year in self.semesters.keys():
