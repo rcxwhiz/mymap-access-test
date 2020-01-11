@@ -63,7 +63,6 @@ def get(semester_year, recheck_delay=0.1):
 	except exceptions.NoSuchElementException:
 		logging.error(f'ERROR - Semester {semester_year} not found')
 		return None
-
 	college_buttons = get_college_buttons(browser, recheck_delay)
 
 	colleges = []
