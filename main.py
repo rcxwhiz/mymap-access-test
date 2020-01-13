@@ -1,5 +1,5 @@
 from classroom import semester_manager
-from gui.startup import StartupWindow
+from gui import startup_page
 
 test_semester = 'Fall 2019'
 
@@ -9,4 +9,4 @@ if test_semester not in semester_bag.cached_semesters():
 
 print(semester_bag.semester(test_semester).datestamp)
 
-StartupWindow()
+startup_page.main()
