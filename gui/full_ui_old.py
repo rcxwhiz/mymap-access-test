@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'full_ui_new.ui'
+# Form implementation generated from reading ui file 'full_ui.ui'
 #
 # Created by: PyQt5 UI code generator 5.14.1
 #
@@ -12,12 +12,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_MainWindow(object):
-    def setupUi(self, MainWindow, screenSize):
+    def setupUi(self, MainWindow):
         # MY CODE
         self.assets = os.path.join(os.path.dirname(sys.argv[0]), 'assets')
         MainWindow.setWindowTitle('BYU Schdeuling Tool')
         MainWindow.setWindowIcon(QtGui.QIcon(os.path.join(self.assets, 'byu-icon.png')))
-        self.screenSize = screenSize
 
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(380, 170)
@@ -35,8 +34,6 @@ class Ui_MainWindow(object):
         self.tableWidget.setRowCount(0)
         self.semesterDisplay = QtWidgets.QTextBrowser(self.searchPage)
         self.semesterDisplay.setGeometry(QtCore.QRect(210, 0, 281, 31))
-        self.semesterDisplay.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.semesterDisplay.setFrameShadow(QtWidgets.QFrame.Plain)
         self.semesterDisplay.setObjectName("semesterDisplay")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.searchPage)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 40, 171, 621))
@@ -68,27 +65,9 @@ class Ui_MainWindow(object):
         self.instructorLineEdit_3 = QtWidgets.QLineEdit(self.verticalLayoutWidget)
         self.instructorLineEdit_3.setObjectName("instructorLineEdit_3")
         self.searchCol_3.addWidget(self.instructorLineEdit_3)
-        self.label_3 = QtWidgets.QLabel(self.verticalLayoutWidget)
-        self.label_3.setObjectName("label_3")
-        self.searchCol_3.addWidget(self.label_3)
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.timeStartBox = QtWidgets.QSpinBox(self.verticalLayoutWidget)
-        self.timeStartBox.setObjectName("spinBox")
-        self.timeStartBox.setMaximum(24)
-        self.timeStartBox.setMinimum(0)
-        self.horizontalLayout_2.addWidget(self.timeStartBox)
-        self.timeEndBox = QtWidgets.QSpinBox(self.verticalLayoutWidget)
-        self.timeEndBox.setObjectName("spinBox_2")
-        self.timeEndBox.setMaximum(24)
-        self.timeEndBox.setMinimum(0)
-        self.horizontalLayout_2.addWidget(self.timeEndBox)
-        self.searchCol_3.addLayout(self.horizontalLayout_2)
         self.courseTypeLabel_3 = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.courseTypeLabel_3.setObjectName("courseTypeLabel_3")
         self.searchCol_3.addWidget(self.courseTypeLabel_3)
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout_12 = QtWidgets.QVBoxLayout()
         self.verticalLayout_12.setObjectName("verticalLayout_12")
         self.dayCheckbox_3 = QtWidgets.QCheckBox(self.verticalLayoutWidget)
@@ -97,20 +76,10 @@ class Ui_MainWindow(object):
         self.eveningCheckbox_3 = QtWidgets.QCheckBox(self.verticalLayoutWidget)
         self.eveningCheckbox_3.setObjectName("eveningCheckbox_3")
         self.verticalLayout_12.addWidget(self.eveningCheckbox_3)
-        self.onlineCheckbox = QtWidgets.QCheckBox(self.verticalLayoutWidget)
-        self.onlineCheckbox.setObjectName("onlineCheckbox")
-        self.verticalLayout_12.addWidget(self.onlineCheckbox)
-        self.horizontalLayout.addLayout(self.verticalLayout_12)
-        self.verticalLayout = QtWidgets.QVBoxLayout()
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.slCheckbox = QtWidgets.QCheckBox(self.verticalLayoutWidget)
-        self.slCheckbox.setObjectName("slCheckbox")
-        self.verticalLayout.addWidget(self.slCheckbox)
-        self.stabroadCheckbox = QtWidgets.QCheckBox(self.verticalLayoutWidget)
-        self.stabroadCheckbox.setObjectName("stabroadCheckbox")
-        self.verticalLayout.addWidget(self.stabroadCheckbox)
-        self.horizontalLayout.addLayout(self.verticalLayout)
-        self.searchCol_3.addLayout(self.horizontalLayout)
+        self.otherCheckbox_3 = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.otherCheckbox_3.setObjectName("otherCheckbox_3")
+        self.verticalLayout_12.addWidget(self.otherCheckbox_3)
+        self.searchCol_3.addLayout(self.verticalLayout_12)
         self.dayLabel_3 = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.dayLabel_3.setObjectName("dayLabel_3")
         self.searchCol_3.addWidget(self.dayLabel_3)
@@ -148,11 +117,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
         self.maxCredits_3 = QtWidgets.QDoubleSpinBox(self.verticalLayoutWidget)
         self.maxCredits_3.setObjectName("maxCredits_3")
-        self.maxCredits_3.setMinimum(0.0)
         self.horizontalLayout_8.addWidget(self.maxCredits_3)
         self.minCredits_3 = QtWidgets.QDoubleSpinBox(self.verticalLayoutWidget)
         self.minCredits_3.setObjectName("minCredits_3")
-        self.minCredits_3.setMinimum(0.0)
         self.horizontalLayout_8.addWidget(self.minCredits_3)
         self.searchCol_3.addLayout(self.horizontalLayout_8)
         self.courseLevelLabel_3 = QtWidgets.QLabel(self.verticalLayoutWidget)
@@ -239,43 +206,21 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         # MY CODE
-        self.stackedWidget.setCurrentIndex(2)
         self.advancedSearchButton.clicked.connect(self.gotoSearchPage)
         self.scheduleMakerButton.clicked.connect(self.gotoSchedulePage)
         self.backButton.clicked.connect(self.gotoStartPage)
         self.backButton_2.clicked.connect(self.gotoStartPage)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.stackedWidget.setCurrentIndex(2)
         self.main_window_ref = MainWindow
-
-    # MY CODE
-    def goodScreenX(self, x):
-        if x < 0:
-            return 0
-        if x > self.screenSize.width():
-            return self.screenSize.width()
-        return x
-
-    # MY CODE
-    def goodScreenY(self, y):
-        if y < 0:
-            return 0
-        if y > self.screenSize.height():
-            return self.screenSize.height()
-        return y
 
     # MY CODE
     def makeWindowSmall(self):
         self.main_window_ref.resize(380, 170)
-        x = self.main_window_ref.x()
-        y = self.main_window_ref.y()
-        self.main_window_ref.move(self.goodScreenX(x + 310), self.goodScreenY(y + 265))
 
     # MY CODE
     def makeWindowBig(self):
         self.main_window_ref.resize(1000, 700)
-        x = self.main_window_ref.x()
-        y = self.main_window_ref.y()
-        self.main_window_ref.move(self.goodScreenX(x - 310), self.goodScreenY(y - 265))
 
     # MY CODE
     def gotoStartPage(self):
@@ -304,13 +249,10 @@ class Ui_MainWindow(object):
         self.courseNumLabel_3.setText(_translate("MainWindow", "Course Num."))
         self.courseNameLabel_3.setText(_translate("MainWindow", "Course Name"))
         self.instructorLabel_3.setText(_translate("MainWindow", "Instructor"))
-        self.label_3.setText(_translate("MainWindow", "Time Range (start - end) (00 - 23)"))
         self.courseTypeLabel_3.setText(_translate("MainWindow", "Type"))
         self.dayCheckbox_3.setText(_translate("MainWindow", "DAY"))
         self.eveningCheckbox_3.setText(_translate("MainWindow", "EVENING"))
-        self.onlineCheckbox.setText(_translate("MainWindow", "ONLINE"))
-        self.slCheckbox.setText(_translate("MainWindow", "SALT LAKE"))
-        self.stabroadCheckbox.setText(_translate("MainWindow", "ST ABROAD"))
+        self.otherCheckbox_3.setText(_translate("MainWindow", "Something?"))
         self.dayLabel_3.setText(_translate("MainWindow", "Day"))
         self.mondayBox_3.setText(_translate("MainWindow", "Monday"))
         self.wednesdayBox_3.setText(_translate("MainWindow", "Wednesday"))
@@ -342,11 +284,11 @@ class Ui_MainWindow(object):
 
 
 def main():
+    import sys
     app = QtWidgets.QApplication(sys.argv)
-    screenSize = app.primaryScreen().size()
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
-    ui.setupUi(MainWindow, screenSize)
+    ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
 

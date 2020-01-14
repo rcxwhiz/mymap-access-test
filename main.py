@@ -9,4 +9,12 @@ if test_semester not in semester_bag.cached_semesters():
 
 print(semester_bag.semester(test_semester).datestamp)
 
+types = []
+for course in semester_bag.semester(test_semester).courses:
+	for section in course.sections:
+		if section.type not in types:
+			types.append(section.type)
+
+print(types)
+
 full_ui.main()
