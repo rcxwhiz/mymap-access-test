@@ -10,7 +10,3 @@ out of given classes.
 # TODO makes a schedule by getting all possible combinations and then removing the impossible ones
 # TODO allow schedules to be optimized several ways
 # TODO add a function to the semester manager to save it to a google sheet
-# TODO extensively test if the semester manager is actually a singleton
-# TODO make the window not move around when it resizes
-# TODO use depreciated files to properly set window title and icon
-# TODO remove gui_test.py from project
