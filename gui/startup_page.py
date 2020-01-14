@@ -8,6 +8,7 @@
 
 import os
 import sys
+import gui.search_page
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -62,6 +63,7 @@ class Ui_MainWindow(object):
 
     def advancedSearchButtonAction(self):
         print('the search button')
+        gui.search_page.test()
 
     def schedulingButtonAction(self):
         print('the schedule button')

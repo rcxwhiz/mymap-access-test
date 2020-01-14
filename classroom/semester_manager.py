@@ -1,11 +1,23 @@
+from __future__ import annotations
+
 import pickle
 import os
 import sys
+from typing import Optional
 from classroom import semester_getter
 from my_logger import logging
 
 
-class SemesterManager:
+class SemesterManagerMeta(type):
+	_instance: Optional[SemesterManager] = None
+
+	def __call__(self) -> SemesterManager:
+		if self._instance is None:
+			self._instance = super().__call__()
+		return self._instance
+
+
+class SemesterManager(metaclass=SemesterManagerMeta):
 
 	def __init__(self):
 		self.semesters = {}
@@ -20,7 +32,7 @@ class SemesterManager:
 	def semester(self, semester_year):
 		if semester_year in self.semesters.keys():
 			return self.semesters[semester_year]
-		logging(f'Requested semester {semester_year} not in semester manager')
+		print(f'Requested semester {semester_year} not in semester manager')
 		return None
 
 	def update(self, semester_year):
@@ -32,3 +44,12 @@ class SemesterManager:
 
 	def cached_semesters(self):
 		return self.semesters.keys()
+
+
+# class SemesterManagerMeta(type):
+# 	_instance: Optional[SemesterManager] = None
+#
+# 	def __call__(self) -> SemesterManager:
+# 		if self._instance is None:
+# 			self._instance = super().__call__()
+# 		return self._instance
