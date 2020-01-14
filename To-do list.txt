@@ -10,3 +10,6 @@ out of given classes.
 # TODO makes a schedule by getting all possible combinations and then removing the impossible ones
 # TODO allow schedules to be optimized several ways
 # TODO add a function to the semester manager to save it to a google sheet
+# TODO make pickles widget show when button is pressed
+# TODO check on table population because there is an empty column
+# TODO I think the semester filtering should be done on the end of the semester manager, and it should just have a filtered list it gives
