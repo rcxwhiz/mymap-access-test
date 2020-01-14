@@ -10,6 +10,7 @@ import os
 import sys
 from classroom.semester_manager import SemesterManager
 import gui.pickle_ui
+import gui.single_class
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 pickleShouldBeOpen = False
@@ -17,6 +18,7 @@ semesterManager = SemesterManager()
 
 app = QtWidgets.QApplication(sys.argv)
 PickleSelector = QtWidgets.QWidget()
+ClassViewer = QtWidgets.QWidget()
 MainWindow = QtWidgets.QMainWindow()
 
 
@@ -37,12 +39,14 @@ class Ui_MainWindow(object):
         self.stackedWidget.setObjectName("stackedWidget")
         self.searchPage = QtWidgets.QWidget()
         self.searchPage.setObjectName("searchPage")
+
         self.tableWidget = QtWidgets.QTableWidget(self.searchPage)
         self.tableWidget.setGeometry(QtCore.QRect(210, 40, 751, 621))
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(9)
-        self.tableWidget.setHorizontalHeaderLabels(['College', 'Course', 'Section', 'Title', 'Instructor', 'Time', 'Type', 'Days', 'Credits'])
+        self.tableWidget.setColumnCount(10)
+        self.tableWidget.setHorizontalHeaderLabels(['College', 'Course', 'Section', 'Title', 'Instructor', 'Time', 'Type', 'Days', 'Credits', 'Location'])
         self.tableWidget.setRowCount(0)
+
         self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.semesterDisplay = QtWidgets.QTextBrowser(self.searchPage)
         self.semesterDisplay.setGeometry(QtCore.QRect(210, 0, 281, 31))
@@ -279,6 +283,7 @@ class Ui_MainWindow(object):
     def openPicklePage(self):
         global PickleSelector
         PickleSelector.show()
+        self.updateTable()
 
     # MY CODE
     def makeWindowSmall(self):
@@ -374,7 +379,8 @@ class Ui_MainWindow(object):
                         QtWidgets.QTableWidgetItem(f'{section.start} - {section.end}'),
                         QtWidgets.QTableWidgetItem(section.type),
                         QtWidgets.QTableWidgetItem(section.days),
-                        QtWidgets.QTableWidgetItem(str(section.credits))]
+                        QtWidgets.QTableWidgetItem(str(section.credits)),
+                        QtWidgets.QTableWidgetItem(section.loction)]
                 for i in range(len(data)):
                     self.tableWidget.setItem(section_ct, i, data[i])
 
@@ -390,9 +396,15 @@ def main():
     global app
     global PickleSelector
     global MainWindow
+    global ClassViewer
+
     pickleUi = gui.pickle_ui.Ui_Form()
     pickleUi.setupUi(PickleSelector)
     PickleSelector.hide()
+
+    classViewerUi = gui.single_class.Ui_Form()
+    classViewerUi.setupUi(ClassViewer)
+    ClassViewer.hide()
 
     screenSize = app.primaryScreen().size()
     ui = Ui_MainWindow()
