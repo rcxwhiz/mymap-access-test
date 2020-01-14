@@ -63,7 +63,7 @@ class Ui_MainWindow(object):
 
     def advancedSearchButtonAction(self):
         print('the search button')
-        gui.search_page.test()
+        self = gui.search_page.Ui_MainWindow()
 
     def schedulingButtonAction(self):
         print('the schedule button')
