@@ -71,7 +71,7 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 			pickle.dump(self.semesters[semester_year], open(semester_year, 'wb'))
 
 	def cached_semesters(self):
-		return self.semesters.keys()
+		return list(self.semesters.keys())
 
 	def select_semester(self, semester_year):
 		self.selected_semester = self.semesters[semester_year]

@@ -8,7 +8,10 @@
 
 import os
 import sys
+from classroom.semester_manager import SemesterManager
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+semesterManager = SemesterManager()
 
 
 class Ui_Form(object):
@@ -41,9 +44,16 @@ class Ui_Form(object):
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget1)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.tableView = QtWidgets.QTableView(self.widget1)
+
+        self.tableView = QtWidgets.QTableWidget(self.widget1)
         self.tableView.setObjectName("tableView")
         self.horizontalLayout_2.addWidget(self.tableView)
+        self.tableView.setColumnCount(2)
+        self.tableView.setHorizontalHeaderLabels(['Semester', 'Downloaded'])
+        self.tableView.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.tableView.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.tableView.verticalHeader().setVisible(False)
+
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
         self.pushButton = QtWidgets.QPushButton(self.widget1)
@@ -65,6 +75,18 @@ class Ui_Form(object):
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
+        self.updateCachedSemester()
+
+    def updateCachedSemester(self):
+        self.tableView.setRowCount(len(semesterManager.semesters))
+        semesters = semesterManager.cached_semesters()
+        for i in range(len(semesters)):
+            name = semesters[i]
+            time = semesterManager.semesters[semesters[i]].datestamp
+            self.tableView.setItem(i, 0, QtWidgets.QTableWidgetItem(name))
+            self.tableView.setItem(i, 1, QtWidgets.QTableWidgetItem(time))
+        self.tableView.resizeColumnsToContents()
+
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
@@ -77,7 +99,6 @@ class Ui_Form(object):
 
 
 if __name__ == "__main__":
-    import sys
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
     ui = Ui_Form()
