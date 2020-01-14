@@ -48,8 +48,8 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         # MY BUTTON CONNECTING
-        self.scheduleMakerButton.clicked.connect(self.schedulingButtonPrint)
-        self.advancedSearchButton.clicked.connect(self.advancedSearchButtonPrint)
+        self.scheduleMakerButton.clicked.connect(self.schedulingButtonAction)
+        self.advancedSearchButton.clicked.connect(self.advancedSearchButtonAction)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -60,10 +60,10 @@ class Ui_MainWindow(object):
         self.advancedSearchButton.setText(_translate("MainWindow", "Advanced Search"))
         self.scheduleMakerButton.setText(_translate("MainWindow", "Schedule Maker"))
 
-    def advancedSearchButtonPrint(self):
+    def advancedSearchButtonAction(self):
         print('the search button')
 
-    def schedulingButtonPrint(self):
+    def schedulingButtonAction(self):
         print('the schedule button')
 
 
