@@ -8,8 +8,10 @@
 
 import os
 import sys
+from classroom.semester_manager import SemesterManager
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+semesterManager = SemesterManager()
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow, screenSize):
@@ -31,7 +33,7 @@ class Ui_MainWindow(object):
         self.tableWidget = QtWidgets.QTableWidget(self.searchPage)
         self.tableWidget.setGeometry(QtCore.QRect(210, 40, 751, 621))
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(0)
+        self.tableWidget.setColumnCount(7)
         self.tableWidget.setRowCount(0)
         self.semesterDisplay = QtWidgets.QTextBrowser(self.searchPage)
         self.semesterDisplay.setGeometry(QtCore.QRect(210, 0, 281, 31))
@@ -244,6 +246,8 @@ class Ui_MainWindow(object):
         self.scheduleMakerButton.clicked.connect(self.gotoSchedulePage)
         self.backButton.clicked.connect(self.gotoStartPage)
         self.backButton_2.clicked.connect(self.gotoStartPage)
+        # TODO this bit is for testing, incorrect function
+        self.picklesButton.clicked.connect(self.updateTable)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.main_window_ref = MainWindow
 
@@ -339,6 +343,27 @@ class Ui_MainWindow(object):
 "version - 0.0.0\n"
 "\n"
 "Josh Bedwell"))
+
+    def updateTable(self):
+        global semesterManager
+        self.tableWidget.setRowCount(semesterManager.num_sections)
+        section_ct = 0
+        for course in semesterManager.selected_semester.courses:
+            for section in course.sections:
+                data = [QtWidgets.QTableWidgetItem(course.short_title),
+                        QtWidgets.QTableWidgetItem(course.long_title),
+                        QtWidgets.QTableWidgetItem(section.instructor),
+                        QtWidgets.QTableWidgetItem(f'{section.start} - {section.end}'),
+                        QtWidgets.QTableWidgetItem(section.type),
+                        QtWidgets.QTableWidgetItem(section.days),
+                        QtWidgets.QTableWidgetItem(section.credits)]
+                for i in range(len(data)):
+                    self.tableWidget.setItem(section_ct, i, data[i])
+
+                section_ct += 1
+
+    def clearTable(self):
+        self.tableWidget.setRowCount(0)
 
 
 def main():

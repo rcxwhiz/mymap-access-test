@@ -29,6 +29,10 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 		for file in os.listdir(pickles_path):
 			self.semesters[file] = pickle.load(open(os.path.join(pickles_path, file), 'rb'))
 
+		self.selected_semester = None
+
+		num_sections = 0
+
 	def semester(self, semester_year):
 		if semester_year in self.semesters.keys():
 			return self.semesters[semester_year]
@@ -44,6 +48,13 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 
 	def cached_semesters(self):
 		return self.semesters.keys()
+
+	def select_semester(self, semester_year):
+		self.selected_semester = self.semesters[semester_year]
+
+		self.num_sections = 0
+		for course in self.selected_semester.courses:
+			self.num_sections += len(course.sections)
 
 
 # class SemesterManagerMeta(type):
