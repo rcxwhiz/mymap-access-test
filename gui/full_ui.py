@@ -9,9 +9,16 @@
 import os
 import sys
 from classroom.semester_manager import SemesterManager
+import gui.pickle_ui
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+pickleShouldBeOpen = False
 semesterManager = SemesterManager()
+
+app = QtWidgets.QApplication(sys.argv)
+PickleSelector = QtWidgets.QWidget()
+MainWindow = QtWidgets.QMainWindow()
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow, screenSize):
@@ -248,8 +255,7 @@ class Ui_MainWindow(object):
         self.scheduleMakerButton.clicked.connect(self.gotoSchedulePage)
         self.backButton.clicked.connect(self.gotoStartPage)
         self.backButton_2.clicked.connect(self.gotoStartPage)
-        # TODO this bit is for testing, incorrect function
-        self.picklesButton.clicked.connect(self.updateTable)
+        self.picklesButton.clicked.connect(self.openPicklePage)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.main_window_ref = MainWindow
 
@@ -270,6 +276,11 @@ class Ui_MainWindow(object):
         return y
 
     # MY CODE
+    def openPicklePage(self):
+        global PickleSelector
+        PickleSelector.show()
+
+    # MY CODE
     def makeWindowSmall(self):
         self.main_window_ref.resize(380, 170)
         x = self.main_window_ref.x()
@@ -287,16 +298,19 @@ class Ui_MainWindow(object):
     def gotoStartPage(self):
         self.makeWindowSmall()
         self.stackedWidget.setCurrentIndex(2)
+        self.main_window_ref.setWindowTitle('BYU Scheduling Tool')
 
     # MY CODE
     def gotoSearchPage(self):
         self.makeWindowBig()
         self.stackedWidget.setCurrentIndex(0)
+        self.main_window_ref.setWindowTitle('BYU Scheduling Tool - Advanced Search')
 
     # MY CODE
     def gotoSchedulePage(self):
         self.makeWindowBig()
         self.stackedWidget.setCurrentIndex(1)
+        self.main_window_ref.setWindowTitle('BYU Scheduling Tool - Scheduler')
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -373,12 +387,18 @@ class Ui_MainWindow(object):
 
 
 def main():
-    app = QtWidgets.QApplication(sys.argv)
+    global app
+    global PickleSelector
+    global MainWindow
+    pickleUi = gui.pickle_ui.Ui_Form()
+    pickleUi.setupUi(PickleSelector)
+    PickleSelector.hide()
+
     screenSize = app.primaryScreen().size()
-    MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow, screenSize)
     MainWindow.show()
+
     sys.exit(app.exec_())
 
 

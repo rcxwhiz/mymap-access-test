@@ -42,12 +42,12 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 		                    'ONLINE': False,
 		                    'SALT LAKE': False,
 		                    'ST ABROAD': False}
-		self.day_filter = {'Monday': False,
-		                   'Tuesday': False,
-		                   'Wednesday': False,
-		                   'Thursday': False,
-		                   'Friday': False,
-		                   'Saturday': False}
+		self.day_filter = {'M': False,
+		                   'T': False,
+		                   'W': False,
+		                   'Th': False,
+		                   'F': False,
+		                   'Sa': False}
 		self.credits_filter = [0.0, 0.0]  # MIN - MAX
 		self.course_level_filter = {100: False,
 		                            200: False,
@@ -82,35 +82,38 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 
 	def update_filtered_list(self):
 
+		self.filtered_sections = []
+
 		for course in self.selected_semester.courses:
 			if self.dept_filter not in course.dept:
 				pass
+
 			if self.course_num_filter not in str(course.num):
 				pass
+
 			if self.course_name_filter not in course.long_title:
 				pass
+
 			if True in self.course_level_filter.values():
 				if not self.course_level_filter[course.level]:
 					pass
+
 			for section in course.sections:
 				if self.instructor_filter not in section.instructor:
 					pass
+
 				if True in self.type_filter.values():
 					if not self.type_filter[section.type]:
 						pass
-				# TODO day filtering not enabled
+
+				if True in self.day_filter.values():
+					for day in self.day_filter.keys():
+						if self.day_filter[day] and day not in section.days:
+							pass
+
 				if self.credits_filter[0] != 0 and self.credits_filter[1] != 0:
 					if not section.credits > self.credits_filter[0] or not section.credits < self.credits_filter[1]:
 						pass
 
 				# ALL TESTS HAVE BEEN PASSED
 				self.filtered_sections.append(section)
-
-
-# class SemesterManagerMeta(type):
-# 	_instance: Optional[SemesterManager] = None
-#
-# 	def __call__(self) -> SemesterManager:
-# 		if self._instance is None:
-# 			self._instance = super().__call__()
-# 		return self._instance

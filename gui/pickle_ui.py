@@ -6,12 +6,18 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-
+import os
+import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_Form(object):
     def setupUi(self, Form):
+        # MY CODE
+        self.assets = os.path.join(os.path.dirname(sys.argv[0]), 'assets')
+        Form.setWindowTitle('Semesters')
+        Form.setWindowIcon(QtGui.QIcon(os.path.join(self.assets, 'byu-icon.png')))
+
         Form.setObjectName("Form")
         Form.resize(330, 269)
         self.label = QtWidgets.QLabel(Form)
@@ -43,7 +49,6 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
         self.label.setText(_translate("Form", "Cached Semesters"))
         self.pushButton.setText(_translate("Form", "Delete"))
         self.pushButton_2.setText(_translate("Form", "Refresh"))
