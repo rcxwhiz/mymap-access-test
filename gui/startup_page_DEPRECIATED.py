@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'startup_page.ui'
+# Form implementation generated from reading ui file 'startup_page_DEPRECIATED.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -8,7 +8,7 @@
 
 import os
 import sys
-import gui.search_page
+import gui.search_page_DEPRECIATED
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -63,7 +63,7 @@ class Ui_MainWindow(object):
 
     def advancedSearchButtonAction(self):
         print('the search button')
-        self = gui.search_page.Ui_MainWindow()
+        self = gui.search_page_DEPRECIATED.Ui_MainWindow()
 
     def schedulingButtonAction(self):
         print('the schedule button')

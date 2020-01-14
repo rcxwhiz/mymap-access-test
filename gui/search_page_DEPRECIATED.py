@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'search_page.ui'
+# Form implementation generated from reading ui file 'search_page_DEPRECIATED.ui'
 #
 # Created by: PyQt5 UI code generator 5.14.1
 #
