@@ -33,8 +33,10 @@ class Ui_MainWindow(object):
         self.tableWidget = QtWidgets.QTableWidget(self.searchPage)
         self.tableWidget.setGeometry(QtCore.QRect(210, 40, 751, 621))
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(7)
+        self.tableWidget.setColumnCount(9)
+        self.tableWidget.setHorizontalHeaderLabels(['College', 'Course', 'Section', 'Title', 'Instructor', 'Time', 'Type', 'Days', 'Credits'])
         self.tableWidget.setRowCount(0)
+        self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.semesterDisplay = QtWidgets.QTextBrowser(self.searchPage)
         self.semesterDisplay.setGeometry(QtCore.QRect(210, 0, 281, 31))
         self.semesterDisplay.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -350,17 +352,21 @@ class Ui_MainWindow(object):
         section_ct = 0
         for course in semesterManager.selected_semester.courses:
             for section in course.sections:
-                data = [QtWidgets.QTableWidgetItem(course.short_title),
+                data = [QtWidgets.QTableWidgetItem(course.college_short),
+                        QtWidgets.QTableWidgetItem(course.short_title),
+                        QtWidgets.QTableWidgetItem(str(section.section_num)),
                         QtWidgets.QTableWidgetItem(course.long_title),
                         QtWidgets.QTableWidgetItem(section.instructor),
                         QtWidgets.QTableWidgetItem(f'{section.start} - {section.end}'),
                         QtWidgets.QTableWidgetItem(section.type),
                         QtWidgets.QTableWidgetItem(section.days),
-                        QtWidgets.QTableWidgetItem(section.credits)]
+                        QtWidgets.QTableWidgetItem(str(section.credits))]
                 for i in range(len(data)):
                     self.tableWidget.setItem(section_ct, i, data[i])
 
                 section_ct += 1
+        self.tableWidget.resizeColumnsToContents()
+        self.tableWidget.setColumnWidth(3, 200)
 
     def clearTable(self):
         self.tableWidget.setRowCount(0)
