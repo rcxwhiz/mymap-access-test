@@ -30,8 +30,32 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 			self.semesters[file] = pickle.load(open(os.path.join(pickles_path, file), 'rb'))
 
 		self.selected_semester = None
+		self.filtered_courses = []
 
-		num_sections = 0
+		self.dept_filter = ''
+		self.course_num_filter = ''
+		self.course_name_filter = ''
+		self.instructor_filter = ''
+		self.time_filter = [0, 0]
+		self.type_filter = {'DAY': False,
+		                    'EVENING': False,
+		                    'ONLINE': False,
+		                    'SALT LAKE': False,
+		                    'ST ABROAD': False}
+		self.day_filter = {'Monday': False,
+		                   'Tuesday': False,
+		                   'Wednesday': False,
+		                   'Thursday': False,
+		                   'Friday': False,
+		                   'Saturday': False}
+		self.credits_filter = [0.0, 0.0]
+		self.course_level_filter = {100: False,
+		                            200: False,
+		                            300: False,
+		                            400: False,
+		                            500: False,
+		                            600: False,
+		                            700: False}
 
 	def semester(self, semester_year):
 		if semester_year in self.semesters.keys():
@@ -52,9 +76,8 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 	def select_semester(self, semester_year):
 		self.selected_semester = self.semesters[semester_year]
 
-		self.num_sections = 0
-		for course in self.selected_semester.courses:
-			self.num_sections += len(course.sections)
+	def num_sections(self):
+		return len(self.filtered_courses)
 
 
 # class SemesterManagerMeta(type):

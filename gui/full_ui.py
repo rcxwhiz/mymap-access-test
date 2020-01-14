@@ -348,7 +348,7 @@ class Ui_MainWindow(object):
 
     def updateTable(self):
         global semesterManager
-        self.tableWidget.setRowCount(semesterManager.num_sections)
+        self.tableWidget.setRowCount(semesterManager.num_sections())
         section_ct = 0
         for course in semesterManager.selected_semester.courses:
             for section in course.sections:

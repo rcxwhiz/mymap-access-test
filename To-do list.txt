@@ -13,3 +13,4 @@ out of given classes.
 # TODO make pickles widget show when button is pressed
 # TODO check on table population because there is an empty column
 # TODO I think the semester filtering should be done on the end of the semester manager, and it should just have a filtered list it gives
+# TODO make the time and credit adjustors keep each other in check
