@@ -25,7 +25,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow, screenSize):
         # MY CODE
         self.assets = os.path.join(os.path.dirname(sys.argv[0]), 'assets')
-        MainWindow.setWindowTitle('BYU Schdeuling Tool')
+        MainWindow.setWindowTitle('BYU Schdeuling Tool - No Semester Selected')
         MainWindow.setWindowIcon(QtGui.QIcon(os.path.join(self.assets, 'byu-icon.png')))
         self.screenSize = screenSize
 
@@ -254,6 +254,7 @@ class Ui_MainWindow(object):
         self.backButton.clicked.connect(self.gotoStartPage)
         self.backButton_2.clicked.connect(self.gotoStartPage)
         self.picklesButton.clicked.connect(self.openPicklePage)
+        self.picklesButton_2.clicked.connect(self.openPicklePage)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.main_window_ref = MainWindow
 
@@ -277,7 +278,6 @@ class Ui_MainWindow(object):
     def openPicklePage(self):
         global PickleSelector
         PickleSelector.show()
-        self.updateTable()
 
     # MY CODE
     def makeWindowSmall(self):
@@ -296,24 +296,42 @@ class Ui_MainWindow(object):
     # MY CODE
     def gotoStartPage(self):
         self.makeWindowSmall()
+        self.clearTable()
+        semesterManager.selected_semester = None
         self.stackedWidget.setCurrentIndex(2)
-        self.main_window_ref.setWindowTitle('BYU Scheduling Tool')
+        self.updateTitleBar()
 
     # MY CODE
     def gotoSearchPage(self):
         self.makeWindowBig()
+        semesterManager.selected_semester = None
         self.stackedWidget.setCurrentIndex(0)
-        self.main_window_ref.setWindowTitle('BYU Scheduling Tool - Advanced Search')
+        self.updateTitleBar()
 
     # MY CODE
     def gotoSchedulePage(self):
         self.makeWindowBig()
+        self.clearTable()
+        semesterManager.selected_semester = None
         self.stackedWidget.setCurrentIndex(1)
-        self.main_window_ref.setWindowTitle('BYU Scheduling Tool - Scheduler')
+        self.updateTitleBar()
+
+    def updateTitleBar(self):
+        if self.stackedWidget.currentIndex() == 0:
+            mode = 'Advanced Search'
+        elif self.stackedWidget.currentIndex() == 1:
+            mode = 'Schedule Maker'
+        else:
+            self.main_window_ref.setWindowTitle(f'BYU Schdeuling Tool')
+            return None
+        if semesterManager.selected_semester is None:
+            self.main_window_ref.setWindowTitle(f'BYU Schdeuling Tool - {mode} - No Semester Selected')
+        else:
+            self.main_window_ref.setWindowTitle(f'BYU Scheduling Tool - {mode} - {semesterManager.selected_semester.semester_year}')
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(f'BYU Schdeuling Tool')
         self.deptLabel_3.setText(_translate("MainWindow", "Dept."))
         self.courseNumLabel_3.setText(_translate("MainWindow", "Course Num."))
         self.courseNameLabel_3.setText(_translate("MainWindow", "Course Name"))
@@ -381,25 +399,21 @@ class Ui_MainWindow(object):
         self.tableWidget.setRowCount(0)
 
 
+classViewerUi = gui.single_class.Ui_Form()
+classViewerUi.setupUi(ClassViewer)
+ClassViewer.hide()
+
+screenSize = app.primaryScreen().size()
+ui = Ui_MainWindow()
+ui.setupUi(MainWindow, screenSize)
+MainWindow.show()
+
+pickleUi = gui.pickle_ui.Ui_Form()
+pickleUi.setupUi(PickleSelector, ui)
+PickleSelector.hide()
+
 def main():
     global app
-    global PickleSelector
-    global MainWindow
-    global ClassViewer
-
-    pickleUi = gui.pickle_ui.Ui_Form()
-    pickleUi.setupUi(PickleSelector)
-    PickleSelector.hide()
-
-    classViewerUi = gui.single_class.Ui_Form()
-    classViewerUi.setupUi(ClassViewer)
-    ClassViewer.hide()
-
-    screenSize = app.primaryScreen().size()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow, screenSize)
-    MainWindow.show()
-
     sys.exit(app.exec_())
 
 

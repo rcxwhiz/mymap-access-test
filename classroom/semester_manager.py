@@ -117,3 +117,8 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 
 				# ALL TESTS HAVE BEEN PASSED
 				self.filtered_sections.append(section)
+
+	def remove_semester(self, semester_year):
+		del self.semesters[semester_year]
+		if os.path.exists(semester_year):
+			os.remove(semester_year)

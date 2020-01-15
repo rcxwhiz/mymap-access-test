@@ -15,7 +15,7 @@ semesterManager = SemesterManager()
 
 
 class Ui_Form(object):
-    def setupUi(self, Form):
+    def setupUi(self, Form, BigUi):
 		# MY CODE
         self.assets = os.path.join(os.path.dirname(sys.argv[0]), 'assets')
         Form.setWindowTitle('Semesters')
@@ -75,7 +75,40 @@ class Ui_Form(object):
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
+        self.tableView.cellClicked.connect(self.selected_semester)
+        self.pushButton_4.clicked.connect(self.apply)
+        self.pushButton_3.clicked.connect(self.askForSemester)
+        self.pushButton_2.clicked.connect(self.updateASemester)
+
         self.updateCachedSemester()
+        self.blue_semester = semesterManager.selected_semester
+        self.form_ref = Form
+        self.big_ui_ref = BigUi
+
+    def selected_semester(self, row, column):
+        self.blue_semester = self.tableView.itemAt(row, 0).text()
+
+    def apply(self):
+        if self.blue_semester is not None:
+            semesterManager.select_semester(self.blue_semester)
+            if self.big_ui_ref.stackedWidget.currentIndex() == 0:
+                self.big_ui_ref.updateTable()
+        self.big_ui_ref.updateTitleBar()
+        self.form_ref.hide()
+
+    def getRidOfASemester(self):
+        if self.blue_semester is not None:
+            semesterManager.remove_semester(self.blue_semester)
+
+    def updateASemester(self):
+        if self.blue_semester is not None:
+            semesterManager.update(self.blue_semester)
+
+    def askForSemester(self):
+        if self.lineEdit.text() in semesterManager.semesters.keys():
+            self.lineEdit.setText('Already downloaded')
+        else:
+            semesterManager.update(self.lineEdit.text())
 
     def updateCachedSemester(self):
         self.tableView.setRowCount(len(semesterManager.semesters))

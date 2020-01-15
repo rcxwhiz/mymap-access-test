@@ -62,6 +62,7 @@ def get(semester_year, recheck_delay=0.1):
 		semester_button.select_by_visible_text(semester_year)
 	except exceptions.NoSuchElementException:
 		logging.error(f'ERROR - Semester {semester_year} not found')
+		browser.close()
 		return None
 	college_buttons = get_college_buttons(browser, recheck_delay)
 
