@@ -8,6 +8,7 @@
 
 import os
 import sys
+import time
 from classroom.semester_manager import SemesterManager
 import gui.pickle_ui
 import gui.single_class
@@ -255,8 +256,14 @@ class Ui_MainWindow(object):
         self.backButton_2.clicked.connect(self.gotoStartPage)
         self.picklesButton.clicked.connect(self.openPicklePage)
         self.picklesButton_2.clicked.connect(self.openPicklePage)
+        self.deptLineEdit_3.textChanged.connect(self.updateDeptFilter)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.main_window_ref = MainWindow
+
+    def updateDeptFilter(self):
+        semesterManager.dept_filter = self.deptLineEdit_3.text()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
 
     # MY CODE
     def goodScreenX(self, x):
@@ -373,10 +380,15 @@ class Ui_MainWindow(object):
 "Josh Bedwell"))
 
     def updateTable(self):
-        global semesterManager
-        self.tableWidget.setRowCount(semesterManager.num_sections())
+        self.clearTable()
+        self.filteredSemester = semesterManager.get_filtered_semester()
+        num_sections = 0
+        for course in self.filteredSemester.courses:
+            num_sections += len(course.sections)
+        self.tableWidget.setRowCount(num_sections)
         section_ct = 0
-        for course in semesterManager.selected_semester.courses:
+        print(f'number of courses {len(self.filteredSemester.courses)}')
+        for course in self.filteredSemester.courses:
             for section in course.sections:
                 data = [QtWidgets.QTableWidgetItem(course.college_short),
                         QtWidgets.QTableWidgetItem(course.short_title),

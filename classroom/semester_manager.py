@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import pickle
 import os
 import sys
@@ -75,48 +76,63 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 
 	def select_semester(self, semester_year):
 		self.selected_semester = self.semesters[semester_year]
-		self.update_filtered_list()
 
 	def num_sections(self):
 		return len(self.filtered_sections)
 
-	def update_filtered_list(self):
+	def find_same_course(self, list, course):
+		for i in range(len(list)):
+			if course.short_title == list[i].short_title:
+				return i
 
-		self.filtered_sections = []
+	def find_same_section(self, list, section):
+		for i in range(len(list)):
+			if section.section_num == list[i].section_num:
+				return i
 
-		for course in self.selected_semester.courses:
+	def get_filtered_semester(self):
+
+		temp_semester = copy.deepcopy(self.selected_semester)
+
+		temp_courses = copy.deepcopy(temp_semester.courses)
+		for course in temp_semester.courses:
 			if self.dept_filter not in course.dept:
-				pass
+				del temp_courses[self.find_same_course(temp_courses, course)]
 
-			if self.course_num_filter not in str(course.num):
-				pass
+			elif self.course_num_filter not in str(course.num):
+				del temp_courses[self.find_same_course(temp_courses, course)]
 
-			if self.course_name_filter not in course.long_title:
-				pass
+			elif self.course_name_filter not in course.long_title:
+				del temp_courses[self.find_same_course(temp_courses, course)]
 
-			if True in self.course_level_filter.values():
+			elif True in self.course_level_filter.values():
 				if not self.course_level_filter[course.level]:
-					pass
+					del temp_courses[self.find_same_course(temp_courses, course)]
 
-			for section in course.sections:
-				if self.instructor_filter not in section.instructor:
-					pass
+			if self.find_same_course(temp_courses, course) is not None:
+				temp_sections = copy.deepcopy(temp_courses[self.find_same_course(temp_courses, course)].sections)
 
-				if True in self.type_filter.values():
-					if not self.type_filter[section.type]:
-						pass
+				for section in course.sections:
+					if self.instructor_filter not in section.instructor:
+						del temp_sections[self.find_same_section(temp_sections, section)]
 
-				if True in self.day_filter.values():
-					for day in self.day_filter.keys():
-						if self.day_filter[day] and day not in section.days:
-							pass
+					elif True in self.type_filter.values():
+						if not self.type_filter[section.type]:
+							del temp_sections[self.find_same_section(temp_sections, section)]
 
-				if self.credits_filter[0] != 0 and self.credits_filter[1] != 0:
-					if not section.credits > self.credits_filter[0] or not section.credits < self.credits_filter[1]:
-						pass
+					elif True in self.day_filter.values():
+						for day in self.day_filter.keys():
+							if self.day_filter[day] and day not in section.days:
+								del temp_sections[self.find_same_section(temp_sections, section)]
 
-				# ALL TESTS HAVE BEEN PASSED
-				self.filtered_sections.append(section)
+					elif self.credits_filter[0] != 0 and self.credits_filter[1] != 0:
+						if not section.credits > self.credits_filter[0] or not section.credits < self.credits_filter[1]:
+							del temp_sections[self.find_same_section(temp_sections, section)]
+
+				temp_courses[self.find_same_course(temp_courses, course)].sections = temp_sections
+		temp_semester.courses = temp_courses
+		# ALL TESTS HAVE BEEN PASSED
+		return temp_semester
 
 	def remove_semester(self, semester_year):
 		del self.semesters[semester_year]

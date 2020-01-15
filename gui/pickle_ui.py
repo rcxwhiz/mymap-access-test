@@ -122,7 +122,6 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
         self.label.setText(_translate("Form", "Cached Semesters"))
         self.pushButton_3.setText(_translate("Form", "Get Semester"))
         self.pushButton.setText(_translate("Form", "Delete"))
