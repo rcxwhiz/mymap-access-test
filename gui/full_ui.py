@@ -257,11 +257,29 @@ class Ui_MainWindow(object):
         self.picklesButton.clicked.connect(self.openPicklePage)
         self.picklesButton_2.clicked.connect(self.openPicklePage)
         self.deptLineEdit_3.textChanged.connect(self.updateDeptFilter)
+        self.courseNumLineEdit_3.textChanged.connect(self.updateCourseNumFilter)
+        self.courseNameLineEdit_3.textChanged.connect(self.updateCourseNameFilter)
+        self.instructorLineEdit_3.textChanged.connect(self.updateInstructorFilter)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.main_window_ref = MainWindow
 
     def updateDeptFilter(self):
         semesterManager.dept_filter = self.deptLineEdit_3.text()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
+
+    def updateCourseNumFilter(self):
+        semesterManager.course_num_filter = self.courseNumLineEdit_3.text()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
+
+    def updateCourseNameFilter(self):
+        semesterManager.course_name_filter = self.courseNameLineEdit_3.text()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
+
+    def updateInstructorFilter(self):
+        semesterManager.instructor_filter = self.instructorLineEdit_3.text()
         if semesterManager.selected_semester is not None:
             self.updateTable()
 

@@ -80,15 +80,19 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 	def num_sections(self):
 		return len(self.filtered_sections)
 
-	def find_same_course(self, list, course):
-		for i in range(len(list)):
-			if course.short_title == list[i].short_title:
+	def find_same_course(self, list_in, course):
+		for i in range(len(list_in)):
+			if course.short_title == list_in[i].short_title:
 				return i
 
-	def find_same_section(self, list, section):
-		for i in range(len(list)):
-			if section.section_num == list[i].section_num:
+	def find_same_section(self, list_in, section):
+		for i in range(len(list_in)):
+			if section.section_num == list_in[i].section_num:
 				return i
+		print(f"Couldn't find {section.section_num}")
+		print(f'Was looking in:')
+		for sec in list_in:
+			print(sec.section_num)
 
 	def get_filtered_semester(self):
 
@@ -113,7 +117,10 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 				temp_sections = copy.deepcopy(temp_courses[self.find_same_course(temp_courses, course)].sections)
 
 				for section in course.sections:
+					# TODO there is a PROBLEM here with getting the index to delete
 					if self.instructor_filter not in section.instructor:
+						print(f'Course: {course.short_title} Section: {section.section_num}')
+						# print(f'Index found: {self.find_same_section(temp_sections, section)}')
 						del temp_sections[self.find_same_section(temp_sections, section)]
 
 					elif True in self.type_filter.values():
