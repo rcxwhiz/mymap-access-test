@@ -267,6 +267,13 @@ class Ui_MainWindow(object):
         self.stabroadCheckbox.clicked.connect(self.updateTypeFilter)
         self.maxCredits_3.valueChanged.connect(self.updateCreditsFilterMax)
         self.minCredits_3.valueChanged.connect(self.updateCreditsFilterMin)
+        self.level100_3.clicked.connect(self.updateLevelFilter)
+        self.level200_3.clicked.connect(self.updateLevelFilter)
+        self.level300_3.clicked.connect(self.updateLevelFilter)
+        self.level400_3.clicked.connect(self.updateLevelFilter)
+        self.level500_3.clicked.connect(self.updateLevelFilter)
+        self.level600_3.clicked.connect(self.updateLevelFilter)
+        self.level700_3.clicked.connect(self.updateLevelFilter)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.main_window_ref = MainWindow
 
@@ -290,6 +297,17 @@ class Ui_MainWindow(object):
         semesterManager.type_filter['ONLINE'] = self.onlineCheckbox.isChecked()
         semesterManager.type_filter['SALT LAKE'] = self.slCheckbox.isChecked()
         semesterManager.type_filter['ST ABROAD'] = self.stabroadCheckbox.isChecked()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
+
+    def updateLevelFilter(self):
+        semesterManager.course_level_filter[100] = self.level100_3.isChecked()
+        semesterManager.course_level_filter[200] = self.level200_3.isChecked()
+        semesterManager.course_level_filter[300] = self.level400_3.isChecked()
+        semesterManager.course_level_filter[400] = self.level400_3.isChecked()
+        semesterManager.course_level_filter[500] = self.level500_3.isChecked()
+        semesterManager.course_level_filter[600] = self.level600_3.isChecked()
+        semesterManager.course_level_filter[700] = self.level700_3.isChecked()
         if semesterManager.selected_semester is not None:
             self.updateTable()
 
