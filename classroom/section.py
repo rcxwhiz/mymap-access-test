@@ -11,8 +11,8 @@ class Section:
 		self.credits = float(re.findall(r'\d+\.\d+', attributes['credits'])[0])
 		self.term = attributes['term']
 		self.days = attributes['days']
-		self.start = attributes['start']
-		self.end = attributes['end']
+		self.start = attributes['starts']
+		self.end = attributes['ends']
 		self.loction = attributes['loction']
 		self.available_frac = attributes['available']
 		self.waitlist = int(attributes['waitlist'])

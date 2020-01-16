@@ -528,22 +528,26 @@ class Ui_MainWindow(object):
         section_ct = 0
         for course in self.filteredSemester.courses:
             for section in course.sections:
+                times = ''
+                for i in range(len(section.start)):
+                    times += section.start[i] + ' - ' + section.end[i] + ', '
+                times = times[:-2]
                 data = [QtWidgets.QTableWidgetItem(course.college_short),
                         QtWidgets.QTableWidgetItem(course.short_title),
                         QtWidgets.QTableWidgetItem(str(section.section_num)),
                         QtWidgets.QTableWidgetItem(course.long_title),
                         QtWidgets.QTableWidgetItem(section.instructor),
-                        QtWidgets.QTableWidgetItem(f'{section.start} - {section.end}'),
+                        QtWidgets.QTableWidgetItem(times),
                         QtWidgets.QTableWidgetItem(section.type),
                         QtWidgets.QTableWidgetItem(section.days),
                         QtWidgets.QTableWidgetItem(str(section.credits)),
                         QtWidgets.QTableWidgetItem(section.loction)]
                 for i in range(len(data)):
                     self.tableWidget.setItem(section_ct, i, data[i])
-
                 section_ct += 1
         self.tableWidget.resizeColumnsToContents()
         self.tableWidget.setColumnWidth(3, 200)
+        self.tableWidget.setColumnWidth(5, 125)
 
     def clearTable(self):
         self.tableWidget.setRowCount(0)
@@ -562,10 +566,4 @@ pickleUi = gui.pickle_ui.Ui_Form()
 pickleUi.setupUi(PickleSelector, ui)
 PickleSelector.hide()
 
-def main():
-    global app
-    sys.exit(app.exec_())
-
-
-if __name__ == "__main__":
-    main()
+sys.exit(app.exec_())

@@ -153,8 +153,8 @@ def get(semester_year, recheck_delay=0.1):
 				                      'credits': data[3].text,
 				                      'term': data[4].text,
 				                      'days': data[5].text,
-				                      'start': data[6].text,
-				                      'end': data[7].text,
+				                      'starts': data[6].text.split('\n'),
+				                      'ends': data[7].text.split('\n'),
 				                      'loction': data[8].text,
 				                      'available': data[9].text,
 				                      'waitlist': data[10].text}
