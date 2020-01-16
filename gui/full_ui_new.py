@@ -1,25 +1,19 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'full_ui.ui'
+# Form implementation generated from reading ui file 'full_ui_new.ui'
 #
 # Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
-import os
-import sys
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        # MY CODE
-        self.assets = os.path.join(os.path.dirname(sys.argv[0]), 'assets')
-        MainWindow.setWindowTitle('BYU Schdeuling Tool')
-        MainWindow.setWindowIcon(QtGui.QIcon(os.path.join(self.assets, 'byu-icon.png')))
-
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(380, 170)
+        MainWindow.resize(1014, 696)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.stackedWidget = QtWidgets.QStackedWidget(self.centralwidget)
@@ -29,11 +23,16 @@ class Ui_MainWindow(object):
         self.searchPage.setObjectName("searchPage")
         self.tableWidget = QtWidgets.QTableWidget(self.searchPage)
         self.tableWidget.setGeometry(QtCore.QRect(210, 40, 751, 621))
-        self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(0)
+        self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.tableWidget.setTextElideMode(QtCore.Qt.ElideLeft)
         self.tableWidget.setRowCount(0)
+        self.tableWidget.setColumnCount(0)
+        self.tableWidget.setObjectName("tableWidget")
         self.semesterDisplay = QtWidgets.QTextBrowser(self.searchPage)
         self.semesterDisplay.setGeometry(QtCore.QRect(210, 0, 281, 31))
+        self.semesterDisplay.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.semesterDisplay.setFrameShadow(QtWidgets.QFrame.Plain)
         self.semesterDisplay.setObjectName("semesterDisplay")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.searchPage)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 40, 171, 621))
@@ -65,9 +64,23 @@ class Ui_MainWindow(object):
         self.instructorLineEdit_3 = QtWidgets.QLineEdit(self.verticalLayoutWidget)
         self.instructorLineEdit_3.setObjectName("instructorLineEdit_3")
         self.searchCol_3.addWidget(self.instructorLineEdit_3)
+        self.label_3 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label_3.setObjectName("label_3")
+        self.searchCol_3.addWidget(self.label_3)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.timeEdit = QtWidgets.QTimeEdit(self.verticalLayoutWidget)
+        self.timeEdit.setObjectName("timeEdit")
+        self.horizontalLayout_2.addWidget(self.timeEdit)
+        self.timeEdit_2 = QtWidgets.QTimeEdit(self.verticalLayoutWidget)
+        self.timeEdit_2.setObjectName("timeEdit_2")
+        self.horizontalLayout_2.addWidget(self.timeEdit_2)
+        self.searchCol_3.addLayout(self.horizontalLayout_2)
         self.courseTypeLabel_3 = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.courseTypeLabel_3.setObjectName("courseTypeLabel_3")
         self.searchCol_3.addWidget(self.courseTypeLabel_3)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout_12 = QtWidgets.QVBoxLayout()
         self.verticalLayout_12.setObjectName("verticalLayout_12")
         self.dayCheckbox_3 = QtWidgets.QCheckBox(self.verticalLayoutWidget)
@@ -76,10 +89,20 @@ class Ui_MainWindow(object):
         self.eveningCheckbox_3 = QtWidgets.QCheckBox(self.verticalLayoutWidget)
         self.eveningCheckbox_3.setObjectName("eveningCheckbox_3")
         self.verticalLayout_12.addWidget(self.eveningCheckbox_3)
-        self.otherCheckbox_3 = QtWidgets.QCheckBox(self.verticalLayoutWidget)
-        self.otherCheckbox_3.setObjectName("otherCheckbox_3")
-        self.verticalLayout_12.addWidget(self.otherCheckbox_3)
-        self.searchCol_3.addLayout(self.verticalLayout_12)
+        self.onlineCheckbox = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.onlineCheckbox.setObjectName("onlineCheckbox")
+        self.verticalLayout_12.addWidget(self.onlineCheckbox)
+        self.horizontalLayout.addLayout(self.verticalLayout_12)
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.slCheckbox = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.slCheckbox.setObjectName("slCheckbox")
+        self.verticalLayout.addWidget(self.slCheckbox)
+        self.stabroadCheckbox = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.stabroadCheckbox.setObjectName("stabroadCheckbox")
+        self.verticalLayout.addWidget(self.stabroadCheckbox)
+        self.horizontalLayout.addLayout(self.verticalLayout)
+        self.searchCol_3.addLayout(self.horizontalLayout)
         self.dayLabel_3 = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.dayLabel_3.setObjectName("dayLabel_3")
         self.searchCol_3.addWidget(self.dayLabel_3)
@@ -170,9 +193,60 @@ class Ui_MainWindow(object):
         self.picklesButton_2 = QtWidgets.QPushButton(self.schedulePage)
         self.picklesButton_2.setGeometry(QtCore.QRect(20, 10, 111, 31))
         self.picklesButton_2.setObjectName("picklesButton_2")
-        self.label_2 = QtWidgets.QLabel(self.schedulePage)
-        self.label_2.setGeometry(QtCore.QRect(350, 220, 241, 141))
+        self.tableWidget_2 = QtWidgets.QTableWidget(self.schedulePage)
+        self.tableWidget_2.setGeometry(QtCore.QRect(180, 70, 801, 601))
+        self.tableWidget_2.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.tableWidget_2.setObjectName("tableWidget_2")
+        self.tableWidget_2.setColumnCount(0)
+        self.tableWidget_2.setRowCount(0)
+        self.label_5 = QtWidgets.QLabel(self.schedulePage)
+        self.label_5.setGeometry(QtCore.QRect(190, 50, 111, 16))
+        self.label_5.setObjectName("label_5")
+        self.layoutWidget = QtWidgets.QWidget(self.schedulePage)
+        self.layoutWidget.setGeometry(QtCore.QRect(20, 80, 141, 491))
+        self.layoutWidget.setObjectName("layoutWidget")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.layoutWidget)
+        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.label_2 = QtWidgets.QLabel(self.layoutWidget)
         self.label_2.setObjectName("label_2")
+        self.verticalLayout_3.addWidget(self.label_2)
+        self.textEdit = QtWidgets.QTextEdit(self.layoutWidget)
+        self.textEdit.setObjectName("textEdit")
+        self.verticalLayout_3.addWidget(self.textEdit)
+        self.pushButton = QtWidgets.QPushButton(self.layoutWidget)
+        self.pushButton.setObjectName("pushButton")
+        self.verticalLayout_3.addWidget(self.pushButton)
+        self.label_4 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_4.setObjectName("label_4")
+        self.verticalLayout_3.addWidget(self.label_4)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.radioButton_3 = QtWidgets.QRadioButton(self.layoutWidget)
+        self.radioButton_3.setObjectName("radioButton_3")
+        self.verticalLayout_2.addWidget(self.radioButton_3)
+        self.radioButton_2 = QtWidgets.QRadioButton(self.layoutWidget)
+        self.radioButton_2.setObjectName("radioButton_2")
+        self.verticalLayout_2.addWidget(self.radioButton_2)
+        self.radioButton = QtWidgets.QRadioButton(self.layoutWidget)
+        self.radioButton.setObjectName("radioButton")
+        self.verticalLayout_2.addWidget(self.radioButton)
+        self.radioButton_4 = QtWidgets.QRadioButton(self.layoutWidget)
+        self.radioButton_4.setObjectName("radioButton_4")
+        self.verticalLayout_2.addWidget(self.radioButton_4)
+        self.radioButton_5 = QtWidgets.QRadioButton(self.layoutWidget)
+        self.radioButton_5.setObjectName("radioButton_5")
+        self.verticalLayout_2.addWidget(self.radioButton_5)
+        self.radioButton_7 = QtWidgets.QRadioButton(self.layoutWidget)
+        self.radioButton_7.setObjectName("radioButton_7")
+        self.verticalLayout_2.addWidget(self.radioButton_7)
+        self.radioButton_6 = QtWidgets.QRadioButton(self.layoutWidget)
+        self.radioButton_6.setObjectName("radioButton_6")
+        self.verticalLayout_2.addWidget(self.radioButton_6)
+        self.verticalLayout_3.addLayout(self.verticalLayout_2)
+        self.label_6 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_6.setObjectName("label_6")
+        self.verticalLayout_3.addWidget(self.label_6)
         self.stackedWidget.addWidget(self.schedulePage)
         self.startPage = QtWidgets.QWidget()
         self.startPage.setObjectName("startPage")
@@ -204,42 +278,21 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-
-        # MY CODE
-        self.advancedSearchButton.clicked.connect(self.gotoSearchPage)
-        self.scheduleMakerButton.clicked.connect(self.gotoSchedulePage)
-        self.backButton.clicked.connect(self.gotoStartPage)
-        self.backButton_2.clicked.connect(self.gotoStartPage)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        self.stackedWidget.setCurrentIndex(2)
-        self.main_window_ref = MainWindow
-
-    # MY CODE
-    def makeWindowSmall(self):
-        self.main_window_ref.resize(380, 170)
-
-    # MY CODE
-    def makeWindowBig(self):
-        self.main_window_ref.resize(1000, 700)
-
-    # MY CODE
-    def gotoStartPage(self):
-        self.makeWindowSmall()
-        self.stackedWidget.setCurrentIndex(2)
-
-    # MY CODE
-    def gotoSearchPage(self):
-        self.makeWindowBig()
-        self.stackedWidget.setCurrentIndex(0)
-
-    # MY CODE
-    def gotoSchedulePage(self):
-        self.makeWindowBig()
         self.stackedWidget.setCurrentIndex(1)
+        self.advancedSearchButton.clicked.connect(MainWindow.show)
+        self.advancedSearchButton.clicked.connect(self.stackedWidget.show)
+        self.scheduleMakerButton.clicked.connect(MainWindow.show)
+        self.scheduleMakerButton.clicked.connect(self.stackedWidget.show)
+        self.backButton.clicked.connect(MainWindow.show)
+        self.backButton.clicked.connect(self.stackedWidget.show)
+        self.backButton_2.clicked.connect(MainWindow.show)
+        self.backButton_2.clicked.connect(self.stackedWidget.show)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.tableWidget.setSortingEnabled(True)
         self.semesterDisplay.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -249,10 +302,13 @@ class Ui_MainWindow(object):
         self.courseNumLabel_3.setText(_translate("MainWindow", "Course Num."))
         self.courseNameLabel_3.setText(_translate("MainWindow", "Course Name"))
         self.instructorLabel_3.setText(_translate("MainWindow", "Instructor"))
+        self.label_3.setText(_translate("MainWindow", "Time Range (start - end)"))
         self.courseTypeLabel_3.setText(_translate("MainWindow", "Type"))
         self.dayCheckbox_3.setText(_translate("MainWindow", "DAY"))
         self.eveningCheckbox_3.setText(_translate("MainWindow", "EVENING"))
-        self.otherCheckbox_3.setText(_translate("MainWindow", "Something?"))
+        self.onlineCheckbox.setText(_translate("MainWindow", "ONLINE"))
+        self.slCheckbox.setText(_translate("MainWindow", "SALT LAKE"))
+        self.stabroadCheckbox.setText(_translate("MainWindow", "ST ABROAD"))
         self.dayLabel_3.setText(_translate("MainWindow", "Day"))
         self.mondayBox_3.setText(_translate("MainWindow", "Monday"))
         self.wednesdayBox_3.setText(_translate("MainWindow", "Wednesday"))
@@ -273,7 +329,19 @@ class Ui_MainWindow(object):
         self.picklesButton.setText(_translate("MainWindow", "Choose Semester"))
         self.backButton_2.setText(_translate("MainWindow", "Back"))
         self.picklesButton_2.setText(_translate("MainWindow", "Choose Semester"))
-        self.label_2.setText(_translate("MainWindow", "THIS IS AN EMPTY TEST PAGE"))
+        self.tableWidget_2.setSortingEnabled(False)
+        self.label_5.setText(_translate("MainWindow", "Possible Schedules:"))
+        self.label_2.setText(_translate("MainWindow", "Enter classes here:"))
+        self.pushButton.setText(_translate("MainWindow", "Find Schedules"))
+        self.label_4.setText(_translate("MainWindow", "Optimization"))
+        self.radioButton_3.setText(_translate("MainWindow", "All"))
+        self.radioButton_2.setText(_translate("MainWindow", "Earliest"))
+        self.radioButton.setText(_translate("MainWindow", "Earliest Start"))
+        self.radioButton_4.setText(_translate("MainWindow", "Latest"))
+        self.radioButton_5.setText(_translate("MainWindow", "Latest Start"))
+        self.radioButton_7.setText(_translate("MainWindow", "Shortest Day"))
+        self.radioButton_6.setText(_translate("MainWindow", "Least Gaps"))
+        self.label_6.setText(_translate("MainWindow", "Cannot find:"))
         self.advancedSearchButton.setText(_translate("MainWindow", "Advanced Search"))
         self.scheduleMakerButton.setText(_translate("MainWindow", "Schedule Maker"))
         self.label.setText(_translate("MainWindow", "BYU Class Scheduling & Search Tool\n"
@@ -283,7 +351,7 @@ class Ui_MainWindow(object):
 "Josh Bedwell"))
 
 
-def main():
+if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
@@ -291,7 +359,3 @@ def main():
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-
-
-if __name__ == "__main__":
-    main()
