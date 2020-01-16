@@ -260,8 +260,22 @@ class Ui_MainWindow(object):
         self.courseNumLineEdit_3.textChanged.connect(self.updateCourseNumFilter)
         self.courseNameLineEdit_3.textChanged.connect(self.updateCourseNameFilter)
         self.instructorLineEdit_3.textChanged.connect(self.updateInstructorFilter)
+        self.dayCheckbox_3.clicked.connect(self.updateTypeFilter)
+        self.eveningCheckbox_3.clicked.connect(self.updateTypeFilter)
+        self.onlineCheckbox.clicked.connect(self.updateTypeFilter)
+        self.slCheckbox.clicked.connect(self.updateTypeFilter)
+        self.stabroadCheckbox.clicked.connect(self.updateTypeFilter)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.main_window_ref = MainWindow
+
+    def updateTypeFilter(self):
+        semesterManager.type_filter['DAY'] = self.dayCheckbox_3.isChecked()
+        semesterManager.type_filter['EVENING'] = self.eveningCheckbox_3.isChecked()
+        semesterManager.type_filter['ONLINE'] = self.onlineCheckbox.isChecked()
+        semesterManager.type_filter['SALT LAKE'] = self.slCheckbox.isChecked()
+        semesterManager.type_filter['ST ABROAD'] = self.stabroadCheckbox.isChecked()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
 
     def updateDeptFilter(self):
         semesterManager.dept_filter = self.deptLineEdit_3.text()
