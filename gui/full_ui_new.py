@@ -6,8 +6,19 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-
+import os
+import sys
+from classroom.semester_manager import SemesterManager
+import gui.pickle_ui
+import gui.single_class
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+semesterManager = SemesterManager()
+
+app = QtWidgets.QApplication(sys.argv)
+PickleSelector = QtWidgets.QWidget()
+ClassViewer = QtWidgets.QWidget()
+MainWindow = QtWidgets.QMainWindow()
 
 
 class Ui_MainWindow(object):
@@ -350,12 +361,54 @@ class Ui_MainWindow(object):
 "\n"
 "Josh Bedwell"))
 
+    def updateTable(self):
+        self.clearTable()
+        self.filteredSemester = semesterManager.get_filtered_semester()
+        num_sections = 0
+        for course in self.filteredSemester.courses:
+            num_sections += len(course.sections)
+        self.tableWidget.setRowCount(num_sections)
+        section_ct = 0
+        for course in self.filteredSemester.courses:
+            for section in course.sections:
+                data = [QtWidgets.QTableWidgetItem(course.college_short),
+                        QtWidgets.QTableWidgetItem(course.short_title),
+                        QtWidgets.QTableWidgetItem(str(section.section_num)),
+                        QtWidgets.QTableWidgetItem(course.long_title),
+                        QtWidgets.QTableWidgetItem(section.instructor),
+                        QtWidgets.QTableWidgetItem(f'{section.start} - {section.end}'),
+                        QtWidgets.QTableWidgetItem(section.type),
+                        QtWidgets.QTableWidgetItem(section.days),
+                        QtWidgets.QTableWidgetItem(str(section.credits)),
+                        QtWidgets.QTableWidgetItem(section.loction)]
+                for i in range(len(data)):
+                    self.tableWidget.setItem(section_ct, i, data[i])
+
+                section_ct += 1
+        self.tableWidget.resizeColumnsToContents()
+        self.tableWidget.setColumnWidth(3, 200)
+
+    def clearTable(self):
+        self.tableWidget.setRowCount(0)
+
+
+classViewerUi = gui.single_class.Ui_Form()
+classViewerUi.setupUi(ClassViewer)
+ClassViewer.hide()
+
+screenSize = app.primaryScreen().size()
+ui = Ui_MainWindow()
+ui.setupUi(MainWindow, screenSize)
+MainWindow.show()
+
+pickleUi = gui.pickle_ui.Ui_Form()
+pickleUi.setupUi(PickleSelector, ui)
+PickleSelector.hide()
+
+def main():
+    global app
+    sys.exit(app.exec_())
+
 
 if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+    main()
