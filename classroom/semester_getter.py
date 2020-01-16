@@ -155,7 +155,7 @@ def get(semester_year, recheck_delay=0.1):
 				                      'days': data[5].text,
 				                      'start': data[6].text,
 				                      'end': data[7].text,
-				                      'location': data[8].text,
+				                      'loction': data[8].text,
 				                      'available': data[9].text,
 				                      'waitlist': data[10].text}
 				course_attributes['sections'].append(Section(section_attributes))

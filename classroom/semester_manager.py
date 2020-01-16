@@ -6,7 +6,7 @@ import os
 import sys
 from typing import Optional
 from classroom import semester_getter
-from my_logger import logging
+import classroom
 
 
 class SemesterManagerMeta(type):
@@ -83,6 +83,8 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 	def find_same_course(self, list_in, course):
 		for i in range(len(list_in)):
 			if course.short_title == list_in[i].short_title:
+				if 'R' in course.short_title:
+					print(f'Found an R course in {course.short_title}')
 				return i
 
 	def del_section(self, sections, section_num):
@@ -99,49 +101,74 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 		print('Did not find a course')
 
 	def get_filtered_semester(self):
+		semester_attributes = {'timestamp': self.selected_semester.timestamp,
+		              'datestamp': self.selected_semester.datestamp,
+		              'courses': [],
+		              'semester year': self.selected_semester.semester_year}
 
-		temp_semester = copy.deepcopy(self.selected_semester)
-
-		temp_courses = copy.deepcopy(temp_semester.courses)
-		for course in temp_semester.courses:
+		for course in self.selected_semester.courses:
+			course_attributes = {'dept': course.dept,
+			                     'num': course.num,
+			                     'long title': course.long_title,
+			                     'description': course.description,
+			                     'college short': course.college_short,
+			                     'college long': course.college_long,
+			                     'courseCredits': course.hours,
+			                     'courseOffered': course.offered,
+			                     'courseHeaders': course.headers,
+			                     'courseNote': course.note,
+			                     'courseWhenTaught': course.when_taught,
+			                     'coursePrereqs': course.prerequisites,
+			                     'courseRec': course.recommended,
+			                     'sections': []}
 			if self.dept_filter not in course.dept:
-				del temp_courses[self.find_same_course(temp_courses, course)]
+				continue
 
 			elif self.course_num_filter not in str(course.num):
-				del temp_courses[self.find_same_course(temp_courses, course)]
+				continue
 
 			elif self.course_name_filter not in course.long_title:
-				del temp_courses[self.find_same_course(temp_courses, course)]
+				continue
 
-			elif True in self.course_level_filter.values():
-				if not self.course_level_filter[course.level]:
-					del temp_courses[self.find_same_course(temp_courses, course)]
+			elif True in self.course_level_filter.values() and not self.course_level_filter[course.level]:
+				continue
 
-			if self.find_same_course(temp_courses, course) is not None:
-				temp_sections = copy.deepcopy(self.get_sections_by_course(temp_courses, course.short_title))
+			for section in course.sections:
+				make_section = True
+				if self.instructor_filter not in section.instructor:
+					make_section = False
 
-				for section in course.sections:
-					# TODO there is a PROBLEM here with getting the index to delete
-					if self.instructor_filter not in section.instructor:
-						self.del_section(temp_sections, section.section_num)
+				elif True in self.type_filter.values() and not self.type_filter[section.type]:
+					make_section = False
 
-					elif True in self.type_filter.values():
-						if not self.type_filter[section.type]:
-							self.del_section(temp_sections, section.section_num)
+				elif True in self.day_filter.values():
+					for day in self.day_filter.keys():
+						if self.day_filter[day] and day not in section.days:
+							make_section = False
+							break
 
-					elif True in self.day_filter.values():
-						for day in self.day_filter.keys():
-							if self.day_filter[day] and day not in section.days:
-								self.del_section(temp_sections, section.section_num)
+				elif self.credits_filter[0] != 0 and self.credits_filter[1] != 0:
+					if not section.credits > self.credits_filter[0] or not section.credits < self.credits_filter[1]:
+						make_section = False
 
-					elif self.credits_filter[0] != 0 and self.credits_filter[1] != 0:
-						if not section.credits > self.credits_filter[0] or not section.credits < self.credits_filter[1]:
-							self.del_section(temp_sections, section.section_num)
+				if make_section:
+					section_attributes = {'section num': section.section_num,
+					                      'type': section.type,
+					                      'instructor': section.instructor,
+					                      'credits': str(section.credits),
+					                      'term': section.term,
+					                      'days': section.days,
+					                      'start': section.start,
+					                      'end': section.end,
+					                      'loction': section.loction,
+					                      'available': section.available_frac,
+					                      'waitlist': section.waitlist}
+					course_attributes['sections'].append(classroom.section.Section(section_attributes))
 
-				temp_courses[self.find_same_course(temp_courses, course)].sections = temp_sections
-		temp_semester.courses = temp_courses
-		# ALL TESTS HAVE BEEN PASSED
-		return temp_semester
+			if len(course.sections) > 0:
+				semester_attributes['courses'].append(classroom.course.Course(course_attributes))
+
+		return classroom.semester.Semester(semester_attributes)
 
 	def remove_semester(self, semester_year):
 		del self.semesters[semester_year]

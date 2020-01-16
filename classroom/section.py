@@ -13,12 +13,12 @@ class Section:
 		self.days = attributes['days']
 		self.start = attributes['start']
 		self.end = attributes['end']
-		self.loction = attributes['location']
+		self.loction = attributes['loction']
 		self.available_frac = attributes['available']
 		self.waitlist = int(attributes['waitlist'])
 
 		building_regex = re.compile(r'[a-zA-Z]*')
-		self.building = building_regex.search(attributes['location']).group()
+		self.building = building_regex.search(attributes['loction']).group()
 
 		available_regex1 = re.compile(r'[0-9]+/')
 		available_regex2 = re.compile(r'/[0-9]+')
