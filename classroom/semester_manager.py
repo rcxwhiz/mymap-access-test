@@ -85,14 +85,18 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 			if course.short_title == list_in[i].short_title:
 				return i
 
-	def find_same_section(self, list_in, section):
-		for i in range(len(list_in)):
-			if section.section_num == list_in[i].section_num:
-				return i
-		print(f"Couldn't find {section.section_num}")
-		print(f'Was looking in:')
-		for sec in list_in:
-			print(sec.section_num)
+	def del_section(self, sections, section_num):
+		for section in sections:
+			if section.section_num == section_num:
+				sections.remove(section)
+				return None
+		print('Did not find a section')
+
+	def get_sections_by_course(self, courses, short_name):
+		for course in courses:
+			if course.short_title == short_name:
+				return course.sections
+		print('Did not find a course')
 
 	def get_filtered_semester(self):
 
@@ -114,27 +118,25 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 					del temp_courses[self.find_same_course(temp_courses, course)]
 
 			if self.find_same_course(temp_courses, course) is not None:
-				temp_sections = copy.deepcopy(temp_courses[self.find_same_course(temp_courses, course)].sections)
+				temp_sections = copy.deepcopy(self.get_sections_by_course(temp_courses, course.short_title))
 
 				for section in course.sections:
 					# TODO there is a PROBLEM here with getting the index to delete
 					if self.instructor_filter not in section.instructor:
-						print(f'Course: {course.short_title} Section: {section.section_num}')
-						# print(f'Index found: {self.find_same_section(temp_sections, section)}')
-						del temp_sections[self.find_same_section(temp_sections, section)]
+						self.del_section(temp_sections, section.section_num)
 
 					elif True in self.type_filter.values():
 						if not self.type_filter[section.type]:
-							del temp_sections[self.find_same_section(temp_sections, section)]
+							self.del_section(temp_sections, section.section_num)
 
 					elif True in self.day_filter.values():
 						for day in self.day_filter.keys():
 							if self.day_filter[day] and day not in section.days:
-								del temp_sections[self.find_same_section(temp_sections, section)]
+								self.del_section(temp_sections, section.section_num)
 
 					elif self.credits_filter[0] != 0 and self.credits_filter[1] != 0:
 						if not section.credits > self.credits_filter[0] or not section.credits < self.credits_filter[1]:
-							del temp_sections[self.find_same_section(temp_sections, section)]
+							self.del_section(temp_sections, section.section_num)
 
 				temp_courses[self.find_same_course(temp_courses, course)].sections = temp_sections
 		temp_semester.courses = temp_courses

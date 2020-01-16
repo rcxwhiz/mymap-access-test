@@ -405,7 +405,6 @@ class Ui_MainWindow(object):
             num_sections += len(course.sections)
         self.tableWidget.setRowCount(num_sections)
         section_ct = 0
-        print(f'number of courses {len(self.filteredSemester.courses)}')
         for course in self.filteredSemester.courses:
             for section in course.sections:
                 data = [QtWidgets.QTableWidgetItem(course.college_short),
