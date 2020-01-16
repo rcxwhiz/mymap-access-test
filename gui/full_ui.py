@@ -265,8 +265,24 @@ class Ui_MainWindow(object):
         self.onlineCheckbox.clicked.connect(self.updateTypeFilter)
         self.slCheckbox.clicked.connect(self.updateTypeFilter)
         self.stabroadCheckbox.clicked.connect(self.updateTypeFilter)
+        self.maxCredits_3.valueChanged.connect(self.updateCreditsFilterMax)
+        self.minCredits_3.valueChanged.connect(self.updateCreditsFilterMin)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.main_window_ref = MainWindow
+
+    def updateCreditsFilterMax(self):
+        if self.maxCredits_3.value() < self.minCredits_3.value():
+            self.minCredits_3.setValue(self.maxCredits_3.value())
+        semesterManager.credits_filter[1] = self.maxCredits_3.value()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
+
+    def updateCreditsFilterMin(self):
+        if self.minCredits_3.value() > self.maxCredits_3.value():
+            self.maxCredits_3.setValue(self.minCredits_3.value())
+        semesterManager.credits_filter[0] = self.minCredits_3.value()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
 
     def updateTypeFilter(self):
         semesterManager.type_filter['DAY'] = self.dayCheckbox_3.isChecked()

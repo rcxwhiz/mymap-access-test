@@ -148,7 +148,7 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 							break
 
 				elif self.credits_filter[0] != 0 and self.credits_filter[1] != 0:
-					if not section.credits > self.credits_filter[0] or not section.credits < self.credits_filter[1]:
+					if not (self.credits_filter[0] <= section.credits <= self.credits_filter[1]):
 						make_section = False
 
 				if make_section:
