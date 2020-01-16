@@ -274,8 +274,24 @@ class Ui_MainWindow(object):
         self.level500_3.clicked.connect(self.updateLevelFilter)
         self.level600_3.clicked.connect(self.updateLevelFilter)
         self.level700_3.clicked.connect(self.updateLevelFilter)
+        self.mondayBox_3.clicked.connect(self.updateDaysFilter)
+        self.tuesdayBox_3.clicked.connect(self.updateDaysFilter)
+        self.wednesdayBox_3.clicked.connect(self.updateDaysFilter)
+        self.thursdayBox_3.clicked.connect(self.updateDaysFilter)
+        self.fridayBox_3.clicked.connect(self.updateDaysFilter)
+        self.saturdayBox_3.clicked.connect(self.updateDaysFilter)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.main_window_ref = MainWindow
+
+    def updateDaysFilter(self):
+        semesterManager.day_filter['M'] = self.mondayBox_3.isChecked()
+        semesterManager.day_filter['T'] = self.tuesdayBox_3.isChecked()
+        semesterManager.day_filter['W'] = self.wednesdayBox_3.isChecked()
+        semesterManager.day_filter['Th'] = self.thursdayBox_3.isChecked()
+        semesterManager.day_filter['F'] = self.fridayBox_3.isChecked()
+        semesterManager.day_filter['Sa'] = self.saturdayBox_3.isChecked()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
 
     def updateCreditsFilterMax(self):
         if self.maxCredits_3.value() < self.minCredits_3.value():

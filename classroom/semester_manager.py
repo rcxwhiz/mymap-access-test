@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import copy
+import re
 import pickle
 import os
 import sys
@@ -143,9 +143,16 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 
 				elif True in self.day_filter.values():
 					for day in self.day_filter.keys():
-						if self.day_filter[day] and day not in section.days:
-							make_section = False
-							break
+						if self.day_filter[day]:
+							if day == 'T':
+								t_reg = re.compile(r'T[^h]')
+								if t_reg.search(section.days) is None:
+									make_section = False
+									break
+							else:
+								if day not in section.days:
+									make_section = False
+									break
 
 				elif self.credits_filter[0] != 0 and self.credits_filter[1] != 0:
 					if not (self.credits_filter[0] <= section.credits <= self.credits_filter[1]):
