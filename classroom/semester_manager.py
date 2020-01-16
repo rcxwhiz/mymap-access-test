@@ -154,6 +154,16 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 								if day not in section.days:
 									make_section = False
 									break
+						else:
+							if day == 'T':
+								t_reg = re.compile(r'T[^h]')
+								if t_reg.search(section.days) is not None:
+									make_section = False
+									break
+							else:
+								if day in section.days:
+									make_section = False
+									break
 
 				elif self.credits_filter[0] != 0 or self.credits_filter[1] != 0:
 					if not (self.credits_filter[0] <= section.credits <= self.credits_filter[1]):
@@ -166,8 +176,8 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 					                      'credits': str(section.credits),
 					                      'term': section.term,
 					                      'days': section.days,
-					                      'start': section.start,
-					                      'end': section.end,
+					                      'starts': section.start,
+					                      'ends': section.end,
 					                      'loction': section.loction,
 					                      'available': section.available_frac,
 					                      'waitlist': section.waitlist}
