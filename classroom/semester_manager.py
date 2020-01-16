@@ -4,6 +4,7 @@ import re
 import pickle
 import os
 import sys
+from pathlib import Path
 from typing import Optional
 from classroom import semester_getter
 import classroom
@@ -23,7 +24,7 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 	def __init__(self):
 		self.semesters = {}
 
-		pickles_path = os.path.join(os.path.dirname(sys.argv[0]), 'pickles')
+		pickles_path = os.path.join(os.path.dirname(Path(sys.argv[0]).parent), 'pickles')
 		if not os.path.exists(pickles_path):
 			os.makedirs(pickles_path)
 

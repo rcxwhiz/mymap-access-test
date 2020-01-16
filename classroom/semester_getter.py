@@ -6,7 +6,6 @@ import time
 import re
 import sys
 from classroom import *
-from my_logger import logging
 
 
 def get_college_buttons(browser, delay, max_wait=2.0):
@@ -21,7 +20,7 @@ def get_college_buttons(browser, delay, max_wait=2.0):
 			college_buttons = browser.find_elements_by_class_name('collegeName')
 			return college_buttons
 		if time.time() - start > max_wait:
-			logging.debug('Ran out of time without encountering stale elements, passing what was given')
+			print('Ran out of time without encountering stale elements, passing what was given')
 			return college_buttons
 
 
@@ -40,7 +39,7 @@ def get_courses_page(browser, delay, max_wait=2.0):
 			college_courses = browser.find_elements_by_class_name('courseItem')
 			return college_courses
 		if time.time() - start > max_wait:
-			logging.debug('Ran out of time without encountering stale elements, passing what was given')
+			print('Ran out of time without encountering stale elements, passing what was given')
 			return college_courses
 
 
@@ -61,7 +60,7 @@ def get(semester_year, recheck_delay=0.1):
 	try:
 		semester_button.select_by_visible_text(semester_year)
 	except exceptions.NoSuchElementException:
-		logging.error(f'ERROR - Semester {semester_year} not found')
+		print(f'ERROR - Semester {semester_year} not found')
 		browser.close()
 		return None
 	college_buttons = get_college_buttons(browser, recheck_delay)
@@ -77,7 +76,7 @@ def get(semester_year, recheck_delay=0.1):
 		except AttributeError:
 			long_college_name = college.get_attribute('college')
 		except exceptions.StaleElementReferenceException:
-			logging.critical('Found a stale element :( this should not have happened')
+			print('Found a stale element :( this should not have happened')
 			return None
 		colleges.append([college.text, long_college_name])
 
@@ -91,9 +90,6 @@ def get(semester_year, recheck_delay=0.1):
 			if button.text == college[0]:
 				button.click()
 
-		# print the college names and number of courses
-		logging.debug(f'{college[0]} | {college[1]}')
-
 		college_courses = get_courses_page(browser, recheck_delay)
 
 		course_counter = 0
@@ -101,7 +97,21 @@ def get(semester_year, recheck_delay=0.1):
 			course_counter += 1
 			clicked_course.click()
 
+			checks = 0
 			while True:
+				if checks > 20:
+					print('Reloading course')
+					browser.refresh()
+					college_buttons = get_college_buttons(browser, recheck_delay)
+					for button in college_buttons:
+						if button.text == college[0]:
+							button.click()
+					college_courses = get_courses_page(browser, recheck_delay)
+					for i, subcourse in enumerate(college_courses):
+						if i + 1 == course_counter:
+							clicked_course = subcourse
+							break
+					continue
 				course_attributes = {'college short': college[0],
 				                     'college long': college[1],
 				                     'dept': browser.find_element_by_id('courseDept').text,
@@ -112,6 +122,7 @@ def get(semester_year, recheck_delay=0.1):
 						to_break = False
 				if to_break:
 					break
+				checks += 1
 				time.sleep(recheck_delay)
 			course_attributes['long title'] = browser.find_element_by_id('courseTitle').text
 			course_attributes['description'] = browser.find_element_by_id('courseDescription').text
