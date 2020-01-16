@@ -156,9 +156,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
         self.maxCredits_3 = QtWidgets.QDoubleSpinBox(self.verticalLayoutWidget)
         self.maxCredits_3.setObjectName("maxCredits_3")
+        self.maxCredits_3.setMinimum(0.0)
         self.horizontalLayout_8.addWidget(self.maxCredits_3)
         self.minCredits_3 = QtWidgets.QDoubleSpinBox(self.verticalLayoutWidget)
         self.minCredits_3.setObjectName("minCredits_3")
+        self.minCredits_3.setMinimum(0.0)
         self.horizontalLayout_8.addWidget(self.minCredits_3)
         self.searchCol_3.addLayout(self.horizontalLayout_8)
         self.courseLevelLabel_3 = QtWidgets.QLabel(self.verticalLayoutWidget)
@@ -294,26 +296,180 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(1)
-        self.advancedSearchButton.clicked.connect(MainWindow.show)
-        self.advancedSearchButton.clicked.connect(self.stackedWidget.show)
-        self.scheduleMakerButton.clicked.connect(MainWindow.show)
-        self.scheduleMakerButton.clicked.connect(self.stackedWidget.show)
-        self.backButton.clicked.connect(MainWindow.show)
-        self.backButton.clicked.connect(self.stackedWidget.show)
-        self.backButton_2.clicked.connect(MainWindow.show)
-        self.backButton_2.clicked.connect(self.stackedWidget.show)
+
+        # MY CODE
+        self.stackedWidget.setCurrentIndex(2)
+        self.advancedSearchButton.clicked.connect(self.gotoSearchPage)
+        self.scheduleMakerButton.clicked.connect(self.gotoSchedulePage)
+        self.backButton.clicked.connect(self.gotoStartPage)
+        self.backButton_2.clicked.connect(self.gotoStartPage)
+        self.picklesButton.clicked.connect(self.openPicklePage)
+        self.picklesButton_2.clicked.connect(self.openPicklePage)
+        self.deptLineEdit_3.textChanged.connect(self.updateDeptFilter)
+        self.courseNumLineEdit_3.textChanged.connect(self.updateCourseNumFilter)
+        self.courseNameLineEdit_3.textChanged.connect(self.updateCourseNameFilter)
+        self.instructorLineEdit_3.textChanged.connect(self.updateInstructorFilter)
+        self.dayCheckbox_3.clicked.connect(self.updateTypeFilter)
+        self.eveningCheckbox_3.clicked.connect(self.updateTypeFilter)
+        self.onlineCheckbox.clicked.connect(self.updateTypeFilter)
+        self.slCheckbox.clicked.connect(self.updateTypeFilter)
+        self.stabroadCheckbox.clicked.connect(self.updateTypeFilter)
+        self.maxCredits_3.valueChanged.connect(self.updateCreditsFilterMax)
+        self.minCredits_3.valueChanged.connect(self.updateCreditsFilterMin)
+        self.level100_3.clicked.connect(self.updateLevelFilter)
+        self.level200_3.clicked.connect(self.updateLevelFilter)
+        self.level300_3.clicked.connect(self.updateLevelFilter)
+        self.level400_3.clicked.connect(self.updateLevelFilter)
+        self.level500_3.clicked.connect(self.updateLevelFilter)
+        self.level600_3.clicked.connect(self.updateLevelFilter)
+        self.level700_3.clicked.connect(self.updateLevelFilter)
+        self.mondayBox_3.clicked.connect(self.updateDaysFilter)
+        self.tuesdayBox_3.clicked.connect(self.updateDaysFilter)
+        self.wednesdayBox_3.clicked.connect(self.updateDaysFilter)
+        self.thursdayBox_3.clicked.connect(self.updateDaysFilter)
+        self.fridayBox_3.clicked.connect(self.updateDaysFilter)
+        self.saturdayBox_3.clicked.connect(self.updateDaysFilter)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.main_window_ref = MainWindow
+
+    def updateDaysFilter(self):
+        semesterManager.day_filter['M'] = self.mondayBox_3.isChecked()
+        semesterManager.day_filter['T'] = self.tuesdayBox_3.isChecked()
+        semesterManager.day_filter['W'] = self.wednesdayBox_3.isChecked()
+        semesterManager.day_filter['Th'] = self.thursdayBox_3.isChecked()
+        semesterManager.day_filter['F'] = self.fridayBox_3.isChecked()
+        semesterManager.day_filter['Sa'] = self.saturdayBox_3.isChecked()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
+
+    def updateCreditsFilterMax(self):
+        if self.maxCredits_3.value() < self.minCredits_3.value():
+            self.minCredits_3.setValue(self.maxCredits_3.value())
+        semesterManager.credits_filter[1] = self.maxCredits_3.value()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
+
+    def updateCreditsFilterMin(self):
+        if self.minCredits_3.value() > self.maxCredits_3.value():
+            self.maxCredits_3.setValue(self.minCredits_3.value())
+        semesterManager.credits_filter[0] = self.minCredits_3.value()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
+
+    def updateTypeFilter(self):
+        semesterManager.type_filter['DAY'] = self.dayCheckbox_3.isChecked()
+        semesterManager.type_filter['EVENING'] = self.eveningCheckbox_3.isChecked()
+        semesterManager.type_filter['ONLINE'] = self.onlineCheckbox.isChecked()
+        semesterManager.type_filter['SALT LAKE'] = self.slCheckbox.isChecked()
+        semesterManager.type_filter['ST ABROAD'] = self.stabroadCheckbox.isChecked()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
+
+    def updateLevelFilter(self):
+        semesterManager.course_level_filter[100] = self.level100_3.isChecked()
+        semesterManager.course_level_filter[200] = self.level200_3.isChecked()
+        semesterManager.course_level_filter[300] = self.level400_3.isChecked()
+        semesterManager.course_level_filter[400] = self.level400_3.isChecked()
+        semesterManager.course_level_filter[500] = self.level500_3.isChecked()
+        semesterManager.course_level_filter[600] = self.level600_3.isChecked()
+        semesterManager.course_level_filter[700] = self.level700_3.isChecked()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
+
+    def updateDeptFilter(self):
+        semesterManager.dept_filter = self.deptLineEdit_3.text()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
+
+    def updateCourseNumFilter(self):
+        semesterManager.course_num_filter = self.courseNumLineEdit_3.text()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
+
+    def updateCourseNameFilter(self):
+        semesterManager.course_name_filter = self.courseNameLineEdit_3.text()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
+
+    def updateInstructorFilter(self):
+        semesterManager.instructor_filter = self.instructorLineEdit_3.text()
+        if semesterManager.selected_semester is not None:
+            self.updateTable()
+
+    # MY CODE
+    def goodScreenX(self, x):
+        if x < 0:
+            return 0
+        if x > self.screenSize.width():
+            return self.screenSize.width()
+        return x
+
+    # MY CODE
+    def goodScreenY(self, y):
+        if y < 0:
+            return 0
+        if y > self.screenSize.height():
+            return self.screenSize.height()
+        return y
+
+    # MY CODE
+    def openPicklePage(self):
+        global PickleSelector
+        PickleSelector.show()
+
+    # MY CODE
+    def makeWindowSmall(self):
+        self.main_window_ref.resize(380, 170)
+        x = self.main_window_ref.x()
+        y = self.main_window_ref.y()
+        self.main_window_ref.move(self.goodScreenX(x + 310), self.goodScreenY(y + 265))
+
+    # MY CODE
+    def makeWindowBig(self):
+        self.main_window_ref.resize(1000, 700)
+        x = self.main_window_ref.x()
+        y = self.main_window_ref.y()
+        self.main_window_ref.move(self.goodScreenX(x - 310), self.goodScreenY(y - 265))
+
+    # MY CODE
+    def gotoStartPage(self):
+        self.makeWindowSmall()
+        self.clearTable()
+        semesterManager.selected_semester = None
+        self.stackedWidget.setCurrentIndex(2)
+        self.updateTitleBar()
+
+    # MY CODE
+    def gotoSearchPage(self):
+        self.makeWindowBig()
+        semesterManager.selected_semester = None
+        self.stackedWidget.setCurrentIndex(0)
+        self.updateTitleBar()
+
+    # MY CODE
+    def gotoSchedulePage(self):
+        self.makeWindowBig()
+        self.clearTable()
+        semesterManager.selected_semester = None
+        self.stackedWidget.setCurrentIndex(1)
+        self.updateTitleBar()
+
+    def updateTitleBar(self):
+        if self.stackedWidget.currentIndex() == 0:
+            mode = 'Advanced Search'
+        elif self.stackedWidget.currentIndex() == 1:
+            mode = 'Schedule Maker'
+        else:
+            self.main_window_ref.setWindowTitle(f'BYU Schdeuling Tool')
+            return None
+        if semesterManager.selected_semester is None:
+            self.main_window_ref.setWindowTitle(f'BYU Schdeuling Tool - {mode} - No Semester Selected')
+        else:
+            self.main_window_ref.setWindowTitle(f'BYU Scheduling Tool - {mode} - {semesterManager.selected_semester.semester_year}')
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.tableWidget.setSortingEnabled(True)
-        self.semesterDisplay.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Would like to put the semester info here?</p></body></html>"))
+        MainWindow.setWindowTitle(f'BYU Schdeuling Tool')
         self.deptLabel_3.setText(_translate("MainWindow", "Dept."))
         self.courseNumLabel_3.setText(_translate("MainWindow", "Course Num."))
         self.courseNameLabel_3.setText(_translate("MainWindow", "Course Name"))
