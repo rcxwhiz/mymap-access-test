@@ -47,6 +47,7 @@ class Ui_Form(object):
 
         self.tableView = QtWidgets.QTableWidget(self.widget1)
         self.tableView.setObjectName("tableView")
+        self.tableView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.horizontalLayout_2.addWidget(self.tableView)
         self.tableView.setColumnCount(2)
         self.tableView.setHorizontalHeaderLabels(['Semester', 'Downloaded'])

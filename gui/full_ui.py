@@ -43,7 +43,7 @@ class Ui_MainWindow(object):
         self.tableWidget.setGeometry(QtCore.QRect(210, 40, 751, 621))
         self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-        self.tableWidget.setTextElideMode(QtCore.Qt.ElideLeft)
+        self.tableWidget.setTextElideMode(QtCore.Qt.ElideNone)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(10)
         self.tableWidget.setHorizontalHeaderLabels(['College', 'Course', 'Section', 'Title', 'Instructor', 'Time', 'Type', 'Days', 'Credits', 'Location'])
@@ -516,11 +516,7 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "Cannot find:"))
         self.advancedSearchButton.setText(_translate("MainWindow", "Advanced Search"))
         self.scheduleMakerButton.setText(_translate("MainWindow", "Schedule Maker"))
-        self.label.setText(_translate("MainWindow", "BYU Class Scheduling & Search Tool\n"
-"\n"
-"version - 0.0.0\n"
-"\n"
-"Josh Bedwell"))
+        self.label.setText(_translate("MainWindow", "BYU Class Scheduling & Search Tool\n\nversion - 0.0.0\n\nJosh Bedwell"))
 
     def updateTable(self):
         self.clearTable()
