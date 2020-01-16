@@ -22,9 +22,15 @@ MainWindow = QtWidgets.QMainWindow()
 
 
 class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
+    def setupUi(self, MainWindow, screenSize):
+        # MY CODE
+        self.assets = os.path.join(os.path.dirname(sys.argv[0]), 'assets')
+        MainWindow.setWindowTitle('BYU Schdeuling Tool - No Semester Selected')
+        MainWindow.setWindowIcon(QtGui.QIcon(os.path.join(self.assets, 'byu-icon.png')))
+        self.screenSize = screenSize
+
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1014, 696)
+        MainWindow.resize(380, 170)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.stackedWidget = QtWidgets.QStackedWidget(self.centralwidget)
@@ -32,19 +38,18 @@ class Ui_MainWindow(object):
         self.stackedWidget.setObjectName("stackedWidget")
         self.searchPage = QtWidgets.QWidget()
         self.searchPage.setObjectName("searchPage")
+
         self.tableWidget = QtWidgets.QTableWidget(self.searchPage)
         self.tableWidget.setGeometry(QtCore.QRect(210, 40, 751, 621))
         self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.tableWidget.setTextElideMode(QtCore.Qt.ElideLeft)
-        self.tableWidget.setRowCount(0)
-        self.tableWidget.setColumnCount(0)
         self.tableWidget.setObjectName("tableWidget")
-        self.semesterDisplay = QtWidgets.QTextBrowser(self.searchPage)
-        self.semesterDisplay.setGeometry(QtCore.QRect(210, 0, 281, 31))
-        self.semesterDisplay.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.semesterDisplay.setFrameShadow(QtWidgets.QFrame.Plain)
-        self.semesterDisplay.setObjectName("semesterDisplay")
+        self.tableWidget.setColumnCount(10)
+        self.tableWidget.setHorizontalHeaderLabels(['College', 'Course', 'Section', 'Title', 'Instructor', 'Time', 'Type', 'Days', 'Credits', 'Location'])
+        self.tableWidget.setRowCount(0)
+        self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+
         self.verticalLayoutWidget = QtWidgets.QWidget(self.searchPage)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 40, 171, 621))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")

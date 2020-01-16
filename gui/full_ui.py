@@ -41,6 +41,9 @@ class Ui_MainWindow(object):
 
         self.tableWidget = QtWidgets.QTableWidget(self.searchPage)
         self.tableWidget.setGeometry(QtCore.QRect(210, 40, 751, 621))
+        self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.tableWidget.setTextElideMode(QtCore.Qt.ElideLeft)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(10)
         self.tableWidget.setHorizontalHeaderLabels(['College', 'Course', 'Section', 'Title', 'Instructor', 'Time', 'Type', 'Days', 'Credits', 'Location'])
