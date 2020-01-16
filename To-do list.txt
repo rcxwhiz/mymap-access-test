@@ -4,13 +4,8 @@ The two main features of this program are advanced filtering of the entire cours
 out of given classes.
 
 # TODO a good GUI so that the filtering can be done well
-# TODO a dropdown to select the semester
-# TODO determine if filter will be able to apply in realtime due to performance issues or if an apply button is needed
 # TODO warnings when classes aren't found - make just one entry in the column which says NOT FOUND
 # TODO makes a schedule by getting all possible combinations and then removing the impossible ones
 # TODO allow schedules to be optimized several ways
 # TODO add a function to the semester manager to save it to a google sheet
-# TODO make pickles widget show when button is pressed
-# TODO check on table population because there is an empty column
-# TODO I think the semester filtering should be done on the end of the semester manager, and it should just have a filtered list it gives
-# TODO make the time and credit adjustors keep each other in check
+# TODO add functionality to time and day filtering
