@@ -8,7 +8,6 @@
 
 import os
 import sys
-import time
 from classroom.semester_manager import SemesterManager
 import gui.pickle_ui
 import gui.single_class
