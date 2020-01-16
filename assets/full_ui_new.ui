@@ -39,19 +39,21 @@
       <property name="sizeAdjustPolicy">
        <enum>QAbstractScrollArea::AdjustToContents</enum>
       </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
       <property name="textElideMode">
        <enum>Qt::ElideLeft</enum>
       </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
       <property name="rowCount">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="columnCount">
-       <number>2</number>
+       <number>0</number>
       </property>
-      <row/>
-      <row/>
-      <column/>
-      <column/>
      </widget>
      <widget class="QTextBrowser" name="semesterDisplay">
       <property name="geometry">
@@ -129,17 +131,17 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>Time Range (start - end) (00 - 23)</string>
+          <string>Time Range (start - end)</string>
          </property>
         </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QSpinBox" name="spinBox"/>
+          <widget class="QTimeEdit" name="timeEdit"/>
          </item>
          <item>
-          <widget class="QSpinBox" name="spinBox_2"/>
+          <widget class="QTimeEdit" name="timeEdit_2"/>
          </item>
         </layout>
        </item>
@@ -408,6 +410,12 @@ p, li { white-space: pre-wrap; }
         <height>601</height>
        </rect>
       </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="sortingEnabled">
+       <bool>false</bool>
+      </property>
      </widget>
      <widget class="QLabel" name="label_5">
       <property name="geometry">
@@ -422,7 +430,7 @@ p, li { white-space: pre-wrap; }
        <string>Possible Schedules:</string>
       </property>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -508,6 +516,13 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Cannot find:</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
