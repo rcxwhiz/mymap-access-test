@@ -24,12 +24,12 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 	def __init__(self):
 		self.semesters = {}
 
-		pickles_path = os.path.join(os.path.dirname(Path(sys.argv[0]).parent), 'pickles')
-		if not os.path.exists(pickles_path):
-			os.makedirs(pickles_path)
+		self.pickles_path = os.path.join(os.path.dirname(Path(sys.argv[0]).parent), 'pickles')
+		if not os.path.exists(self.pickles_path):
+			os.makedirs(self.pickles_path)
 
-		for file in os.listdir(pickles_path):
-			self.semesters[file] = pickle.load(open(os.path.join(pickles_path, file), 'rb'))
+		for file in os.listdir(self.pickles_path):
+			self.semesters[file] = pickle.load(open(os.path.join(self.pickles_path, file), 'rb'))
 
 		self.selected_semester = None
 		self.filtered_sections = []
@@ -67,10 +67,10 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 
 	def update(self, semester_year):
 		self.semesters[semester_year] = semester_getter.get(semester_year)
-		if os.path.exists(semester_year):
-			os.remove(semester_year)
+		if os.path.exists(os.path.join(self.pickles_path, semester_year)):
+			os.remove(os.path.join(self.pickles_path, semester_year))
 		if self.semesters[semester_year] is not None:
-			pickle.dump(self.semesters[semester_year], open(semester_year, 'wb'))
+			pickle.dump(self.semesters[semester_year], open(os.path.join(self.pickles_path, semester_year), 'wb'))
 
 	def cached_semesters(self):
 		return list(self.semesters.keys())
