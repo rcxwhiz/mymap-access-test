@@ -163,7 +163,7 @@ def get(semester_year, recheck_delay=0.1):
 				                      'instructor': data[2].text,
 				                      'credits': data[3].text,
 				                      'term': data[4].text,
-				                      'days': data[5].text.replace('\n', ''),
+				                      'days': data[5].text.split('\n'),
 				                      'starts': data[6].text.split('\n'),
 				                      'ends': data[7].text.split('\n'),
 				                      'loction': data[8].text,
