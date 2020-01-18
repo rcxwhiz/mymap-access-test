@@ -3,9 +3,9 @@ Class registration is on March 1st
 The two main features of this program are advanced filtering of the entire course catalogue and making a schedule
 out of given classes.
 
-# TODO a good GUI so that the filtering can be done well
+# TODO change the way day and time filtering work
+# TODO create a way to tell if the days and times collide
 # TODO warnings when classes aren't found - make just one entry in the column which says NOT FOUND
 # TODO makes a schedule by getting all possible combinations and then removing the impossible ones
 # TODO allow schedules to be optimized several ways
 # TODO add a function to the semester manager to save it to a google sheet
-# TODO add functionality to time and day filtering

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1014</width>
-    <height>696</height>
+    <width>1100</width>
+    <height>850</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>981</width>
-      <height>681</height>
+      <width>1081</width>
+      <height>821</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -32,8 +32,8 @@
        <rect>
         <x>210</x>
         <y>40</y>
-        <width>751</width>
-        <height>621</height>
+        <width>861</width>
+        <height>781</height>
        </rect>
       </property>
       <property name="sizeAdjustPolicy">
@@ -55,58 +55,53 @@
        <number>0</number>
       </property>
      </widget>
-     <widget class="QTextBrowser" name="semesterDisplay">
-      <property name="geometry">
-       <rect>
-        <x>210</x>
-        <y>0</y>
-        <width>281</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-      <property name="html">
-       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Would like to put the semester info here?&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
      <widget class="QWidget" name="verticalLayoutWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>40</y>
         <width>171</width>
-        <height>621</height>
+        <height>771</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="searchCol_3">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="sizeConstraint">
+        <enum>QLayout::SetDefaultConstraint</enum>
+       </property>
        <item>
-        <widget class="QLabel" name="deptLabel_3">
-         <property name="text">
-          <string>Dept.</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="deptLineEdit_3"/>
-       </item>
-       <item>
-        <widget class="QLabel" name="courseNumLabel_3">
-         <property name="text">
-          <string>Course Num.</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="courseNumLineEdit_3"/>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_11">
+           <item>
+            <widget class="QLabel" name="deptLabel_3">
+             <property name="text">
+              <string>Dept.</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="deptLineEdit_3"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_13">
+           <item>
+            <widget class="QLabel" name="courseNumLabel_3">
+             <property name="text">
+              <string>Course Num.</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="courseNumLineEdit_3"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="QLabel" name="courseNameLabel_3">
@@ -129,19 +124,132 @@ p, li { white-space: pre-wrap; }
         <widget class="QLineEdit" name="instructorLineEdit_3"/>
        </item>
        <item>
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Time Range (start - end)</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <layout class="QVBoxLayout" name="verticalLayout_10">
          <item>
-          <widget class="QTimeEdit" name="timeEdit"/>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QCheckBox" name="monCheck">
+             <property name="text">
+              <string>Monday (start-end)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <widget class="QTimeEdit" name="monTimeS"/>
+             </item>
+             <item>
+              <widget class="QTimeEdit" name="monTimeE"/>
+             </item>
+            </layout>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QTimeEdit" name="timeEdit_2"/>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="QCheckBox" name="tueCheck">
+             <property name="text">
+              <string>Tuesday (start-end)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QTimeEdit" name="tueTimeS"/>
+             </item>
+             <item>
+              <widget class="QTimeEdit" name="tueTimeE"/>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QCheckBox" name="wedCheck">
+             <property name="text">
+              <string>Wednesday (start-end)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
+             <item>
+              <widget class="QTimeEdit" name="wedTimeS"/>
+             </item>
+             <item>
+              <widget class="QTimeEdit" name="wedTimeE"/>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <item>
+            <widget class="QCheckBox" name="thurCheck">
+             <property name="text">
+              <string>Thursday (start-end)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_6">
+             <item>
+              <widget class="QTimeEdit" name="thurTimeS"/>
+             </item>
+             <item>
+              <widget class="QTimeEdit" name="thuTimeE"/>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_8">
+           <item>
+            <widget class="QCheckBox" name="friCheck">
+             <property name="text">
+              <string>Friday (start-end)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_10">
+             <item>
+              <widget class="QTimeEdit" name="friTimeS"/>
+             </item>
+             <item>
+              <widget class="QTimeEdit" name="friTimeE"/>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_9">
+           <item>
+            <widget class="QCheckBox" name="satCheck">
+             <property name="text">
+              <string>Saturday (start-end)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_11">
+             <item>
+              <widget class="QTimeEdit" name="satTimeS"/>
+             </item>
+             <item>
+              <widget class="QTimeEdit" name="satTimeE"/>
+             </item>
+            </layout>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -192,67 +300,6 @@ p, li { white-space: pre-wrap; }
             <widget class="QCheckBox" name="stabroadCheckbox">
              <property name="text">
               <string>ST ABROAD</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QLabel" name="dayLabel_3">
-         <property name="text">
-          <string>Day</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_7">
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_13">
-           <item>
-            <widget class="QCheckBox" name="mondayBox_3">
-             <property name="text">
-              <string>Monday</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="wednesdayBox_3">
-             <property name="text">
-              <string>Wednesday</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="fridayBox_3">
-             <property name="text">
-              <string>Friday</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_14">
-           <item>
-            <widget class="QCheckBox" name="tuesdayBox_3">
-             <property name="text">
-              <string>Tuesday</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="thursdayBox_3">
-             <property name="text">
-              <string>Thursday</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="saturdayBox_3">
-             <property name="text">
-              <string>Saturday</string>
              </property>
             </widget>
            </item>
@@ -350,7 +397,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QPushButton" name="backButton">
       <property name="geometry">
        <rect>
-        <x>860</x>
+        <x>970</x>
         <y>0</y>
         <width>101</width>
         <height>31</height>
@@ -378,7 +425,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QPushButton" name="backButton_2">
       <property name="geometry">
        <rect>
-        <x>870</x>
+        <x>970</x>
         <y>10</y>
         <width>101</width>
         <height>31</height>
@@ -406,8 +453,8 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>180</x>
         <y>70</y>
-        <width>801</width>
-        <height>601</height>
+        <width>891</width>
+        <height>741</height>
        </rect>
       </property>
       <property name="editTriggers">
@@ -436,7 +483,7 @@ p, li { white-space: pre-wrap; }
         <x>20</x>
         <y>80</y>
         <width>141</width>
-        <height>491</height>
+        <height>461</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -448,10 +495,10 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item>
-        <widget class="QTextEdit" name="textEdit"/>
+        <widget class="QTextEdit" name="classesBox"/>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="findSchedules">
          <property name="text">
           <string>Find Schedules</string>
          </property>
@@ -467,49 +514,49 @@ p, li { white-space: pre-wrap; }
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QRadioButton" name="radioButton_3">
+          <widget class="QRadioButton" name="allButt">
            <property name="text">
             <string>All</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton_2">
+          <widget class="QRadioButton" name="earliestButt">
            <property name="text">
             <string>Earliest</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton">
+          <widget class="QRadioButton" name="earliestStartButt">
            <property name="text">
             <string>Earliest Start</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton_4">
+          <widget class="QRadioButton" name="latestButt">
            <property name="text">
             <string>Latest</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton_5">
+          <widget class="QRadioButton" name="latestStartButt">
            <property name="text">
             <string>Latest Start</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton_7">
+          <widget class="QRadioButton" name="shortestDayButt">
            <property name="text">
             <string>Shortest Day</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton_6">
+          <widget class="QRadioButton" name="gapsButt">
            <property name="text">
             <string>Least Gaps</string>
            </property>
@@ -518,7 +565,7 @@ p, li { white-space: pre-wrap; }
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="label_6">
+        <widget class="QLabel" name="cannotFindLabel">
          <property name="text">
           <string>Cannot find:</string>
          </property>
