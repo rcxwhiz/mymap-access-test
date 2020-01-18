@@ -588,24 +588,24 @@ class Ui_MainWindow(object):
         section_ct = 0
         for course in self.filteredSemester.courses:
             for section in course.sections:
-                times = ''
+                times = []
                 for i in range(len(section.start)):
-                    times += section.start[i] + ' - ' + section.end[i] + ', '
-                times = times[:-2]
+                    times.append(section.start[i] + ' - ' + section.end[i])
                 data = [QtWidgets.QTableWidgetItem(course.college_short),
                         QtWidgets.QTableWidgetItem(course.short_title),
                         QtWidgets.QTableWidgetItem(str(section.section_num)),
                         QtWidgets.QTableWidgetItem(course.long_title),
                         QtWidgets.QTableWidgetItem(section.instructor),
-                        QtWidgets.QTableWidgetItem(times),
+                        QtWidgets.QTableWidgetItem('\n'.join(times)),
                         QtWidgets.QTableWidgetItem(section.type),
-                        QtWidgets.QTableWidgetItem(section.days),
+                        QtWidgets.QTableWidgetItem(''.join(section.days)),
                         QtWidgets.QTableWidgetItem(str(section.credits)),
                         QtWidgets.QTableWidgetItem(section.loction)]
                 for i in range(len(data)):
                     self.tableWidget.setItem(section_ct, i, data[i])
                 section_ct += 1
         self.tableWidget.resizeColumnsToContents()
+        self.tableWidget.resizeRowsToContents()
         self.tableWidget.setColumnWidth(3, 200)
         self.tableWidget.setColumnWidth(5, 125)
 
