@@ -44,12 +44,12 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 		                    'ONLINE': False,
 		                    'SALT LAKE': False,
 		                    'ST ABROAD': False}
-		self.day_filter = {'M': False,
-		                   'T': False,
-		                   'W': False,
-		                   'Th': False,
-		                   'F': False,
-		                   'Sa': False}
+		self.day_filter = {'M': [0, 0, False],
+		                   'T': [0, 0, False],
+		                   'W': [0, 0, False],
+		                   'Th': [0, 0, False],
+		                   'F': [0, 0, False],
+		                   'Sa': [0, 0, False]}
 		self.credits_filter = [0.0, 0.0]  # MIN - MAX
 		self.course_level_filter = {100: False,
 		                            200: False,
@@ -101,6 +101,14 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 				return course.sections
 		print('Did not find a course')
 
+	def class_in_slot(self, day, section):
+		for slot in section.schedule:
+			if slot[0] != day:
+				continue
+			if slot[1] >= self.day_filter[day][0] and slot[2] <= self.day_filter[day][1]:
+				return True
+		return False
+
 	def get_filtered_semester(self):
 		semester_attributes = {'timestamp': self.selected_semester.timestamp,
 		              'datestamp': self.selected_semester.datestamp,
@@ -142,32 +150,14 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 				elif True in self.type_filter.values() and not self.type_filter[section.type]:
 					make_section = False
 
-				elif True in self.day_filter.values():
-					for day in self.day_filter.keys():
-						if self.day_filter[day]:
-							if day == 'T':
-								t_reg = re.compile(r'T[^h]')
-								if t_reg.search(section.days) is None:
-									make_section = False
-									break
-							else:
-								if day not in section.days:
-									make_section = False
-									break
-						else:
-							if day == 'T':
-								t_reg = re.compile(r'T[^h]')
-								if t_reg.search(section.days) is not None:
-									make_section = False
-									break
-							else:
-								if day in section.days:
-									make_section = False
-									break
-
 				elif self.credits_filter[0] != 0 or self.credits_filter[1] != 0:
 					if not (self.credits_filter[0] <= section.credits <= self.credits_filter[1]):
 						make_section = False
+
+				for day in self.day_filter.keys():
+					if self.day_filter[day][2]:
+						if not self.class_in_slot(day, section):
+							make_section = False
 
 				if make_section:
 					section_attributes = {'section num': section.section_num,
