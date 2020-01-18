@@ -17,6 +17,8 @@ class Section:
 		self.available_frac = attributes['available']
 		self.waitlist = int(attributes['waitlist'])
 
+		# TODO put in a thing here where I make a list of all the times the section meets
+
 		building_regex = re.compile(r'[a-zA-Z]*')
 		self.building = building_regex.search(attributes['loction']).group()
 
