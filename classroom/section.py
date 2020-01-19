@@ -20,13 +20,17 @@ class Section:
 
 		self.schedule = []
 		for i, meeting in enumerate(self.days.split('\n')):
-			start_time_string = self.start.split('\n')[i]
-			end_time_string = self.end.split('\n')[i]
-			if ':' in start_time_string:
+			start_time_string = self.start[i]
+			end_time_string = self.end[i]
+			if start_time_string == '':
+				start_time = 0
+			elif ':' in start_time_string:
 				start_time = datetime.datetime.strptime(start_time_string, '%I:%M %p')
 			else:
 				start_time = datetime.datetime.strptime(start_time_string, '%I %p')
-			if ':' in end_time_string:
+			if end_time_string == '':
+				end_time = 0
+			elif ':' in end_time_string:
 				end_time = datetime.datetime.strptime(end_time_string, '%I:%M %p')
 			else:
 				end_time = datetime.datetime.strptime(end_time_string, '%I %p')
@@ -37,9 +41,13 @@ class Section:
 				if day == 'h' or day == 'a':
 					continue
 				elif day == 'T':
-					if meeting[j + 1] == 'h':
-						print('thu')
-						self.schedule.append(['Th', start_time, end_time])
+					if j < len(meeting) - 1:
+						if meeting[j + 1] == 'h':
+							print('thu')
+							self.schedule.append(['Th', start_time, end_time])
+						else:
+							print('tue')
+							self.schedule.append(['T', start_time, end_time])
 					else:
 						print('tue')
 						self.schedule.append(['T', start_time, end_time])
