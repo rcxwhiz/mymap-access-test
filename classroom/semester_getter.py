@@ -20,7 +20,7 @@ def get_college_buttons(browser, delay, max_wait=2.0):
 			college_buttons = browser.find_elements_by_class_name('collegeName')
 			return college_buttons
 		if time.time() - start > max_wait:
-			print('Ran out of time getting college buttons without encountering stale elements, passing what was given\n'
+			print('Ran out of time getting college buttons without encountering stale elements, passing what was given.\n'
 			      'This is probably not an issue')
 			return college_buttons
 
@@ -40,7 +40,7 @@ def get_courses_page(browser, delay, max_wait=2.0):
 			college_courses = browser.find_elements_by_class_name('courseItem')
 			return college_courses
 		if time.time() - start > max_wait:
-			print('Ran out of time getting courses without encountering stale elements, passing what was given\n'
+			print('Ran out of time getting courses without encountering stale elements, passing what was given.\n'
 			      'This is probably not an issue.')
 			return college_courses
 

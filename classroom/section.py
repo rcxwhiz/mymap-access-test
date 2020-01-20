@@ -20,8 +20,12 @@ class Section:
 
 		self.schedule = []
 		for i, meeting in enumerate(self.days):
-			start_time_string = self.start[i]
-			end_time_string = self.end[i]
+			try:
+				start_time_string = self.start[i]
+				end_time_string = self.end[i]
+			except IndexError:
+				start_time_string = ''
+				end_time_string = ''
 			if start_time_string == '':
 				start_time = 0
 			elif ':' in start_time_string:
