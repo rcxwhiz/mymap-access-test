@@ -39,7 +39,8 @@ def get_courses_page(browser, delay, max_wait=2.0):
 			college_courses = browser.find_elements_by_class_name('courseItem')
 			return college_courses
 		if time.time() - start > max_wait:
-			print('Ran out of time without encountering stale elements, passing what was given')
+			print('Ran out of time without encountering stale elements, passing what was given\n'
+			      'This is probably not an issue.')
 			return college_courses
 
 
@@ -100,7 +101,7 @@ def get(semester_year, recheck_delay=0.1):
 			checks = 0
 			while True:
 				if checks > 20:
-					print('Reloading course')
+					print('Reloading course due to some timeout')
 					browser.refresh()
 					college_buttons = get_college_buttons(browser, recheck_delay)
 					for button in college_buttons:
@@ -109,6 +110,7 @@ def get(semester_year, recheck_delay=0.1):
 					college_courses = get_courses_page(browser, recheck_delay)
 					for i, subcourse in enumerate(college_courses):
 						if i + 1 == course_counter:
+							global clicked_course
 							clicked_course = subcourse
 							break
 					continue
