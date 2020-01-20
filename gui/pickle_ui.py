@@ -91,6 +91,7 @@ class Ui_Form(object):
 
     def apply(self):
         if self.blue_semester is not None and '.' not in self.blue_semester:
+            semesterManager.save_to_xlsx()
             semesterManager.select_semester(self.blue_semester)
             if self.big_ui_ref.stackedWidget.currentIndex() == 0:
                 self.big_ui_ref.updateTable()

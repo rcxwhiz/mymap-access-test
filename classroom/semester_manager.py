@@ -4,6 +4,7 @@ import re
 import pickle
 import os
 import sys
+import openpyxl
 from pathlib import Path
 from typing import Optional
 from classroom import semester_getter
@@ -58,6 +59,82 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 		                            500: False,
 		                            600: False,
 		                            700: False}
+
+	def save_to_xlsx(self):
+		wb = openpyxl.Workbook()
+
+		for i, semester_year in enumerate(self.semesters.keys()):
+			ws = wb.create_sheet(semester_year, i)
+			ws.cell(row=1, column=1, value='Semester')
+			ws.cell(row=1, column=2, value='Year')
+			ws.cell(row=1, column=3, value='Is term')
+			ws.cell(row=1, column=4, value='Short Title')
+			ws.cell(row=1, column=5, value='Number')
+			ws.cell(row=1, column=6, value='Dept')
+			ws.cell(row=1, column=7, value='Long title')
+			ws.cell(row=1, column=8, value='Description')
+			ws.cell(row=1, column=9, value='College short')
+			ws.cell(row=1, column=10, value='College long')
+			ws.cell(row=1, column=11, value='Course Offered')
+			ws.cell(row=1, column=12, value='Course Headers')
+			ws.cell(row=1, column=13, value='Course Note')
+			ws.cell(row=1, column=14, value='When Taught')
+			ws.cell(row=1, column=15, value='Prereqs')
+			ws.cell(row=1, column=16, value='Recommended')
+			ws.cell(row=1, column=17, value='Course level')
+			ws.cell(row=1, column=18, value='Number of sections')
+			ws.cell(row=1, column=19, value='Section number')
+			ws.cell(row=1, column=20, value='Section type')
+			ws.cell(row=1, column=21, value='Instructor')
+			ws.cell(row=1, column=22, value='Credits')
+			ws.cell(row=1, column=23, value='Term')
+			ws.cell(row=1, column=24, value='Days')
+			ws.cell(row=1, column=25, value='Starts')
+			ws.cell(row=1, column=26, value='Ends')
+			ws.cell(row=1, column=27, value='Location')
+			ws.cell(row=1, column=28, value='Available')
+			ws.cell(row=1, column=29, value='Seats')
+			ws.cell(row=1, column=30, value='Waitlist')
+			ws.cell(row=1, column=31, value='Building')
+
+			cur_row = 2
+			for course in self.semesters[semester_year].courses:
+				for section in course.sections:
+					ws.cell(row=1, column=1, value=self.semesters[semester_year].semester)
+					ws.cell(row=1, column=2, value=self.semesters[semester_year].year)
+					ws.cell(row=1, column=3, value=self.semesters[semester_year].is_term)
+					ws.cell(row=1, column=4, value=course.short_title)
+					ws.cell(row=1, column=5, value=course.num)
+					ws.cell(row=1, column=6, value=course.dept)
+					ws.cell(row=1, column=7, value=course.long_title)
+					ws.cell(row=1, column=8, value=course.description)
+					ws.cell(row=1, column=9, value=course.college_short)
+					ws.cell(row=1, column=10, value=course.college_long)
+					ws.cell(row=1, column=11, value=course.offered)
+					ws.cell(row=1, column=12, value=course.headers)
+					ws.cell(row=1, column=13, value=course.note)
+					ws.cell(row=1, column=14, value=course.when_taught)
+					ws.cell(row=1, column=15, value=course.prerequisites)
+					ws.cell(row=1, column=16, value=course.recommended)
+					ws.cell(row=1, column=17, value=course.level)
+					ws.cell(row=1, column=18, value=course.num_sections)
+					ws.cell(row=1, column=19, value=section.section_num)
+					ws.cell(row=1, column=20, value=section.type)
+					ws.cell(row=1, column=21, value=section.instructor)
+					ws.cell(row=1, column=22, value=section.credits)
+					ws.cell(row=1, column=23, value=section.term)
+					ws.cell(row=1, column=24, value='\n'.join(section.days))
+					ws.cell(row=1, column=25, value='\n'.join(section.start))
+					ws.cell(row=1, column=26, value='\n'.join(section.end))
+					ws.cell(row=1, column=27, value=section.loction)
+					ws.cell(row=1, column=28, value=section.available)
+					ws.cell(row=1, column=29, value=section.seats)
+					ws.cell(row=1, column=30, value=section.waitlist)
+					ws.cell(row=1, column=31, value=section.building)
+					cur_row += 1
+
+		wb.save('semesters.xlsx')
+
 
 	def semester(self, semester_year):
 		if semester_year in self.semesters.keys():
