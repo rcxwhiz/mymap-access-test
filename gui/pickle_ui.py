@@ -90,7 +90,7 @@ class Ui_Form(object):
         self.blue_semester = self.tableView.itemAt(row, 0).text()
 
     def apply(self):
-        if self.blue_semester is not None:
+        if self.blue_semester is not None and '.' not in self.blue_semester:
             semesterManager.select_semester(self.blue_semester)
             if self.big_ui_ref.stackedWidget.currentIndex() == 0:
                 self.big_ui_ref.updateTable()
@@ -127,7 +127,7 @@ class Ui_Form(object):
         self.pushButton_3.setText(_translate("Form", "Get Semester"))
         self.pushButton.setText(_translate("Form", "Delete"))
         self.pushButton_2.setText(_translate("Form", "Refresh"))
-        self.label_2.setText(_translate("Form", "Note: Getting and refreshing semesters may take about an hour."))
+        self.label_2.setText(_translate("Form", "Note: Getting and refreshing semesters may take about an hour.\n.bak files will not be opened."))
         self.pushButton_4.setText(_translate("Form", "Apply"))
 
 
