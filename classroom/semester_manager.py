@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import re
 import pickle
 import os
 import sys
