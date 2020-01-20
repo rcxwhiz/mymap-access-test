@@ -14,7 +14,7 @@ class Section:
 		self.days = attributes['days']
 		self.start = attributes['starts']
 		self.end = attributes['ends']
-		self.loction = attributes['loction']
+		self.location = attributes['location']
 		self.available_frac = attributes['available']
 		self.waitlist = int(attributes['waitlist'])
 
@@ -60,7 +60,7 @@ class Section:
 					self.schedule.append(['Sa', start_time, end_time])
 
 		building_regex = re.compile(r'[a-zA-Z]*')
-		self.building = building_regex.search(attributes['loction']).group()
+		self.building = building_regex.search(attributes['location']).group()
 
 		available_regex1 = re.compile(r'[0-9]+/')
 		available_regex2 = re.compile(r'/[0-9]+')

@@ -127,7 +127,7 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 					ws.cell(row=cur_row, column=24, value='\n'.join(section.days))
 					ws.cell(row=cur_row, column=25, value='\n'.join(section.start))
 					ws.cell(row=cur_row, column=26, value='\n'.join(section.end))
-					ws.cell(row=cur_row, column=27, value=section.loction)
+					ws.cell(row=cur_row, column=27, value=section.location)
 					ws.cell(row=cur_row, column=28, value=section.available)
 					ws.cell(row=cur_row, column=29, value=section.seats)
 					ws.cell(row=cur_row, column=30, value=section.waitlist)
@@ -247,7 +247,7 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 					                      'days': section.days,
 					                      'starts': section.start,
 					                      'ends': section.end,
-					                      'loction': section.loction,
+					                      'location': section.location,
 					                      'available': section.available_frac,
 					                      'waitlist': section.waitlist}
 					course_attributes['sections'].append(classroom.section.Section(section_attributes))

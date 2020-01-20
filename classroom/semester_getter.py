@@ -20,7 +20,8 @@ def get_college_buttons(browser, delay, max_wait=2.0):
 			college_buttons = browser.find_elements_by_class_name('collegeName')
 			return college_buttons
 		if time.time() - start > max_wait:
-			print('Ran out of time without encountering stale elements, passing what was given')
+			print('Ran out of time getting college buttons without encountering stale elements, passing what was given\n'
+			      'This is probably not an issue')
 			return college_buttons
 
 
@@ -39,7 +40,7 @@ def get_courses_page(browser, delay, max_wait=2.0):
 			college_courses = browser.find_elements_by_class_name('courseItem')
 			return college_courses
 		if time.time() - start > max_wait:
-			print('Ran out of time without encountering stale elements, passing what was given\n'
+			print('Ran out of time getting courses without encountering stale elements, passing what was given\n'
 			      'This is probably not an issue.')
 			return college_courses
 
@@ -100,9 +101,10 @@ def get(semester_year, recheck_delay=0.1):
 
 			checks = 0
 			while True:
-				if checks > 20:
+				if checks > 50:
 					print('Reloading course due to some timeout')
 					browser.refresh()
+					time.sleep(3)
 					college_buttons = get_college_buttons(browser, recheck_delay)
 					for button in college_buttons:
 						if button.text == college[0]:
@@ -110,7 +112,6 @@ def get(semester_year, recheck_delay=0.1):
 					college_courses = get_courses_page(browser, recheck_delay)
 					for i, subcourse in enumerate(college_courses):
 						if i + 1 == course_counter:
-							clicked_course = subcourse
 							break
 					continue
 				course_attributes = {'college short': college[0],
@@ -167,7 +168,7 @@ def get(semester_year, recheck_delay=0.1):
 				                      'days': data[5].text.split('\n'),
 				                      'starts': data[6].text.split('\n'),
 				                      'ends': data[7].text.split('\n'),
-				                      'loction': data[8].text,
+				                      'location': data[8].text,
 				                      'available': data[9].text,
 				                      'waitlist': data[10].text}
 				course_attributes['sections'].append(Section(section_attributes))
