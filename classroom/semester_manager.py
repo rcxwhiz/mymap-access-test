@@ -135,7 +135,7 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 					ws.cell(row=cur_row, column=31, value=section.building)
 					cur_row += 1
 
-		wb.remove_sheet('Sheet')
+		wb.remove_sheet(wb.get_sheet_by_name('Sheet'))
 		wb.save('semesters.xlsx')
 
 
