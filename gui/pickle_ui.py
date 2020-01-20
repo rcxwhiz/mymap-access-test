@@ -126,7 +126,7 @@ class Ui_Form(object):
         self.label.setText(_translate("Form", "Cached Semesters"))
         self.pushButton_3.setText(_translate("Form", "Get Semester"))
         self.pushButton.setText(_translate("Form", "Delete"))
-        self.pushButton_2.setText(_translate("Form", "Export xlsx"))
+        self.pushButton_2.setText(_translate("Form", "Export to xlsx"))
         self.label_2.setText(_translate("Form", "Note: Getting semesters may take about an hour.\n.bak files will not be opened."))
         self.pushButton_4.setText(_translate("Form", "Apply"))
 
