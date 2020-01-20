@@ -35,8 +35,10 @@ class Section:
 			else:
 				end_time = datetime.datetime.strptime(end_time_string, '%I %p')
 
-			start_time = start_time.hour * 60 + start_time.minute
-			end_time = end_time.hour * 60 + end_time.minute
+			if start_time != 0:
+				start_time = start_time.hour * 60 + start_time.minute
+			if end_time != 0:
+				end_time = end_time.hour * 60 + end_time.minute
 			for j, day in enumerate(meeting):
 				if day == 'h' or day == 'a':
 					continue
