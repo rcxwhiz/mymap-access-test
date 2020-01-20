@@ -148,9 +148,9 @@ class Ui_MainWindow(object):
         self.thurTimeS = QtWidgets.QTimeEdit(self.verticalLayoutWidget)
         self.thurTimeS.setObjectName("thurTimeS")
         self.horizontalLayout_6.addWidget(self.thurTimeS)
-        self.thuTimeE = QtWidgets.QTimeEdit(self.verticalLayoutWidget)
-        self.thuTimeE.setObjectName("thuTimeE")
-        self.horizontalLayout_6.addWidget(self.thuTimeE)
+        self.thurTimeE = QtWidgets.QTimeEdit(self.verticalLayoutWidget)
+        self.thurTimeE.setObjectName("thuTimeE")
+        self.horizontalLayout_6.addWidget(self.thurTimeE)
         self.verticalLayout_7.addLayout(self.horizontalLayout_6)
         self.verticalLayout_10.addLayout(self.verticalLayout_7)
         self.verticalLayout_8 = QtWidgets.QVBoxLayout()
@@ -395,12 +395,26 @@ class Ui_MainWindow(object):
         self.main_window_ref = MainWindow
 
     def updateDaysFilter(self):
-        semesterManager.day_filter['M'] = self.mondayBox_3.isChecked()
-        semesterManager.day_filter['T'] = self.tuesdayBox_3.isChecked()
-        semesterManager.day_filter['W'] = self.wednesdayBox_3.isChecked()
-        semesterManager.day_filter['Th'] = self.thursdayBox_3.isChecked()
-        semesterManager.day_filter['F'] = self.fridayBox_3.isChecked()
-        semesterManager.day_filter['Sa'] = self.saturdayBox_3.isChecked()
+        semesterManager.day_filter['M'][2] = self.monCheck.isChecked()
+        semesterManager.day_filter['T'][2] = self.tueCheck.isChecked()
+        semesterManager.day_filter['W'][2] = self.wedCheck.isChecked()
+        semesterManager.day_filter['Th'][2] = self.thurCheck.isChecked()
+        semesterManager.day_filter['F'][2] = self.friCheck.isChecked()
+        semesterManager.day_filter['Sa'][2] = self.satCheck.isChecked()
+
+        semesterManager.day_filter['M'][0] = self.monTimeS.time().hour() * 60 + self.monTimeS.time().minute()
+        semesterManager.day_filter['M'][0] = self.monTimeE.time().hour() * 60 + self.monTimeE.time().minute()
+        semesterManager.day_filter['T'][0] = self.tueTimeS.time().hour() * 60 + self.tueTimeS.time().minute()
+        semesterManager.day_filter['T'][0] = self.tueTimeE.time().hour() * 60 + self.tueTimeE.time().minute()
+        semesterManager.day_filter['W'][0] = self.wedTimeS.time().hour() * 60 + self.wedTimeS.time().minute()
+        semesterManager.day_filter['W'][0] = self.wedTimeE.time().hour() * 60 + self.wedTimeE.time().minute()
+        semesterManager.day_filter['Th'][0] = self.thurTimeS.time().hour() * 60 + self.thurTimeS.time().minute()
+        semesterManager.day_filter['Th'][0] = self.thurTimeE.time().hour() * 60 + self.thurTimeE.time().minute()
+        semesterManager.day_filter['F'][0] = self.friTimeS.time().hour() * 60 + self.friTimeS.time().minute()
+        semesterManager.day_filter['F'][0] = self.friTimeE.time().hour() * 60 + self.friTimeE.time().minute()
+        semesterManager.day_filter['Sa'][0] = self.satTimeS.time().hour() * 60 + self.satTimeS.time().minute()
+        semesterManager.day_filter['Sa'][0] = self.satTimeE.time().hour() * 60 + self.satTimeE.time().minute()
+
         if semesterManager.selected_semester is not None:
             self.updateTable()
 
