@@ -19,7 +19,7 @@ class Section:
 		self.waitlist = int(attributes['waitlist'])
 
 		self.schedule = []
-		for i, meeting in enumerate(self.days.split('\n')):
+		for i, meeting in enumerate(self.days):
 			start_time_string = self.start[i]
 			end_time_string = self.end[i]
 			if start_time_string == '':
@@ -43,25 +43,18 @@ class Section:
 				elif day == 'T':
 					if j < len(meeting) - 1:
 						if meeting[j + 1] == 'h':
-							print('thu')
 							self.schedule.append(['Th', start_time, end_time])
 						else:
-							print('tue')
 							self.schedule.append(['T', start_time, end_time])
 					else:
-						print('tue')
 						self.schedule.append(['T', start_time, end_time])
 				elif day == 'M':
-					print('mon')
 					self.schedule.append(['M', start_time, end_time])
 				elif day == 'W':
-					print('wed')
 					self.schedule.append(['W', start_time, end_time])
 				elif day == 'F':
-					print('fri')
 					self.schedule.append(['F', start_time, end_time])
 				elif day == 'S':
-					print('sat')
 					self.schedule.append(['Sa', start_time, end_time])
 
 		building_regex = re.compile(r'[a-zA-Z]*')
