@@ -113,6 +113,7 @@ def get(semester_year, recheck_delay=0.1):
 					for i, subcourse in enumerate(college_courses):
 						if i + 1 == course_counter:
 							break
+					checks = 0
 					continue
 				course_attributes = {'college short': college[0],
 				                     'college long': college[1],
