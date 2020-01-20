@@ -403,17 +403,17 @@ class Ui_MainWindow(object):
         semesterManager.day_filter['Sa'][2] = self.satCheck.isChecked()
 
         semesterManager.day_filter['M'][0] = self.monTimeS.time().hour() * 60 + self.monTimeS.time().minute()
-        semesterManager.day_filter['M'][0] = self.monTimeE.time().hour() * 60 + self.monTimeE.time().minute()
+        semesterManager.day_filter['M'][1] = self.monTimeE.time().hour() * 60 + self.monTimeE.time().minute()
         semesterManager.day_filter['T'][0] = self.tueTimeS.time().hour() * 60 + self.tueTimeS.time().minute()
-        semesterManager.day_filter['T'][0] = self.tueTimeE.time().hour() * 60 + self.tueTimeE.time().minute()
+        semesterManager.day_filter['T'][1] = self.tueTimeE.time().hour() * 60 + self.tueTimeE.time().minute()
         semesterManager.day_filter['W'][0] = self.wedTimeS.time().hour() * 60 + self.wedTimeS.time().minute()
-        semesterManager.day_filter['W'][0] = self.wedTimeE.time().hour() * 60 + self.wedTimeE.time().minute()
+        semesterManager.day_filter['W'][1] = self.wedTimeE.time().hour() * 60 + self.wedTimeE.time().minute()
         semesterManager.day_filter['Th'][0] = self.thurTimeS.time().hour() * 60 + self.thurTimeS.time().minute()
-        semesterManager.day_filter['Th'][0] = self.thurTimeE.time().hour() * 60 + self.thurTimeE.time().minute()
+        semesterManager.day_filter['Th'][1] = self.thurTimeE.time().hour() * 60 + self.thurTimeE.time().minute()
         semesterManager.day_filter['F'][0] = self.friTimeS.time().hour() * 60 + self.friTimeS.time().minute()
-        semesterManager.day_filter['F'][0] = self.friTimeE.time().hour() * 60 + self.friTimeE.time().minute()
+        semesterManager.day_filter['F'][1] = self.friTimeE.time().hour() * 60 + self.friTimeE.time().minute()
         semesterManager.day_filter['Sa'][0] = self.satTimeS.time().hour() * 60 + self.satTimeS.time().minute()
-        semesterManager.day_filter['Sa'][0] = self.satTimeE.time().hour() * 60 + self.satTimeE.time().minute()
+        semesterManager.day_filter['Sa'][1] = self.satTimeE.time().hour() * 60 + self.satTimeE.time().minute()
 
         if semesterManager.selected_semester is not None:
             self.updateTable()
