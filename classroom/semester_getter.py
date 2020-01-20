@@ -110,7 +110,6 @@ def get(semester_year, recheck_delay=0.1):
 					college_courses = get_courses_page(browser, recheck_delay)
 					for i, subcourse in enumerate(college_courses):
 						if i + 1 == course_counter:
-							global clicked_course
 							clicked_course = subcourse
 							break
 					continue
