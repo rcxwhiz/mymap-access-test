@@ -11,7 +11,7 @@ from selenium.webdriver.support.ui import Select
 from classroom import *
 
 
-def get_college_buttons(browser, delay=0.2, max_wait=2.0):
+def get_college_buttons(browser, delay=0.2, max_wait=5.0):
 	college_buttons = browser.find_elements_by_class_name('collegeName')
 	start = time.time()
 	while True:
@@ -28,7 +28,7 @@ def get_college_buttons(browser, delay=0.2, max_wait=2.0):
 			return college_buttons
 
 
-def get_courses_page(browser, delay=0.2, max_wait=2.0):
+def get_courses_page(browser, delay=0.2, max_wait=5.0):
 	start = time.time()
 	college_courses = []
 	while not college_courses:
@@ -156,6 +156,7 @@ def get_course(course_name, browser, college):
 					return 0
 				time.sleep(0.1)
 
+			print(f'Was able to get course attributes for {course_attributes["dept"]} {course_attributes["num"]}')
 			course_attributes['long title'] = browser.find_element_by_id('courseTitle').text
 			course_attributes['description'] = browser.find_element_by_id('courseDescription').text
 			course_attributes['sections'] = []
