@@ -16,7 +16,6 @@ import gui.single_class
 from classroom.semester_manager import SemesterManager
 
 semesterManager = SemesterManager()
-semesterManager.update('Fall 2019')
 
 app = QtWidgets.QApplication(sys.argv)
 PickleSelector = QtWidgets.QWidget()

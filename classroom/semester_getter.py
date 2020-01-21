@@ -11,7 +11,7 @@ from selenium.webdriver.support.ui import Select
 from classroom import *
 
 
-def get_college_buttons(browser, delay, max_wait=2.0):
+def get_college_buttons(browser, delay=0.2, max_wait=2.0):
 	college_buttons = browser.find_elements_by_class_name('collegeName')
 	start = time.time()
 	while True:
@@ -28,7 +28,7 @@ def get_college_buttons(browser, delay, max_wait=2.0):
 			return college_buttons
 
 
-def get_courses_page(browser, delay, max_wait=2.0):
+def get_courses_page(browser, delay=0.2, max_wait=2.0):
 	start = time.time()
 	college_courses = []
 	while not college_courses:
@@ -58,7 +58,6 @@ def get_semester(semester_year, recheck_delay=0.1):
 
 	browser = webdriver.Chrome()
 	browser.get('http://saasta.byu.edu/noauth/classSchedule/index.php')
-
 	semester_button = Select(browser.find_element_by_id('yearterm'))
 	try:
 		semester_button.select_by_visible_text(semester_year)
@@ -66,6 +65,7 @@ def get_semester(semester_year, recheck_delay=0.1):
 		print(f'ERROR - Semester {semester_year} not found')
 		browser.close()
 		return None
+
 	college_buttons = get_college_buttons(browser, recheck_delay)
 
 	colleges = []
@@ -84,99 +84,66 @@ def get_semester(semester_year, recheck_delay=0.1):
 		colleges.append({'short name': college.text, 'long name': long_college_name})
 	browser.close()
 
+	MAX_NUM_THREADS = 3
+
 	threads = []
 	for college in colleges:
-		# TODO make a configurable number of threads here
-		th = threading.Thread(target=get_college, args=(semester_year, college['short name'], semester.courses))
+		if threading.active_count() >= MAX_NUM_THREADS:
+			time.sleep(5)
+			continue
+
+		th = threading.Thread(target=get_college, args=(semester_year, college, semester.courses))
 		threads.append(th)
 		th.start()
 
 	for thread in threads:
 		thread.join()
 
-	print(semester.courses)
 
-
-def get_college(semester_year, college, course_list):
-	print(f'{college} - {semester_year}')
-	course_list.append(f'{college} - {semester_year}')
-
-
-def get_DEPRECIATED(semester_year, recheck_delay=0.1):
-
-	get_start = time.time()
-	semester_attributes = {'timestamp': time.time(),
-	                       'semester year': semester_year,
-	                       'courses': []}
-
-	print(f'Getting classes for {semester_year}')
-	print('this may take about an hour...')
-
+def get_college(semester_year, college, semester_course_list):
 	browser = webdriver.Chrome()
 	browser.get('http://saasta.byu.edu/noauth/classSchedule/index.php')
-
 	semester_button = Select(browser.find_element_by_id('yearterm'))
-	try:
-		semester_button.select_by_visible_text(semester_year)
-	except exceptions.NoSuchElementException:
-		print(f'ERROR - Semester {semester_year} not found')
-		browser.close()
-		return None
-	college_buttons = get_college_buttons(browser, recheck_delay)
+	semester_button.select_by_visible_text(semester_year)
+	college_buttons = get_college_buttons(browser)
 
-	colleges = []
-	for college in college_buttons:
-		try:
-			postfix_regex = re.compile(r'.*, ')
-			prefix_regex = re.compile(r', [^,]*$')
-			name_postfix = postfix_regex.search(college.get_attribute('college')).group(0)
-			name_prefix = prefix_regex.search(college.get_attribute('college')).group(0)
-			long_college_name = name_prefix[2:] + ' ' + name_postfix[:-2]
-		except AttributeError:
-			long_college_name = college.get_attribute('college')
-		except exceptions.StaleElementReferenceException:
-			print('Found a stale element :( this should not have happened')
-			return None
-		colleges.append([college.text, long_college_name])
+	for college_button in college_buttons:
+		if college_button.text == college['short name']:
+			college_button.click()
+			break
 
-	college_counter = 0
-	for college in colleges:
-		college_counter += 1
-		college_buttons = get_college_buttons(browser, recheck_delay)
+	completed_courses = []
+	college_course_buttons = get_courses_page(browser)
+	total_courses = []
+	for course_button in college_course_buttons:
+		total_courses.append(course_button.text)
 
-		# find the right college button to click and click it
-		for button in college_buttons:
-			if button.text == college[0]:
-				button.click()
+	for current_course in total_courses:
+		while True:
+			response = get_course(current_course, browser, college)
+			if response != 0:
+				completed_courses.append(current_course)
+				semester_course_list.append(response)
+				break
+			if response == 0:
+				browser.get('http://saasta.byu.edu/noauth/classSchedule/index.php')
+				semester_button = Select(browser.find_element_by_id('yearterm'))
+				semester_button.select_by_visible_text(semester_year)
+				college_buttons = get_college_buttons(browser)
 
-		college_courses = get_courses_page(browser, recheck_delay)
+				for college_button in college_buttons:
+					if college_button.text == college['short name']:
+						college_button.click()
 
-		course_counter = 0
-		for clicked_course in college_courses:
-			course_counter += 1
-			clicked_course.click()
 
-			checks = 0
+def get_course(course_name, browser, college):
+	college_course_buttons = get_courses_page(browser)
+	checks = 0
+	for course_button in college_course_buttons:
+		if course_button.text == course_name:
 			while True:
-				if checks > 50:
-					print('Reloading course due to some timeout')
-					browser.get('http://saasta.byu.edu/noauth/classSchedule/index.php')
-					Select(browser.find_element_by_id('yearterm')).select_by_visible_text(semester_year)
-					college_buttons = get_college_buttons(browser, recheck_delay)
-					for button in college_buttons:
-						if button.text == college[0]:
-							button.click()
-					# TODO apparently when you say for x in y, it doesn't matter if you change y inside that
-					# TODO what this means is I think it probably needs a function that relies more on text than references
-					college_courses = get_courses_page(browser, recheck_delay)
-					for i, subcourse in enumerate(college_courses):
-						if i + 1 == course_counter:
-							break
-					checks = 0
-					continue
-
-				course_attributes = {'college short': college[0],
-				                     'college long': college[1],
+				course_attributes = {'college short': college['short name'],
+				                     'college long': college['long name'],
 				                     'dept': browser.find_element_by_id('courseDept').text,
 				                     'num': browser.find_element_by_id('courseNumber').text}
 				to_break = True
@@ -185,12 +152,12 @@ def get_DEPRECIATED(semester_year, recheck_delay=0.1):
 						to_break = False
 				if to_break:
 					break
-				checks += 1
-				time.sleep(recheck_delay)
+				if checks > 50:
+					return 0
+				time.sleep(0.1)
 
 			course_attributes['long title'] = browser.find_element_by_id('courseTitle').text
 			course_attributes['description'] = browser.find_element_by_id('courseDescription').text
-
 			course_attributes['sections'] = []
 			things_to_try = ['courseCredits',
 			                 'courseOffered',
@@ -211,14 +178,6 @@ def get_DEPRECIATED(semester_year, recheck_delay=0.1):
 			section_counter = 0
 			for section_data in sections:
 				section_counter += 1
-				# printing progress here
-				update_string = f'\r[{str(datetime.timedelta(seconds=int(time.time() - get_start)))}]'
-				update_string += f' College {college_counter}/{len(colleges)} ({college_counter / len(colleges) * 100:.0f}%)'
-				update_string += f' - Course {course_counter}/{len(college_courses)} ({course_counter / len(college_courses) * 100:.0f}%)'
-				update_string += f' - Section {section_counter}/{len(sections)} ({section_counter / len(sections) * 100:.0f}%)'
-				update_string += ' ' * 10
-				sys.stdout.write(update_string)
-				sys.stdout.flush()
 
 				# use the data we get from a section to create the object and add it to the course
 				data = section_data.find_elements_by_tag_name('td')
@@ -234,14 +193,6 @@ def get_DEPRECIATED(semester_year, recheck_delay=0.1):
 				                      'available': data[9].text,
 				                      'waitlist': data[10].text}
 				course_attributes['sections'].append(Section(section_attributes))
+			return Course(course_attributes)
 
-			semester_attributes['courses'].append(Course(course_attributes))
-
-		browser.refresh()
-		semester_button = Select(browser.find_element_by_id('yearterm'))
-		semester_button.select_by_visible_text(semester_year)
-
-	browser.close()
-	semester_out = Semester(semester_attributes)
-	print(f'Finished getting classes for {semester_year}')
-	return semester_out
+	return 0
