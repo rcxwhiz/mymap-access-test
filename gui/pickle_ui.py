@@ -93,9 +93,12 @@ class Ui_Form(object):
 
     def apply(self):
         if self.blue_semester is not None and '.' not in self.blue_semester:
-            semesterManager.select_semester(self.blue_semester)
+            #semesterManager.select_semester(self.blue_semester)
+            semesterManager.selected_semester = semesterManager.semesters[self.blue_semester]
             if self.big_ui_ref.stackedWidget.currentIndex() == 0:
                 self.big_ui_ref.updateTable()
+        print(f'used {self.blue_semester}')
+        print(f'the selected semester is supposed to be {semesterManager.selected_semester.semester_year}')
         self.big_ui_ref.updateTitleBar()
         self.form_ref.hide()
 

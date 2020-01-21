@@ -32,6 +32,7 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 
 		for file in os.listdir(self.pickles_path):
 			self.semesters[file] = pickle.load(open(os.path.join(self.pickles_path, file), 'rb'))
+		print(f'loaded files: {self.semesters.keys()}')
 
 		self.selected_semester = None
 		self.filtered_sections = []
@@ -238,10 +239,20 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 					if not (self.credits_filter[0] <= section.credits <= self.credits_filter[1]):
 						make_section = False
 
-				for day in self.day_filter.keys():
-					if self.day_filter[day][2]:
-						if not self.class_in_slot(day, section):
-							make_section = False
+				enabled_days = []
+				for day in self.day_filter.values():
+					enabled_days.append(day[2])
+				if True in enabled_days:
+					for day in self.day_filter.keys():
+						if self.day_filter[day][2]:
+							if not self.class_in_slot(day, section):
+								make_section = False
+								break
+						else:
+							for slot in section.schedule:
+								if slot[0] == day:
+									make_section = False
+									break
 
 				if make_section:
 					section_attributes = {'section num': section.section_num,
