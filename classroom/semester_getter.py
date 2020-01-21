@@ -27,6 +27,7 @@ def get_college_buttons(browser, delay=0.2, max_wait=2.0):
 
 
 def get_semester(semester_year, recheck_delay=0.1):
+	start = time.time()
 	print(f'Getting a semester {semester_year}')
 
 	semester_attributes = {'timestamp': time.time(),
@@ -64,7 +65,7 @@ def get_semester(semester_year, recheck_delay=0.1):
 	browser.close()
 
 	# Will open 1 - the number here of browser windows
-	MAX_NUM_THREADS = 3
+	MAX_NUM_THREADS = 5
 
 	threads = []
 	for college in colleges:
@@ -77,6 +78,10 @@ def get_semester(semester_year, recheck_delay=0.1):
 
 	for thread in threads:
 		thread.join()
+
+	diff = time.time() - start
+	print(f'spent {diff / 60:.0f}:{diff % 60} getting {semester_year}')
+	return semester
 
 
 def get_college(semester_year, college, semester_course_list):
@@ -133,7 +138,6 @@ def get_college(semester_year, college, semester_course_list):
 
 
 def get_course(browser, course_name_in, college_course_buttons, college):
-	print(f'Getting a course {course_name_in}')
 	checks = 0
 	for course_button in college_course_buttons:
 		if course_button.text == course_name_in:
