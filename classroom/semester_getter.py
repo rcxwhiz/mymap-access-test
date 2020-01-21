@@ -11,7 +11,7 @@ from selenium.webdriver.support.ui import Select
 from classroom import *
 
 
-def get_college_buttons(browser, delay=0.2, max_wait=5.0):
+def get_college_buttons(browser, delay=0.2, max_wait=2.0):
 	college_buttons = browser.find_elements_by_class_name('collegeName')
 	start = time.time()
 	while True:
@@ -26,26 +26,6 @@ def get_college_buttons(browser, delay=0.2, max_wait=5.0):
 			print('Ran out of time getting college buttons without encountering stale elements, passing what was given.\n'
 			      'This is probably not an issue')
 			return college_buttons
-
-
-def get_courses_page(browser, delay=0.2, max_wait=5.0):
-	start = time.time()
-	college_courses = []
-	while not college_courses:
-		college_courses = browser.find_elements_by_class_name('courseItem')
-
-	while True:
-		try:
-			for course in college_courses:
-				course.text
-			time.sleep(delay)
-		except exceptions.StaleElementReferenceException:
-			college_courses = browser.find_elements_by_class_name('courseItem')
-			return college_courses
-		if time.time() - start > max_wait:
-			print('Ran out of time getting courses without encountering stale elements, passing what was given.\n'
-			      'This is probably not an issue.')
-			return college_courses
 
 
 def get_semester(semester_year, recheck_delay=0.1):
@@ -85,7 +65,7 @@ def get_semester(semester_year, recheck_delay=0.1):
 	browser.close()
 
 	# Will open 1 - the number here of browser windows
-	MAX_NUM_THREADS = 3
+	MAX_NUM_THREADS = 4
 
 	threads = []
 	for college in colleges:
@@ -114,14 +94,22 @@ def get_college(semester_year, college, semester_course_list):
 			break
 
 	completed_courses = []
-	college_course_buttons = get_courses_page(browser)
+	college_course_buttons = browser.find_elements_by_class_name('collegeName')
+	while True:
+		try:
+			for course_loop in college_course_buttons:
+				test = course_loop.text
+			break
+		except exceptions.StaleElementReferenceException:
+			college_course_buttons = browser.find_elements_by_class_name('collegeName')
+
 	total_courses = []
 	for course_button in college_course_buttons:
 		total_courses.append(course_button.text)
 
 	for current_course in total_courses:
 		while True:
-			response = get_course(current_course, browser, college)
+			response = get_course(browser, current_course, college_course_buttons, college)
 			if response != 0:
 				completed_courses.append(current_course)
 				semester_course_list.append(response)
@@ -135,13 +123,15 @@ def get_college(semester_year, college, semester_course_list):
 				for college_button in college_buttons:
 					if college_button.text == college['short name']:
 						college_button.click()
+						break
+
+				college_course_buttons = browser.find_elements_by_class_name('collegeName')
 
 	browser.close()
 	print(f'closing a window for {college["short name"]}')
 
 
-def get_course(course_id, browser, college):
-	college_course_buttons = get_courses_page(browser)
+def get_course(browser, course_id, college_course_buttons, college):
 	checks = 0
 	for course_button in college_course_buttons:
 		if course_button.text == course_id:
@@ -151,11 +141,7 @@ def get_course(course_id, browser, college):
 				                     'college long': college['long name'],
 				                     'dept': browser.find_element_by_id('courseDept').text,
 				                     'num': browser.find_element_by_id('courseNumber').text}
-				to_break = True
-				for value in course_attributes.values():
-					if not value:
-						to_break = False
-				if to_break:
+				if None not in course_attributes.values():
 					break
 				if checks > 50:
 					return 0
