@@ -1,13 +1,15 @@
 from __future__ import annotations
 
-import pickle
 import os
+import pickle
 import sys
-import openpyxl
 from pathlib import Path
 from typing import Optional
-from classroom import semester_getter
+
+import openpyxl
+
 import classroom
+from classroom import semester_getter
 
 
 class SemesterManagerMeta(type):

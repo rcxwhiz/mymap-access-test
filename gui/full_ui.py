@@ -8,10 +8,12 @@
 
 import os
 import sys
-from classroom.semester_manager import SemesterManager
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
 import gui.pickle_ui
 import gui.single_class
-from PyQt5 import QtCore, QtGui, QtWidgets
+from classroom.semester_manager import SemesterManager
 
 semesterManager = SemesterManager()
 semesterManager.update('Fall 2019')

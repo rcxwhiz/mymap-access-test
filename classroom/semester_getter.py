@@ -1,11 +1,13 @@
+import datetime
+import re
+import sys
+import threading
+import time
+
 from selenium import webdriver
 from selenium.common import exceptions
 from selenium.webdriver.support.ui import Select
-import datetime
-import threading
-import time
-import re
-import sys
+
 from classroom import *
 
 
