@@ -84,6 +84,7 @@ def get_semester(semester_year, recheck_delay=0.1):
 		colleges.append({'short name': college.text, 'long name': long_college_name})
 	browser.close()
 
+	# Will open 1 - the number here of browser windows
 	MAX_NUM_THREADS = 3
 
 	threads = []
