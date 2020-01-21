@@ -84,11 +84,13 @@ class Ui_Form(object):
         self.pushButton_2.clicked.connect(semesterManager.save_to_xlsx)
 
         self.updateCachedSemester()
-        self.blue_semester = semesterManager.selected_semester
+        # self.blue_semester = semesterManager.selected_semester
+        self.blue_semester = 'buns'
         self.form_ref = Form
         self.big_ui_ref = BigUi
 
     def selected_semester(self, row, column):
+        # TODO something is seriously wrong here
         self.blue_semester = self.tableView.itemAt(row, 0).text()
 
     def apply(self):
