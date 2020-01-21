@@ -16,7 +16,10 @@ class Section:
 		self.end = attributes['ends']
 		self.location = attributes['location']
 		self.available_frac = attributes['available']
-		self.waitlist = int(attributes['waitlist'])
+		try:
+			self.waitlist = int(attributes['waitlist'])
+		except ValueError:
+			self.waitlist = attributes['waitlist']
 
 		self.schedule = []
 		for i, meeting in enumerate(self.days):
