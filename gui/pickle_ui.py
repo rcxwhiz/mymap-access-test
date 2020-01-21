@@ -112,6 +112,7 @@ class Ui_Form(object):
             self.lineEdit.setText('Already downloaded')
         else:
             semesterManager.update(self.lineEdit.text())
+        self.updateCachedSemester()
 
     def updateCachedSemester(self):
         self.tableView.setRowCount(len(semesterManager.semesters))
