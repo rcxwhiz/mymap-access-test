@@ -37,7 +37,7 @@ def get_courses_page(browser, delay=0.2, max_wait=5.0):
 	while True:
 		try:
 			for course in college_courses:
-				course.text
+				course.curriculum_id
 			time.sleep(delay)
 		except exceptions.StaleElementReferenceException:
 			college_courses = browser.find_elements_by_class_name('courseItem')
@@ -88,9 +88,8 @@ def get_semester(semester_year, recheck_delay=0.1):
 
 	threads = []
 	for college in colleges:
-		if threading.active_count() >= MAX_NUM_THREADS:
+		while threading.active_count() >= MAX_NUM_THREADS:
 			time.sleep(5)
-			continue
 
 		th = threading.Thread(target=get_college, args=(semester_year, college, semester.courses))
 		threads.append(th)
@@ -101,6 +100,7 @@ def get_semester(semester_year, recheck_delay=0.1):
 
 
 def get_college(semester_year, college, semester_course_list):
+	print(f'opening a window for {college["short name"]}')
 	browser = webdriver.Chrome()
 	browser.get('http://saasta.byu.edu/noauth/classSchedule/index.php')
 	semester_button = Select(browser.find_element_by_id('yearterm'))
@@ -116,7 +116,7 @@ def get_college(semester_year, college, semester_course_list):
 	college_course_buttons = get_courses_page(browser)
 	total_courses = []
 	for course_button in college_course_buttons:
-		total_courses.append(course_button.text)
+		total_courses.append(course_button.curriculum_id)
 
 	for current_course in total_courses:
 		while True:
@@ -135,12 +135,15 @@ def get_college(semester_year, college, semester_course_list):
 					if college_button.text == college['short name']:
 						college_button.click()
 
+	browser.close()
+	print(f'closing a window for {college["short name"]}')
 
-def get_course(course_name, browser, college):
+
+def get_course(course_id, browser, college):
 	college_course_buttons = get_courses_page(browser)
 	checks = 0
 	for course_button in college_course_buttons:
-		if course_button.text == course_name:
+		if course_button.curriculum_id == course_id:
 			while True:
 				course_attributes = {'college short': college['short name'],
 				                     'college long': college['long name'],
@@ -193,7 +196,9 @@ def get_course(course_name, browser, college):
 				                      'location': data[8].text,
 				                      'available': data[9].text,
 				                      'waitlist': data[10].text}
+				print('successfully making a section')
 				course_attributes['sections'].append(Section(section_attributes))
+			print('Successfully making a course')
 			return Course(course_attributes)
 
 	return 0
