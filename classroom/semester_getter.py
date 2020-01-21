@@ -45,6 +45,9 @@ def get_courses_page(browser, delay, max_wait=2.0):
 			return college_courses
 
 
+# TODO -> def get_college
+
+
 def get(semester_year, recheck_delay=0.1):
 
 	get_start = time.time()
@@ -103,18 +106,21 @@ def get(semester_year, recheck_delay=0.1):
 			while True:
 				if checks > 50:
 					print('Reloading course due to some timeout')
-					browser.refresh()
-					time.sleep(3)
+					browser.get('http://saasta.byu.edu/noauth/classSchedule/index.php')
+					Select(browser.find_element_by_id('yearterm')).select_by_visible_text(semester_year)
 					college_buttons = get_college_buttons(browser, recheck_delay)
 					for button in college_buttons:
 						if button.text == college[0]:
 							button.click()
+					# TODO apparently when you say for x in y, it doesn't matter if you change y inside that
+					# TODO what this means is I think it probably needs a function that relies more on text than references
 					college_courses = get_courses_page(browser, recheck_delay)
 					for i, subcourse in enumerate(college_courses):
 						if i + 1 == course_counter:
 							break
 					checks = 0
 					continue
+
 				course_attributes = {'college short': college[0],
 				                     'college long': college[1],
 				                     'dept': browser.find_element_by_id('courseDept').text,
@@ -127,6 +133,7 @@ def get(semester_year, recheck_delay=0.1):
 					break
 				checks += 1
 				time.sleep(recheck_delay)
+
 			course_attributes['long title'] = browser.find_element_by_id('courseTitle').text
 			course_attributes['description'] = browser.find_element_by_id('courseDescription').text
 
