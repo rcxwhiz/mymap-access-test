@@ -65,7 +65,7 @@ def get_semester(semester_year, recheck_delay=0.1):
 	browser.close()
 
 	# Will open 1 - the number here of browser windows
-	MAX_NUM_THREADS = 6
+	MAX_NUM_THREADS = 100
 
 	threads = []
 	for college in colleges:
@@ -80,7 +80,7 @@ def get_semester(semester_year, recheck_delay=0.1):
 		thread.join()
 
 	diff = time.time() - start
-	print(f'spent {diff / 60:.0f}:{diff % 60} getting {semester_year}')
+	print(f'spent {diff / 60:.0f}:{diff % 60:.0f} getting {semester_year}')
 	return semester_to_return
 
 

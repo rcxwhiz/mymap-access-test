@@ -614,7 +614,7 @@ class Ui_MainWindow(object):
                         QtWidgets.QTableWidgetItem(section.instructor),
                         QtWidgets.QTableWidgetItem('\n'.join(times)),
                         QtWidgets.QTableWidgetItem(section.type),
-                        QtWidgets.QTableWidgetItem(''.join(section.days)),
+                        QtWidgets.QTableWidgetItem('\n'.join(section.days)),
                         QtWidgets.QTableWidgetItem(str(section.credits)),
                         QtWidgets.QTableWidgetItem(section.location)]
                 for i in range(len(data)):
