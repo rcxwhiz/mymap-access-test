@@ -1,6 +1,4 @@
-import datetime
 import re
-import sys
 import threading
 import time
 
@@ -29,6 +27,7 @@ def get_college_buttons(browser, delay=0.2, max_wait=2.0):
 
 
 def get_semester(semester_year, recheck_delay=0.1):
+	print(f'Getting a semester {semester_year}')
 
 	semester_attributes = {'timestamp': time.time(),
 	                       'semester year': semester_year,
@@ -65,7 +64,7 @@ def get_semester(semester_year, recheck_delay=0.1):
 	browser.close()
 
 	# Will open 1 - the number here of browser windows
-	MAX_NUM_THREADS = 4
+	MAX_NUM_THREADS = 3
 
 	threads = []
 	for college in colleges:
@@ -93,28 +92,30 @@ def get_college(semester_year, college, semester_course_list):
 			college_button.click()
 			break
 
+	time.sleep(2)
 	completed_courses = []
-	college_course_buttons = browser.find_elements_by_class_name('collegeName')
+	course_buttons = browser.find_elements_by_class_name('courseItem')
 	while True:
 		try:
-			for course_loop in college_course_buttons:
+			for course_loop in course_buttons:
 				test = course_loop.text
 			break
 		except exceptions.StaleElementReferenceException:
-			college_course_buttons = browser.find_elements_by_class_name('collegeName')
+			course_buttons = browser.find_elements_by_class_name('courseItem')
 
 	total_courses = []
-	for course_button in college_course_buttons:
+	for course_button in course_buttons:
 		total_courses.append(course_button.text)
 
 	for current_course in total_courses:
 		while True:
-			response = get_course(browser, current_course, college_course_buttons, college)
+			response = get_course(browser, current_course, course_buttons, college)
 			if response != 0:
 				completed_courses.append(current_course)
 				semester_course_list.append(response)
 				break
 			if response == 0:
+				browser.close()
 				browser.get('http://saasta.byu.edu/noauth/classSchedule/index.php')
 				semester_button = Select(browser.find_element_by_id('yearterm'))
 				semester_button.select_by_visible_text(semester_year)
@@ -125,23 +126,24 @@ def get_college(semester_year, college, semester_course_list):
 						college_button.click()
 						break
 
-				college_course_buttons = browser.find_elements_by_class_name('collegeName')
+				course_buttons = browser.find_elements_by_class_name('courseItem')
 
 	browser.close()
 	print(f'closing a window for {college["short name"]}')
 
 
-def get_course(browser, course_id, college_course_buttons, college):
+def get_course(browser, course_name_in, college_course_buttons, college):
+	print(f'Getting a course {course_name_in}')
 	checks = 0
 	for course_button in college_course_buttons:
-		if course_button.text == course_id:
+		if course_button.text == course_name_in:
 			course_button.click()
 			while True:
 				course_attributes = {'college short': college['short name'],
 				                     'college long': college['long name'],
 				                     'dept': browser.find_element_by_id('courseDept').text,
 				                     'num': browser.find_element_by_id('courseNumber').text}
-				if None not in course_attributes.values():
+				if '' not in course_attributes.values() and None not in course_attributes.values():
 					break
 				if checks > 50:
 					return 0
@@ -185,5 +187,3 @@ def get_course(browser, course_id, college_course_buttons, college):
 				                      'waitlist': data[10].text}
 				course_attributes['sections'].append(Section(section_attributes))
 			return Course(course_attributes)
-
-	return 0
