@@ -37,7 +37,7 @@ def get_courses_page(browser, delay=0.2, max_wait=5.0):
 	while True:
 		try:
 			for course in college_courses:
-				course.curriculum_id
+				course.text
 			time.sleep(delay)
 		except exceptions.StaleElementReferenceException:
 			college_courses = browser.find_elements_by_class_name('courseItem')
@@ -116,7 +116,7 @@ def get_college(semester_year, college, semester_course_list):
 	college_course_buttons = get_courses_page(browser)
 	total_courses = []
 	for course_button in college_course_buttons:
-		total_courses.append(course_button.curriculum_id)
+		total_courses.append(course_button.text)
 
 	for current_course in total_courses:
 		while True:
@@ -143,7 +143,8 @@ def get_course(course_id, browser, college):
 	college_course_buttons = get_courses_page(browser)
 	checks = 0
 	for course_button in college_course_buttons:
-		if course_button.curriculum_id == course_id:
+		if course_button.text == course_id:
+			course_button.click()
 			while True:
 				course_attributes = {'college short': college['short name'],
 				                     'college long': college['long name'],
@@ -159,7 +160,6 @@ def get_course(course_id, browser, college):
 					return 0
 				time.sleep(0.1)
 
-			print(f'Was able to get course attributes for {course_attributes["dept"]} {course_attributes["num"]}')
 			course_attributes['long title'] = browser.find_element_by_id('courseTitle').text
 			course_attributes['description'] = browser.find_element_by_id('courseDescription').text
 			course_attributes['sections'] = []
@@ -196,9 +196,7 @@ def get_course(course_id, browser, college):
 				                      'location': data[8].text,
 				                      'available': data[9].text,
 				                      'waitlist': data[10].text}
-				print('successfully making a section')
 				course_attributes['sections'].append(Section(section_attributes))
-			print('Successfully making a course')
 			return Course(course_attributes)
 
 	return 0
