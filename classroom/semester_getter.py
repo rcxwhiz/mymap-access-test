@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.common import exceptions
 from selenium.webdriver.support.ui import Select
 import datetime
+import threading
 import time
 import re
 import sys
@@ -45,10 +46,61 @@ def get_courses_page(browser, delay, max_wait=2.0):
 			return college_courses
 
 
-# TODO -> def get_college
+def get_semester(semester_year, recheck_delay=0.1):
+
+	semester_attributes = {'timestamp': time.time(),
+	                       'semester year': semester_year,
+	                       'courses': []}
+
+	semester = Semester(semester_attributes)
+
+	browser = webdriver.Chrome()
+	browser.get('http://saasta.byu.edu/noauth/classSchedule/index.php')
+
+	semester_button = Select(browser.find_element_by_id('yearterm'))
+	try:
+		semester_button.select_by_visible_text(semester_year)
+	except exceptions.NoSuchElementException:
+		print(f'ERROR - Semester {semester_year} not found')
+		browser.close()
+		return None
+	college_buttons = get_college_buttons(browser, recheck_delay)
+
+	colleges = []
+	for college in college_buttons:
+		try:
+			postfix_regex = re.compile(r'.*, ')
+			prefix_regex = re.compile(r', [^,]*$')
+			name_postfix = postfix_regex.search(college.get_attribute('college')).group(0)
+			name_prefix = prefix_regex.search(college.get_attribute('college')).group(0)
+			long_college_name = name_prefix[2:] + ' ' + name_postfix[:-2]
+		except AttributeError:
+			long_college_name = college.get_attribute('college')
+		except exceptions.StaleElementReferenceException:
+			print('Found a stale element :( this should not have happened')
+			return None
+		colleges.append({'short name': college.text, 'long name': long_college_name})
+	browser.close()
+
+	threads = []
+	for college in colleges:
+		# TODO make a configurable number of threads here
+		th = threading.Thread(target=get_college, args=(semester_year, college['short name'], semester.courses))
+		threads.append(th)
+		th.start()
+
+	for thread in threads:
+		thread.join()
+
+	print(semester.courses)
 
 
-def get(semester_year, recheck_delay=0.1):
+def get_college(semester_year, college, course_list):
+	print(f'{college} - {semester_year}')
+	course_list.append(f'{college} - {semester_year}')
+
+
+def get_DEPRECIATED(semester_year, recheck_delay=0.1):
 
 	get_start = time.time()
 	semester_attributes = {'timestamp': time.time(),

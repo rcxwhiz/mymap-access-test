@@ -145,7 +145,7 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 		return None
 
 	def update(self, semester_year):
-		self.semesters[semester_year] = semester_getter.get(semester_year)
+		self.semesters[semester_year] = semester_getter.get_semester(semester_year)
 		if os.path.exists(os.path.join(self.pickles_path, semester_year)):
 			os.rename(os.path.join(self.pickles_path, semester_year), os.path.join(self.pickles_path, semester_year + '.bak'))
 		if self.semesters[semester_year] is not None:

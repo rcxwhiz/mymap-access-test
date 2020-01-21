@@ -14,6 +14,7 @@ import gui.single_class
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 semesterManager = SemesterManager()
+semesterManager.update('Fall 2019')
 
 app = QtWidgets.QApplication(sys.argv)
 PickleSelector = QtWidgets.QWidget()
