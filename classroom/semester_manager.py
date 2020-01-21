@@ -148,10 +148,13 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 
 	def update(self, semester_year):
 		self.semesters[semester_year] = semester_getter.get_semester(semester_year)
-		if os.path.exists(os.path.join(self.pickles_path, semester_year)):
-			os.rename(os.path.join(self.pickles_path, semester_year), os.path.join(self.pickles_path, semester_year + '.bak'))
+		print('Got the semester')
 		if self.semesters[semester_year] is not None:
+			if os.path.exists(os.path.join(self.pickles_path, semester_year)):
+				os.rename(os.path.join(self.pickles_path, semester_year),
+				          os.path.join(self.pickles_path, semester_year + '.bak'))
 			pickle.dump(self.semesters[semester_year], open(os.path.join(self.pickles_path, semester_year), 'wb'))
+			print(f'The semester should be printed to {os.path.join(self.pickles_path, semester_year)}')
 
 	def cached_semesters(self):
 		return list(self.semesters.keys())

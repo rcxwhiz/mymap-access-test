@@ -34,7 +34,7 @@ def get_semester(semester_year, recheck_delay=0.1):
 	                       'semester year': semester_year,
 	                       'courses': []}
 
-	semester = Semester(semester_attributes)
+	semester_to_return = Semester(semester_attributes)
 
 	browser = webdriver.Chrome()
 	browser.get('http://saasta.byu.edu/noauth/classSchedule/index.php')
@@ -65,14 +65,14 @@ def get_semester(semester_year, recheck_delay=0.1):
 	browser.close()
 
 	# Will open 1 - the number here of browser windows
-	MAX_NUM_THREADS = 5
+	MAX_NUM_THREADS = 6
 
 	threads = []
 	for college in colleges:
 		while threading.active_count() >= MAX_NUM_THREADS:
 			time.sleep(5)
 
-		th = threading.Thread(target=get_college, args=(semester_year, college, semester.courses))
+		th = threading.Thread(target=get_college, args=(semester_year, college, semester_to_return.courses))
 		threads.append(th)
 		th.start()
 
@@ -81,7 +81,7 @@ def get_semester(semester_year, recheck_delay=0.1):
 
 	diff = time.time() - start
 	print(f'spent {diff / 60:.0f}:{diff % 60} getting {semester_year}')
-	return semester
+	return semester_to_return
 
 
 def get_college(semester_year, college, semester_course_list):
