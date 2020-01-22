@@ -106,19 +106,57 @@ def earliest_start(schedules_in):
 
 
 def latest_start(schedules_in):
-	maximum = 0
+	schedules_in_starts = []
+
 	for schedule in schedules_in:
+		schedules_in_starts.append({'M': [1140, 0, 0],
+		                            'T': [1140, 0, 0],
+		                            'W': [1140, 0, 0],
+		                            'Th': [1140, 0, 0],
+		                            'F': [1140, 0, 0],
+		                            'Sa': [1140, 0, 0]})
 		for section in schedule:
 			for meeting in section.schedule:
-				maximum = max(meeting[1], maximum)
+				if schedules_in_starts[-1][meeting[0]][0] > meeting[1]:
+					schedules_in_starts[-1][meeting[0]][0] = meeting[1]
+				schedules_in_starts[-1][meeting[0]][1] += meeting[1]
+				schedules_in_starts[-1][meeting[0]][2] += 1
+
+	maximum_start = 0
+	for sched_stats in schedules_in_starts:
+		min_all_week = 0
+		for day in sched_stats.keys():
+			min_all_week = min(sched_stats[day][0], min_all_week)
+		maximum_start = max(maximum_start, min_all_week)
+
+	working_schedules = []
+	working_stats = []
+	for i, sched_stats in enumerate(schedules_in_starts):
+		min_all_week = 0
+		for day in sched_stats.keys():
+			min_all_week = min(sched_stats[day][0], min_all_week)
+		if min_all_week == maximum_start:
+			working_schedules.append(schedules_in[i])
+			working_stats.append(sched_stats)
+
+	maximum_avg = 0
+	for i, sched_stats in enumerate(working_stats):
+		weekly_avg = []
+		for day in sched_stats.keys():
+			if sched_stats[day][1] != 0:
+				weekly_avg.append(sched_stats[day][0])
+		weekly_avg = sum(weekly_avg) / len(weekly_avg)
+		maximum_avg = max(maximum_avg, weekly_avg)
 
 	opt_schedules = []
-	for schedule in schedules_in:
-		for section in schedule:
-			for meeting in section.schedule:
-				if meeting[1] == maximum and schedule not in opt_schedules:
-					opt_schedules.append(schedule)
-					break
+	for i, sched_stats in enumerate(working_stats):
+		weekly_avg = []
+		for day in sched_stats.keys():
+			if sched_stats[day][1] != 0:
+				weekly_avg.append(sched_stats[day][0])
+		weekly_avg = sum(weekly_avg) / len(weekly_avg)
+		if weekly_avg == maximum_avg:
+			opt_schedules.append(working_schedules[i])
 
 	return opt_schedules
 
