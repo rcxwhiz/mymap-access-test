@@ -415,6 +415,9 @@ class Ui_MainWindow(object):
         self.findSchedules.clicked.connect(self.updateScheduleTable)
         self.allButt.clicked.connect(self.updateScheduleTable)
         self.earliestStartButt.clicked.connect(self.earliest_start)
+        self.earliestButt.clicked.connect(self.earliest)
+        self.latestStartButt.clicked.connect(self.latest_start)
+        self.latestButt.clicked.connect(self.latest)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.tableWidget.setSortingEnabled(True)
         self.main_window_ref = MainWindow
@@ -616,6 +619,18 @@ class Ui_MainWindow(object):
 
     def earliest_start(self):
         opt_schedules = classroom.schedule_tools.earliest_start(self.schedules)
+        self.populateTable2Opt(opt_schedules)
+
+    def earliest(self):
+        opt_schedules = classroom.schedule_tools.earliest(self.schedules)
+        self.populateTable2Opt(opt_schedules)
+
+    def latest_start(self):
+        opt_schedules = classroom.schedule_tools.latest_start(self.schedules)
+        self.populateTable2Opt(opt_schedules)
+
+    def latest(self):
+        opt_schedules = classroom.schedule_tools.latest(self.schedules)
         self.populateTable2Opt(opt_schedules)
 
     def populateTable2Opt(self, schedulesIn):
