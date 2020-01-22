@@ -409,6 +409,7 @@ class Ui_MainWindow(object):
         self.friCheck.clicked.connect(self.updateDaysFilter)
         self.satCheck.clicked.connect(self.updateDaysFilter)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.tableWidget.setSortingEnabled(True)
         self.main_window_ref = MainWindow
 
     def updateDaysFilter(self):
@@ -610,6 +611,7 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "BYU Class Scheduling & Search Tool\n\nversion - 0.0.0\n\nJosh Bedwell"))
 
     def updateTable(self):
+        self.tableWidget.setSortingEnabled(False)
         self.clearTable()
         self.filteredSemester = semesterManager.get_filtered_semester()
         num_sections = 0
@@ -624,14 +626,16 @@ class Ui_MainWindow(object):
                     times.append(section.start[i] + ' - ' + section.end[i])
                 data = [QtWidgets.QTableWidgetItem(course.college_short),
                         QtWidgets.QTableWidgetItem(course.short_title),
-                        QtWidgets.QTableWidgetItem(str(section.section_num)),
+                        QtWidgets.QTableWidgetItem(),
                         QtWidgets.QTableWidgetItem(course.long_title),
                         QtWidgets.QTableWidgetItem(section.instructor),
                         QtWidgets.QTableWidgetItem('\n'.join(times)),
                         QtWidgets.QTableWidgetItem(section.type),
                         QtWidgets.QTableWidgetItem('\n'.join(section.days)),
-                        QtWidgets.QTableWidgetItem(str(section.credits)),
+                        QtWidgets.QTableWidgetItem(),
                         QtWidgets.QTableWidgetItem(section.location)]
+                data[2].setData(QtCore.Qt.EditRole, QtCore.QVariant(section.section_num))
+                data[8].setData(QtCore.Qt.EditRole, QtCore.QVariant(section.credits))
                 for i in range(len(data)):
                     self.tableWidget.setItem(section_ct, i, data[i])
                 section_ct += 1
@@ -639,6 +643,7 @@ class Ui_MainWindow(object):
         self.tableWidget.resizeRowsToContents()
         self.tableWidget.setColumnWidth(3, 200)
         self.tableWidget.setColumnWidth(5, 125)
+        self.tableWidget.setSortingEnabled(True)
 
     def clearTable(self):
         self.tableWidget.setRowCount(0)
