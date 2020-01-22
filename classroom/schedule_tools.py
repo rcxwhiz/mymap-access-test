@@ -47,3 +47,21 @@ def filter_combinations(possible_sections):
 		if add_this_schedule:
 			good_schedules.append(possible_schedule)
 	return good_schedules
+
+def earliest_start(schedules_in):
+	min = 24 * 60
+	for schedule in schedules_in:
+		for section in schedule:
+			for meeting in section.schedule:
+				if meeting[1] < min:
+					min = meeting[1]
+
+	opt_schedules = []
+	for schedule in schedules_in:
+		for section in schedule:
+			for meeting in section.schedule:
+				if meeting[1] == min and schedule not in opt_schedules:
+					opt_schedules.append(schedule)
+					break
+
+	return opt_schedules

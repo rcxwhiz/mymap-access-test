@@ -413,6 +413,8 @@ class Ui_MainWindow(object):
         self.tableWidget_2.cellClicked.connect(self.openSingleClassPage)
         self.tableWidget_2.cellClicked.connect(self.click_section_in_schedules)
         self.findSchedules.clicked.connect(self.updateScheduleTable)
+        self.allButt.clicked.connect(self.updateScheduleTable)
+        self.earliestStartButt.clicked.connect(self.earliest_start)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.tableWidget.setSortingEnabled(True)
         self.main_window_ref = MainWindow
@@ -611,6 +613,18 @@ class Ui_MainWindow(object):
                     self.tableWidget_2.setRowCount(0)
                     self.classesBox.setText(f'Could not find: {class_list[j]}')
                     break
+
+    def earliest_start(self):
+        opt_schedules = classroom.schedule_tools.earliest_start(self.schedules)
+        self.populateTable2Opt(opt_schedules)
+
+    def populateTable2Opt(self, schedulesIn):
+        class_list = self.classesBox.toPlainText().split('\n')
+        self.tableWidget_2.setRowCount(0)
+        self.tableWidget_2.setRowCount(len(schedulesIn))
+        for i, tab_schedule in enumerate(schedulesIn):
+            for j in range(len(class_list)):
+                self.tableWidget_2.setItem(i, j, QtWidgets.QTableWidgetItem(str(schedulesIn[i][j].section_num)))
 
     def click_section_in_schedules(self, row, column):
         self.cell_value = self.tableWidget_2.item(row, column).text()
