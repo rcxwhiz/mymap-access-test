@@ -10,9 +10,9 @@ def schedule_collision(class1, class2):
 		for other_meeting in class2.schedule:
 			if meeting[0] == other_meeting[0]:
 				if meeting[1] < other_meeting[1] and meeting[2] < other_meeting[2]:
-					return False
+					x = 0
 				elif meeting[1] > other_meeting[1] and meeting[2] > other_meeting[2]:
-					return False
+					x = 0
 				else:
 					return True
 	return False
@@ -198,6 +198,43 @@ def latest(schedules_in):
 	opt_schedules = []
 	for i, schedule in enumerate(schedules_in):
 		if start_tallys[i] == max(start_tallys):
+			opt_schedules.append(schedule)
+
+	return opt_schedules
+
+
+def shortest_day(schedules_in):
+	day_stats = []
+	day_lengths = []
+	for i, schedule in enumerate(schedules_in):
+		day_stats.append({'M': [1440, 0, 0],
+		                  'T': [1440, 0, 0],
+		                  'W': [1440, 0, 0],
+		                  'Th': [1440, 0, 0],
+		                  'F': [1440, 0, 0],
+		                  'Sa': [1440, 0, 0]})
+		for section in schedule:
+			for meeting in section.schedule:
+				day_stats[i][meeting[0]][0] = min(day_stats[i][meeting[0]][0], meeting[1])
+				day_stats[i][meeting[0]][1] = max(day_stats[i][meeting[0]][1], meeting[2])
+				day_stats[i][meeting[0]][2] = day_stats[i][meeting[0]][1] - day_stats[i][meeting[0]][0]
+		lengths = []
+		for day in day_stats[i].keys():
+			lengths.append(day_stats[i][day][2])
+		lengths.sort()
+		day_lengths.append(lengths)
+
+	to_beat = [1440, 1440, 1440, 1440, 1440, 1440]
+	for i in range(len(day_lengths)):
+		for j in range(len(day_lengths[i])):
+			if day_lengths[i][j] < to_beat[j]:
+				to_beat[j] = day_lengths[i][j]
+			else:
+				break
+
+	opt_schedules = []
+	for i, schedule in enumerate(schedules_in):
+		if day_lengths[i] == to_beat:
 			opt_schedules.append(schedule)
 
 	return opt_schedules
