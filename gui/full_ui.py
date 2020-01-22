@@ -103,6 +103,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.monTimeS = QtWidgets.QTimeEdit(self.verticalLayoutWidget)
+        self.monTimeS.setTime(QtCore.QTime(8, 0))
         self.monTimeS.setObjectName("monTimeS")
         self.horizontalLayout_3.addWidget(self.monTimeS)
         self.monTimeE = QtWidgets.QTimeEdit(self.verticalLayoutWidget)
@@ -358,6 +359,20 @@ class Ui_MainWindow(object):
         self.label.setObjectName("label")
         self.stackedWidget.addWidget(self.startPage)
         MainWindow.setCentralWidget(self.centralwidget)
+
+        self.monTimeS.setTime(QtCore.QTime(8, 0))
+        self.monTimeE.setTime(QtCore.QTime(9, 0))
+        self.tueTimeS.setTime(QtCore.QTime(8, 0))
+        self.tueTimeE.setTime(QtCore.QTime(9, 0))
+        self.wedTimeS.setTime(QtCore.QTime(8, 0))
+        self.wedTimeE.setTime(QtCore.QTime(9, 0))
+        self.thurTimeS.setTime(QtCore.QTime(8, 0))
+        self.thurTimeE.setTime(QtCore.QTime(9, 0))
+        self.friTimeS.setTime(QtCore.QTime(8, 0))
+        self.friTimeE.setTime(QtCore.QTime(9, 0))
+        self.satTimeS.setTime(QtCore.QTime(8, 0))
+        self.satTimeE.setTime(QtCore.QTime(9, 0))
+
 
         self.retranslateUi(MainWindow)
 
