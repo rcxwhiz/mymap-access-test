@@ -14,6 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import gui.pickle_ui
 import gui.single_class
 from classroom.semester_manager import SemesterManager
+import classroom.schedule_tools
 
 semesterManager = SemesterManager()
 
@@ -408,6 +409,8 @@ class Ui_MainWindow(object):
         self.thurCheck.clicked.connect(self.updateDaysFilter)
         self.friCheck.clicked.connect(self.updateDaysFilter)
         self.satCheck.clicked.connect(self.updateDaysFilter)
+        self.tableWidget_2.cellClicked.connect(self.click_section_in_schedules)
+        self.findSchedules.clicked.connect(self.updateScheduleTable)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.tableWidget.setSortingEnabled(True)
         self.main_window_ref = MainWindow
@@ -561,6 +564,55 @@ class Ui_MainWindow(object):
         else:
             self.main_window_ref.setWindowTitle(f'BYU Scheduling Tool - {mode} - {semesterManager.selected_semester.semester_year}')
 
+    def updateScheduleTable(self):
+        class_list = self.classesBox.toPlainText().split('\n')
+        try:
+            self.schedules = classroom.schedule_tools.get_combinations(class_list)
+        except IndexError:
+            self.tableWidget_2.setRowCount(0)
+            self.tableWidget_2.setColumnCount(0)
+            self.classesBox.setText('Could not find a class')
+            return None
+        self.tableWidget_2.setColumnCount(len(class_list))
+        try:
+            self.tableWidget_2.setRowCount(len(self.schedules))
+        except TypeError:
+            self.classesBox.setText('Select a semester')
+            return None
+        self.tableWidget_2.setHorizontalHeaderLabels(class_list)
+        for i, tab_schedule in enumerate(self.schedules):
+            for j in range(len(class_list)):
+                try:
+                    self.tableWidget_2.setItem(i, j, QtWidgets.QTableWidgetItem(str(self.schedules[i][j].section_num)))
+                except IndexError:
+                    self.tableWidget_2.setColumnCount(0)
+                    self.tableWidget_2.setRowCount(0)
+                    self.classesBox.setText(f'Could not find: {class_list[j]}')
+                    break
+
+    def select_section(self, cell_value, column):
+        good_schedule = []
+        for i in range(len(self.schedules)):
+            if self.tableWidget_2.item(i, column).text() == cell_value:
+                good_schedule.append(self.schedules[i])
+
+        self.schedules = good_schedule
+        self.tableWidget_2.setRowCount(len(self.schedules))
+
+        for i, tab_schedule in enumerate(self.schedules):
+            for j in range(len(self.schedules[0])):
+                try:
+                    self.tableWidget_2.setItem(i, j, QtWidgets.QTableWidgetItem(str(self.schedules[i][j].section_num)))
+                except IndexError:
+                    self.tableWidget_2.setColumnCount(0)
+                    self.tableWidget_2.setRowCount(0)
+                    self.classesBox.setText(f'Could not find: {self.schedules[i][j]}')
+                    break
+
+    def click_section_in_schedules(self, row, column):
+        cell_value = self.tableWidget_2.item(row, column).text()
+        self.select_section(cell_value, column)
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(f'BYU Schdeuling Tool')
@@ -598,7 +650,7 @@ class Ui_MainWindow(object):
         self.label_2.setText(_translate("MainWindow", "Enter classes here:"))
         self.findSchedules.setText(_translate("MainWindow", "Find Schedules"))
         self.label_4.setText(_translate("MainWindow", "Optimization"))
-        self.allButt.setText(_translate("MainWindow", "All"))
+        self.allButt.setText(_translate("MainWindow", "None"))
         self.earliestButt.setText(_translate("MainWindow", "Earliest"))
         self.earliestStartButt.setText(_translate("MainWindow", "Earliest Start"))
         self.latestButt.setText(_translate("MainWindow", "Latest"))

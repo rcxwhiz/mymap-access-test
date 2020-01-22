@@ -32,7 +32,7 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 
 		for file in os.listdir(self.pickles_path):
 			self.semesters[file] = pickle.load(open(os.path.join(self.pickles_path, file), 'rb'))
-		print(f'loaded files: {self.semesters.keys()}')
+		print(f'loaded files: {list(self.semesters.keys())}')
 
 		self.selected_semester = None
 		self.filtered_sections = []
