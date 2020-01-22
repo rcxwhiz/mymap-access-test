@@ -7,3 +7,4 @@ out of given classes.
 # TODO makes a schedule by getting all possible combinations and then removing the impossible ones
 # TODO allow schedules to be optimized several ways
 # TODO the full ui class could probably use to have several functions split off of it
+# TODO it would probably be best to have a blacklist/whitelist option for the day/time scheduling
