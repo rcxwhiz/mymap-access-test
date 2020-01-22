@@ -573,6 +573,19 @@ class Ui_MainWindow(object):
             self.tableWidget_2.setColumnCount(0)
             self.classesBox.setText('Could not find a class')
             return None
+        self.populateTable2()
+
+    def select_section(self, cell_value, column):
+        good_schedule = []
+        for i in range(len(self.schedules)):
+            if self.tableWidget_2.item(i, column).text() == cell_value:
+                good_schedule.append(self.schedules[i])
+
+        self.schedules = good_schedule
+        self.populateTable2()
+
+    def populateTable2(self):
+        class_list = self.classesBox.toPlainText().split('\n')
         self.tableWidget_2.setColumnCount(len(class_list))
         try:
             self.tableWidget_2.setRowCount(len(self.schedules))
@@ -588,25 +601,6 @@ class Ui_MainWindow(object):
                     self.tableWidget_2.setColumnCount(0)
                     self.tableWidget_2.setRowCount(0)
                     self.classesBox.setText(f'Could not find: {class_list[j]}')
-                    break
-
-    def select_section(self, cell_value, column):
-        good_schedule = []
-        for i in range(len(self.schedules)):
-            if self.tableWidget_2.item(i, column).text() == cell_value:
-                good_schedule.append(self.schedules[i])
-
-        self.schedules = good_schedule
-        self.tableWidget_2.setRowCount(len(self.schedules))
-
-        for i, tab_schedule in enumerate(self.schedules):
-            for j in range(len(self.schedules[0])):
-                try:
-                    self.tableWidget_2.setItem(i, j, QtWidgets.QTableWidgetItem(str(self.schedules[i][j].section_num)))
-                except IndexError:
-                    self.tableWidget_2.setColumnCount(0)
-                    self.tableWidget_2.setRowCount(0)
-                    self.classesBox.setText(f'Could not find: {self.schedules[i][j]}')
                     break
 
     def click_section_in_schedules(self, row, column):
