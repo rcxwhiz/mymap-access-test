@@ -20,6 +20,7 @@ semesterManager = SemesterManager()
 
 app = QtWidgets.QApplication(sys.argv)
 PickleSelector = QtWidgets.QWidget()
+singleClassSelector = QtWidgets.QWidget()
 ClassViewer = QtWidgets.QWidget()
 MainWindow = QtWidgets.QMainWindow()
 
@@ -409,6 +410,7 @@ class Ui_MainWindow(object):
         self.thurCheck.clicked.connect(self.updateDaysFilter)
         self.friCheck.clicked.connect(self.updateDaysFilter)
         self.satCheck.clicked.connect(self.updateDaysFilter)
+        self.tableWidget_2.cellClicked.connect(self.openSingleClassPage)
         self.tableWidget_2.cellClicked.connect(self.click_section_in_schedules)
         self.findSchedules.clicked.connect(self.updateScheduleTable)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -514,6 +516,13 @@ class Ui_MainWindow(object):
         global PickleSelector
         PickleSelector.show()
 
+    def openSingleClassPage(self, row, column):
+        global singleClassSelector
+        info = semesterManager.get_by_course_section(semesterManager.selected_semester.semester_year, self.tableWidget_2.horizontalHeaderItem(column).text(), int(self.tableWidget_2.item(row, column).text()))
+        singleClassUi.setInfo(info[0], info[1], info[2])
+        singleClassUi.populateTable(info)
+        singleClassSelector.show()
+
     # MY CODE
     def makeWindowSmall(self):
         self.main_window_ref.resize(380, 170)
@@ -604,8 +613,11 @@ class Ui_MainWindow(object):
                     break
 
     def click_section_in_schedules(self, row, column):
-        cell_value = self.tableWidget_2.item(row, column).text()
-        self.select_section(cell_value, column)
+        self.cell_value = self.tableWidget_2.item(row, column).text()
+        self.sched_column = column
+
+    def apply_clicked_section(self):
+        self.select_section(self.cell_value, self.sched_column)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -695,14 +707,18 @@ class Ui_MainWindow(object):
         self.tableWidget.setRowCount(0)
 
 
-classViewerUi = gui.single_class.Ui_Form()
-classViewerUi.setupUi(ClassViewer)
-ClassViewer.hide()
+# classViewerUi = gui.single_class.Ui_Form()
+# classViewerUi.setupUi(ClassViewer)
+# ClassViewer.hide()
 
 screenSize = app.primaryScreen().size()
 ui = Ui_MainWindow()
 ui.setupUi(MainWindow, screenSize)
 MainWindow.show()
+
+singleClassUi = gui.single_class.Ui_Form()
+singleClassUi.setupUi(singleClassSelector, ui)
+singleClassSelector.hide()
 
 pickleUi = gui.pickle_ui.Ui_Form()
 pickleUi.setupUi(PickleSelector, ui)

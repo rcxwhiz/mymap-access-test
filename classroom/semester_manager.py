@@ -62,6 +62,15 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 		                            600: False,
 		                            700: False}
 
+	def get_by_course_section(self, semester_year, course_name, section_num):
+		print(f'{semester_year} - {course_name} - {section_num}')
+		semester_to_return = self.semesters[semester_year]
+		for course in semester_to_return.courses:
+			if course.short_title == course_name:
+				for section in course.sections:
+					if section.section_num == section_num:
+						return semester_to_return, course, section
+
 	def save_to_xlsx(self):
 		wb = openpyxl.Workbook()
 
