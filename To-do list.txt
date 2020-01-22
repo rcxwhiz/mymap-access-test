@@ -6,4 +6,4 @@ out of given classes.
 # TODO warnings when classes aren't found - make just one entry in the column which says NOT FOUND
 # TODO makes a schedule by getting all possible combinations and then removing the impossible ones
 # TODO allow schedules to be optimized several ways
-# TODO add a function to the semester manager to save it to a google sheet
+# TODO the full ui class could probably use to have several functions split off of it
