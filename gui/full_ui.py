@@ -416,6 +416,7 @@ class Ui_MainWindow(object):
         self.latestStartButt.clicked.connect(self.latest_start)
         self.latestButt.clicked.connect(self.latest)
         self.shortestDayButt.clicked.connect(self.shortestDay)
+        self.gapsButt.clicked.connect(self.leastGaps)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.tableWidget.setSortingEnabled(True)
         self.main_window_ref = MainWindow
@@ -633,6 +634,10 @@ class Ui_MainWindow(object):
 
     def shortestDay(self):
         opt_schedules = classroom.schedule_tools.shortest_day(self.schedules)
+        self.populateTable2Opt(opt_schedules)
+
+    def leastGaps(self):
+        opt_schedules = classroom.schedule_tools.least_gaps(self.schedules)
         self.populateTable2Opt(opt_schedules)
 
     def populateTable2Opt(self, schedulesIn):

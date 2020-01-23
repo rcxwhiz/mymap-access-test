@@ -238,3 +238,52 @@ def shortest_day(schedules_in):
 			opt_schedules.append(schedule)
 
 	return opt_schedules
+
+def least_gaps(schedules_in):
+
+	min_gaps = 100
+	for schedule in schedules_in:
+		gaps_found = 0
+		daily_gaps = {'M': [],
+		              'T': [],
+		              'W': [],
+		              'Th': [],
+		              'F': [],
+	                'Sa': []}
+		for section in schedule:
+			for meeting in section.schedule:
+				daily_gaps[meeting[0]].append(meeting[1:])
+		for day in daily_gaps.keys():
+			daily_gaps[day].sort(key=lambda x: x[0])
+			if len(daily_gaps[day]) > 1:
+				for i, meeting in enumerate(daily_gaps[day]):
+					if i == len(daily_gaps[day]) - 1:
+						break
+					if daily_gaps[day][i + 1][0] - meeting[1] > 10:
+						gaps_found += 1
+		min_gaps = min(gaps_found, min_gaps)
+
+	opt_schedules = []
+	for schedule in schedules_in:
+		gaps_found = 0
+		daily_gaps = {'M': [],
+		              'T': [],
+		              'W': [],
+		              'Th': [],
+		              'F': [],
+		              'Sa': []}
+		for section in schedule:
+			for meeting in section.schedule:
+				daily_gaps[meeting[0]].append(meeting[1:])
+		for day in daily_gaps.keys():
+			daily_gaps[day].sort(key=lambda x: x[0])
+			if len(daily_gaps[day]) > 1:
+				for i, meeting in enumerate(daily_gaps[day]):
+					if i == len(daily_gaps[day]) - 1:
+						break
+					if daily_gaps[day][i + 1][0] - meeting[1] > 10:
+						gaps_found += 1
+		if gaps_found == min_gaps:
+			opt_schedules.append(schedule)
+
+	return opt_schedules
