@@ -3,6 +3,7 @@ Class registration is on March 1st
 The two main features of this program are advanced filtering of the entire course catalogue and making a schedule
 out of given classes.
 
+# TODO there is a printing error with the amount of time it takes to harvest a semester or something
 # TODO click on course in advanced search and get a look at the details of all of its sections, similar to in scheduling
 # TODO search by description
 # TODO it may only be required to click the class button again when a class loading gets stuck
