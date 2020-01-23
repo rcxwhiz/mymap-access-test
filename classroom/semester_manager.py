@@ -32,7 +32,7 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 
 		for file in os.listdir(self.pickles_path):
 			self.semesters[file] = pickle.load(open(os.path.join(self.pickles_path, file), 'rb'))
-		print(f'loaded files: {self.semesters.keys()}')
+		print(f'loaded files: {list(self.semesters.keys())}')
 
 		self.selected_semester = None
 		self.filtered_sections = []
@@ -61,6 +61,15 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 		                            500: False,
 		                            600: False,
 		                            700: False}
+
+	def get_by_course_section(self, semester_year, course_name, section_num):
+		print(f'{semester_year} - {course_name} - {section_num}')
+		semester_to_return = self.semesters[semester_year]
+		for course in semester_to_return.courses:
+			if course.short_title == course_name:
+				for section in course.sections:
+					if section.section_num == section_num:
+						return semester_to_return, course, section
 
 	def save_to_xlsx(self):
 		wb = openpyxl.Workbook()

@@ -3,8 +3,7 @@ Class registration is on March 1st
 The two main features of this program are advanced filtering of the entire course catalogue and making a schedule
 out of given classes.
 
-# TODO warnings when classes aren't found - make just one entry in the column which says NOT FOUND
-# TODO makes a schedule by getting all possible combinations and then removing the impossible ones
+# TODO the schedule collision detection is only working some of the time
 # TODO allow schedules to be optimized several ways
 # TODO the full ui class could probably use to have several functions split off of it
 # TODO it would probably be best to have a blacklist/whitelist option for the day/time scheduling

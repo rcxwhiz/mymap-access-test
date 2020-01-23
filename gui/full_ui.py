@@ -14,11 +14,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import gui.pickle_ui
 import gui.single_class
 from classroom.semester_manager import SemesterManager
+import classroom.schedule_tools
 
 semesterManager = SemesterManager()
 
 app = QtWidgets.QApplication(sys.argv)
 PickleSelector = QtWidgets.QWidget()
+singleClassSelector = QtWidgets.QWidget()
 ClassViewer = QtWidgets.QWidget()
 MainWindow = QtWidgets.QMainWindow()
 
@@ -327,9 +329,6 @@ class Ui_MainWindow(object):
         self.gapsButt.setObjectName("gapsButt")
         self.verticalLayout_2.addWidget(self.gapsButt)
         self.verticalLayout_3.addLayout(self.verticalLayout_2)
-        self.cannotFindLabel = QtWidgets.QLabel(self.layoutWidget)
-        self.cannotFindLabel.setObjectName("cannotFindLabel")
-        self.verticalLayout_3.addWidget(self.cannotFindLabel)
         self.stackedWidget.addWidget(self.schedulePage)
         self.startPage = QtWidgets.QWidget()
         self.startPage.setObjectName("startPage")
@@ -408,7 +407,17 @@ class Ui_MainWindow(object):
         self.thurCheck.clicked.connect(self.updateDaysFilter)
         self.friCheck.clicked.connect(self.updateDaysFilter)
         self.satCheck.clicked.connect(self.updateDaysFilter)
+        self.tableWidget_2.cellClicked.connect(self.openSingleClassPage)
+        self.tableWidget_2.cellClicked.connect(self.click_section_in_schedules)
+        self.findSchedules.clicked.connect(self.updateScheduleTable)
+        self.allButt.clicked.connect(self.updateScheduleTable)
+        self.earliestStartButt.clicked.connect(self.earliest_start)
+        self.earliestButt.clicked.connect(self.earliest)
+        self.latestStartButt.clicked.connect(self.latest_start)
+        self.latestButt.clicked.connect(self.latest)
+        self.shortestDayButt.clicked.connect(self.shortestDay)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.tableWidget.setSortingEnabled(True)
         self.main_window_ref = MainWindow
 
     def updateDaysFilter(self):
@@ -510,6 +519,13 @@ class Ui_MainWindow(object):
         global PickleSelector
         PickleSelector.show()
 
+    def openSingleClassPage(self, row, column):
+        global singleClassSelector
+        info = semesterManager.get_by_course_section(semesterManager.selected_semester.semester_year, self.tableWidget_2.horizontalHeaderItem(column).text(), int(self.tableWidget_2.item(row, column).text()))
+        singleClassUi.setInfo(info[0], info[1], info[2])
+        singleClassUi.populateTable(info)
+        singleClassSelector.show()
+
     # MY CODE
     def makeWindowSmall(self):
         self.main_window_ref.resize(380, 170)
@@ -560,6 +576,80 @@ class Ui_MainWindow(object):
         else:
             self.main_window_ref.setWindowTitle(f'BYU Scheduling Tool - {mode} - {semesterManager.selected_semester.semester_year}')
 
+    def updateScheduleTable(self):
+        class_list = self.classesBox.toPlainText().split('\n')
+        try:
+            self.schedules = classroom.schedule_tools.get_combinations(class_list)
+        except IndexError:
+            self.tableWidget_2.setRowCount(0)
+            self.tableWidget_2.setColumnCount(0)
+            self.classesBox.setText('Could not find a class')
+            return None
+        self.populateTable2()
+
+    def select_section(self, cell_value, column):
+        good_schedule = []
+        for i in range(len(self.schedules)):
+            if self.tableWidget_2.item(i, column).text() == cell_value:
+                good_schedule.append(self.schedules[i])
+
+        self.schedules = good_schedule
+        self.populateTable2()
+
+    def populateTable2(self):
+        class_list = self.classesBox.toPlainText().split('\n')
+        self.tableWidget_2.setColumnCount(len(class_list))
+        try:
+            self.tableWidget_2.setRowCount(len(self.schedules))
+        except TypeError:
+            self.classesBox.setText('Select a semester')
+            return None
+        self.tableWidget_2.setHorizontalHeaderLabels(class_list)
+        for i, tab_schedule in enumerate(self.schedules):
+            for j in range(len(class_list)):
+                try:
+                    self.tableWidget_2.setItem(i, j, QtWidgets.QTableWidgetItem(str(self.schedules[i][j].section_num)))
+                except IndexError:
+                    self.tableWidget_2.setColumnCount(0)
+                    self.tableWidget_2.setRowCount(0)
+                    self.classesBox.setText(f'Could not find: {class_list[j]}')
+                    break
+
+    def earliest_start(self):
+        opt_schedules = classroom.schedule_tools.earliest_start(self.schedules)
+        self.populateTable2Opt(opt_schedules)
+
+    def earliest(self):
+        opt_schedules = classroom.schedule_tools.earliest(self.schedules)
+        self.populateTable2Opt(opt_schedules)
+
+    def latest_start(self):
+        opt_schedules = classroom.schedule_tools.latest_start(self.schedules)
+        self.populateTable2Opt(opt_schedules)
+
+    def latest(self):
+        opt_schedules = classroom.schedule_tools.latest(self.schedules)
+        self.populateTable2Opt(opt_schedules)
+
+    def shortestDay(self):
+        opt_schedules = classroom.schedule_tools.shortest_day(self.schedules)
+        self.populateTable2Opt(opt_schedules)
+
+    def populateTable2Opt(self, schedulesIn):
+        class_list = self.classesBox.toPlainText().split('\n')
+        self.tableWidget_2.setRowCount(0)
+        self.tableWidget_2.setRowCount(len(schedulesIn))
+        for i, tab_schedule in enumerate(schedulesIn):
+            for j in range(len(class_list)):
+                self.tableWidget_2.setItem(i, j, QtWidgets.QTableWidgetItem(str(schedulesIn[i][j].section_num)))
+
+    def click_section_in_schedules(self, row, column):
+        self.cell_value = self.tableWidget_2.item(row, column).text()
+        self.sched_column = column
+
+    def apply_clicked_section(self):
+        self.select_section(self.cell_value, self.sched_column)
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(f'BYU Schdeuling Tool')
@@ -597,19 +687,19 @@ class Ui_MainWindow(object):
         self.label_2.setText(_translate("MainWindow", "Enter classes here:"))
         self.findSchedules.setText(_translate("MainWindow", "Find Schedules"))
         self.label_4.setText(_translate("MainWindow", "Optimization"))
-        self.allButt.setText(_translate("MainWindow", "All"))
+        self.allButt.setText(_translate("MainWindow", "None"))
         self.earliestButt.setText(_translate("MainWindow", "Earliest"))
         self.earliestStartButt.setText(_translate("MainWindow", "Earliest Start"))
         self.latestButt.setText(_translate("MainWindow", "Latest"))
         self.latestStartButt.setText(_translate("MainWindow", "Latest Start"))
         self.shortestDayButt.setText(_translate("MainWindow", "Shortest Day"))
         self.gapsButt.setText(_translate("MainWindow", "Least Gaps"))
-        self.cannotFindLabel.setText(_translate("MainWindow", "Cannot find:"))
         self.advancedSearchButton.setText(_translate("MainWindow", "Advanced Search"))
         self.scheduleMakerButton.setText(_translate("MainWindow", "Schedule Maker"))
         self.label.setText(_translate("MainWindow", "BYU Class Scheduling & Search Tool\n\nversion - 0.0.0\n\nJosh Bedwell"))
 
     def updateTable(self):
+        self.tableWidget.setSortingEnabled(False)
         self.clearTable()
         self.filteredSemester = semesterManager.get_filtered_semester()
         num_sections = 0
@@ -624,14 +714,16 @@ class Ui_MainWindow(object):
                     times.append(section.start[i] + ' - ' + section.end[i])
                 data = [QtWidgets.QTableWidgetItem(course.college_short),
                         QtWidgets.QTableWidgetItem(course.short_title),
-                        QtWidgets.QTableWidgetItem(str(section.section_num)),
+                        QtWidgets.QTableWidgetItem(),
                         QtWidgets.QTableWidgetItem(course.long_title),
                         QtWidgets.QTableWidgetItem(section.instructor),
                         QtWidgets.QTableWidgetItem('\n'.join(times)),
                         QtWidgets.QTableWidgetItem(section.type),
                         QtWidgets.QTableWidgetItem('\n'.join(section.days)),
-                        QtWidgets.QTableWidgetItem(str(section.credits)),
+                        QtWidgets.QTableWidgetItem(),
                         QtWidgets.QTableWidgetItem(section.location)]
+                data[2].setData(QtCore.Qt.EditRole, QtCore.QVariant(section.section_num))
+                data[8].setData(QtCore.Qt.EditRole, QtCore.QVariant(section.credits))
                 for i in range(len(data)):
                     self.tableWidget.setItem(section_ct, i, data[i])
                 section_ct += 1
@@ -639,19 +731,24 @@ class Ui_MainWindow(object):
         self.tableWidget.resizeRowsToContents()
         self.tableWidget.setColumnWidth(3, 200)
         self.tableWidget.setColumnWidth(5, 125)
+        self.tableWidget.setSortingEnabled(True)
 
     def clearTable(self):
         self.tableWidget.setRowCount(0)
 
 
-classViewerUi = gui.single_class.Ui_Form()
-classViewerUi.setupUi(ClassViewer)
-ClassViewer.hide()
+# classViewerUi = gui.single_class.Ui_Form()
+# classViewerUi.setupUi(ClassViewer)
+# ClassViewer.hide()
 
 screenSize = app.primaryScreen().size()
 ui = Ui_MainWindow()
 ui.setupUi(MainWindow, screenSize)
 MainWindow.show()
+
+singleClassUi = gui.single_class.Ui_Form()
+singleClassUi.setupUi(singleClassSelector, ui)
+singleClassSelector.hide()
 
 pickleUi = gui.pickle_ui.Ui_Form()
 pickleUi.setupUi(PickleSelector, ui)
