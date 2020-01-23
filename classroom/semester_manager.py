@@ -224,13 +224,13 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 			                     'coursePrereqs': course.prerequisites,
 			                     'courseRec': course.recommended,
 			                     'sections': []}
-			if self.dept_filter not in course.dept:
+			if self.dept_filter not in course.dept.lower():
 				continue
 
 			elif self.course_num_filter not in str(course.num):
 				continue
 
-			elif self.course_name_filter not in course.long_title:
+			elif self.course_name_filter not in course.long_title.lower():
 				continue
 
 			elif True in self.course_level_filter.values() and not self.course_level_filter[course.level]:
@@ -238,7 +238,7 @@ class SemesterManager(metaclass=SemesterManagerMeta):
 
 			for section in course.sections:
 				make_section = True
-				if self.instructor_filter not in section.instructor:
+				if self.instructor_filter not in section.instructor.lower():
 					make_section = False
 
 				elif True in self.type_filter.values() and not self.type_filter[section.type]:

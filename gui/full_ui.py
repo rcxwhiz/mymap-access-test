@@ -479,7 +479,7 @@ class Ui_MainWindow(object):
             self.updateTable()
 
     def updateDeptFilter(self):
-        semesterManager.dept_filter = self.deptLineEdit_3.text()
+        semesterManager.dept_filter = self.deptLineEdit_3.text().lower()
         if semesterManager.selected_semester is not None:
             self.updateTable()
 
@@ -489,12 +489,12 @@ class Ui_MainWindow(object):
             self.updateTable()
 
     def updateCourseNameFilter(self):
-        semesterManager.course_name_filter = self.courseNameLineEdit_3.text()
+        semesterManager.course_name_filter = self.courseNameLineEdit_3.text().lower()
         if semesterManager.selected_semester is not None:
             self.updateTable()
 
     def updateInstructorFilter(self):
-        semesterManager.instructor_filter = self.instructorLineEdit_3.text()
+        semesterManager.instructor_filter = self.instructorLineEdit_3.text().lower()
         if semesterManager.selected_semester is not None:
             self.updateTable()
 
@@ -538,7 +538,7 @@ class Ui_MainWindow(object):
         self.main_window_ref.resize(1100, 850)
         x = self.main_window_ref.x()
         y = self.main_window_ref.y()
-        self.main_window_ref.move(self.goodScreenX(x - 310), self.goodScreenY(y - 265))
+        self.main_window_ref.move(self.goodScreenX(x - 340), self.goodScreenY(y - 290))
 
     # MY CODE
     def gotoStartPage(self):

@@ -3,7 +3,8 @@ Class registration is on March 1st
 The two main features of this program are advanced filtering of the entire course catalogue and making a schedule
 out of given classes.
 
-# TODO the schedule collision detection is only working some of the time
-# TODO allow schedules to be optimized several ways
+# TODO it may only be required to click the class button again when a class loading gets stuck
+# TODO deleting and refreshing from pickles page doesn't really work
+# TODO implement least gaps
 # TODO the full ui class could probably use to have several functions split off of it
 # TODO it would probably be best to have a blacklist/whitelist option for the day/time scheduling

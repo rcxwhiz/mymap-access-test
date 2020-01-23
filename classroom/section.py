@@ -1,6 +1,7 @@
 import datetime
 import logging
 import re
+import sys
 
 class Section:
 
@@ -71,5 +72,9 @@ class Section:
 
 		available_regex1 = re.compile(r'[0-9]+/')
 		available_regex2 = re.compile(r'/[0-9]+')
-		self.available = int(available_regex1.search(attributes['available']).group()[:-1])
+		try:
+			self.available = int(available_regex1.search(attributes['available']).group()[:-1])
+		except AttributeError:
+			print(f'for some reason {attributes["available"]} isn\'t passing the regex')
+			sys.exit()
 		self.seats = int(available_regex2.search(attributes['available']).group()[1:])

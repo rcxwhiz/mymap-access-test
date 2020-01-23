@@ -138,3 +138,4 @@ dmypy.json
 *.iml
 out
 gen
+gui/semesters.xlsx
