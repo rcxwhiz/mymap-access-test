@@ -701,7 +701,7 @@ class Ui_MainWindow(object):
         self.gapsButt.setText(_translate("MainWindow", "Least Gaps"))
         self.advancedSearchButton.setText(_translate("MainWindow", "Advanced Search"))
         self.scheduleMakerButton.setText(_translate("MainWindow", "Schedule Maker"))
-        self.label.setText(_translate("MainWindow", "BYU Class Scheduling & Search Tool\n\nversion - 0.0.0\n\nJosh Bedwell"))
+        self.label.setText(_translate("MainWindow", "BYU Class Scheduling & Search Tool\n\nversion - 1.0.0\n\nJosh Bedwell"))
 
     def updateTable(self):
         self.tableWidget.setSortingEnabled(False)
@@ -741,10 +741,6 @@ class Ui_MainWindow(object):
     def clearTable(self):
         self.tableWidget.setRowCount(0)
 
-
-# classViewerUi = gui.single_class.Ui_Form()
-# classViewerUi.setupUi(ClassViewer)
-# ClassViewer.hide()
 
 screenSize = app.primaryScreen().size()
 ui = Ui_MainWindow()
