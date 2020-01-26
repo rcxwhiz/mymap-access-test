@@ -545,14 +545,12 @@ class Ui_MainWindow(object):
     def gotoStartPage(self):
         self.makeWindowSmall()
         self.clearTable()
-        semesterManager.selected_semester = None
         self.stackedWidget.setCurrentIndex(2)
         self.updateTitleBar()
 
     # MY CODE
     def gotoSearchPage(self):
         self.makeWindowBig()
-        semesterManager.selected_semester = None
         self.stackedWidget.setCurrentIndex(0)
         self.updateTitleBar()
 
@@ -560,7 +558,6 @@ class Ui_MainWindow(object):
     def gotoSchedulePage(self):
         self.makeWindowBig()
         self.clearTable()
-        semesterManager.selected_semester = None
         self.stackedWidget.setCurrentIndex(1)
         self.updateTitleBar()
 
